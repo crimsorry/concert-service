@@ -26,4 +26,16 @@ public class UserQueueServiceTest {
         // then
         assertEquals("user-token", result);
     }
+
+    @Test
+    public void 유저_대기열_순서_조회() {
+        // given
+        String queueToken = "testToken";
+
+        // when
+        long result = userQueueService.loadQueueUser(queueToken);
+
+        // then
+        assertEquals(1, result);
+    }
 }

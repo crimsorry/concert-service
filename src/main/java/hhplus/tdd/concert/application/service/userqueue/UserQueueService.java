@@ -12,6 +12,11 @@ public class UserQueueService {
         return "user-token";
     }
 
+    /* 유저 대기열 조회 */
+    public long loadQueueUser(String queueToken){
+        return 1;
+    }
+
 
 
 }

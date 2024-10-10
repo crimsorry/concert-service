@@ -39,6 +39,26 @@
    ],
    "paths":{
       "/api/v1/user/queue/token":{
+         "get":{
+            "tags":[
+               "대기열 토큰 API"
+            ],
+            "summary":"유저 대기번호 조회",
+            "operationId":"getUserQueueNum",
+            "responses":{
+               "200":{
+                  "description":"OK",
+                  "content":{
+                     "application/json;charset=UTF-8":{
+                        "schema":{
+                           "type":"integer",
+                           "format":"int64"
+                        }
+                     }
+                  }
+               }
+            }
+         },
          "post":{
             "tags":[
                "대기열 토큰 API"
@@ -238,11 +258,14 @@
             "operationId":"getConcertDate",
             "responses":{
                "200":{
-                  "description":"예약 가능 날짜 정보 반환",
+                  "description":"OK",
                   "content":{
-                     "application/json":{
+                     "application/json;charset=UTF-8":{
                         "schema":{
-                           "$ref":"#/components/schemas/ConcertScheduleRes"
+                           "type":"array",
+                           "items":{
+                              "$ref":"#/components/schemas/ConcertScheduleRes"
+                           }
                         }
                      }
                   }
@@ -294,8 +317,7 @@
                   "type":"string",
                   "format":"date-time"
                }
-            },
-            "description":"결제 정보 Response"
+            }
          },
          "ReservationRes":{
             "type":"object",

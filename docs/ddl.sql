@@ -10,8 +10,8 @@ CREATE TABLE USER_QUEUE (
     queue_id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     token VARCHAR(255) NOT NULL COMMENT '토큰 값',
-    status VARCHAR(10) NOT NULL COMMENT '상태 값 (STAND_BY, ACTIVE, EXPIRED)',
-    expired_at DATE COMMENT '만료시간',
+    status ENUM('STAND_BY', 'ACTIVE', 'EXPIRED') NOT NULL COMMENT '상태 값',
+    expired_at DATE NOT NULL COMMENT '만료시간',
     FOREIGN KEY (user_id) REFERENCES USER(user_id)
 ) COMMENT = '대기열';
 
@@ -36,7 +36,7 @@ CREATE TABLE CONCERT_SEAT (
     schedule_id BIGINT NOT NULL,
     seat_num VARCHAR(3) NOT NULL COMMENT '좌석 번호',
     amount INT NOT NULL COMMENT '좌석 금액',
-    seat_status VARCHAR(10) NOT NULL COMMENT '좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)',
+    seat_status ENUM('STAND_BY', 'RESERVED', 'ASSIGN') NOT NULL COMMENT '좌석 점유 여부',
     FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id)
 ) COMMENT = '콘서트 좌석';
 
@@ -49,7 +49,7 @@ CREATE TABLE RESERVATION (
     open_date DATE NOT NULL COMMENT '콘서트 개최 일',
     seat_num VARCHAR(3) NOT NULL COMMENT '좌석 번호',
     amount INT NOT NULL COMMENT '좌석 금액',
-    reserve_status VARCHAR(10) NOT NULL COMMENT '예약 상태 (PENDING, RESERVED, CANCELED)',
+    reserve_status ENUM('PENDING', 'RESERVED', 'CANCELED') NOT NULL COMMENT '예약 상태',
     FOREIGN KEY (user_id) REFERENCES USER(user_id),
     FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id),
     FOREIGN KEY (seat_id) REFERENCES CONCERT_SEAT(seat_id)

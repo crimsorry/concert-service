@@ -56,7 +56,7 @@ erDiagram
     USER ||--o{ PAYMENT : "has pay"
     USER ||--o{ RESERVATION : "has reserve"
     CONCERT ||--o{ CONCERT_SCHEDULE : "has concert schedule"
-    CONCERT_SCHEDULE ||--o{ CONCERT_SEAT : "has concert seat"
+    CONCERT_SCHEDULE ||--o{ CONCERT_SEAT : "has c oncert seat"
     CONCERT_SCHEDULE ||--o{ RESERVATION : "has reserve"
     PAYMENT ||--|| RESERVATION : "pay to reserve"
     CONCERT_SEAT ||--o{ RESERVATION : "has reserve"

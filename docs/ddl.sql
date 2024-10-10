@@ -1,51 +1,50 @@
-
 -- concert
 
 CREATE TABLE USER (
-    user_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '»ç¿ëÀÚ ID',
-    user_name VARCHAR(13) NOT NULL COMMENT '»ç¿ëÀÚ ¸í',
-    charge INT NOT NULL default 0 COMMENT 'ÀÜ¾×' 
-) COMMENT = '»ç¿ëÀÚ';
+    user_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ì‚¬ìš©ìž ID',
+    user_name VARCHAR(13) NOT NULL COMMENT 'ì‚¬ìš©ìž ëª…',
+    charge INT NOT NULL default 0 COMMENT 'ìž”ì•¡' 
+) COMMENT = 'ì‚¬ìš©ìž';
 
 CREATE TABLE USER_QUEUE (
     queue_id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    token VARCHAR(255) NOT NULL COMMENT 'ÅäÅ« °ª',
-    status VARCHAR(10) NOT NULL COMMENT '»óÅÂ °ª (STAND_BY, ACTIVE, DONE, EXPIRED)',
-    entered_at DATE NOT NULL COMMENT 'ÁøÀÔ½Ã°£',
-    expired_at DATE COMMENT '¸¸·á½Ã°£',
+    token VARCHAR(255) NOT NULL COMMENT 'í† í° ê°’',
+    status VARCHAR(10) NOT NULL COMMENT 'ìƒíƒœ ê°’ (STAND_BY, ACTIVE, DONE, EXPIRED)',
+    entered_at DATE NOT NULL COMMENT 'ì§„ìž…ì‹œê°„',
+    expired_at DATE COMMENT 'ë§Œë£Œì‹œê°„',
     FOREIGN KEY (user_id) REFERENCES USER(user_id)
-) COMMENT = '´ë±â¿­';
+) COMMENT = 'ëŒ€ê¸°ì—´';
 
--- index Ãß°¡
+-- index ì¶”ê°€
 CREATE INDEX idx_user_queue_status ON USER_QUEUE(status);
 CREATE INDEX idx_user_queue_entered_at ON USER_QUEUE(entered_at);
 
 CREATE TABLE CONCERT (
     concert_id BIGINT PRIMARY KEY,
-    concert_title VARCHAR(255) NOT NULL COMMENT 'ÄÜ¼­Æ® ¸í',
-    concert_place VARCHAR(255) NOT NULL COMMENT 'ÄÜ¼­Æ® Àå¼Ò'
-) COMMENT = 'ÄÜ¼­Æ® Á¤º¸';
+    concert_title VARCHAR(255) NOT NULL COMMENT 'ì½˜ì„œíŠ¸ ëª…',
+    concert_place VARCHAR(255) NOT NULL COMMENT 'ì½˜ì„œíŠ¸ ìž¥ì†Œ'
+) COMMENT = 'ì½˜ì„œíŠ¸ ì •ë³´';
 
 CREATE TABLE CONCERT_SCHEDULE (
     schedule_id BIGINT PRIMARY KEY,
     concert_id BIGINT NOT NULL,
-    open_date DATE NOT NULL COMMENT 'ÄÜ¼­Æ® °³ÃÖ ÀÏ',
-    start_date DATE NOT NULL COMMENT 'Æ¼ÄÏ ¿¹¸Å ½ÃÀÛ ½Ã°£',
-    end_date DATE NOT NULL COMMENT 'Æ¼ÄÏ ¿¹¸Å Á¾·á ½Ã°£',
+    open_date DATE NOT NULL COMMENT 'ì½˜ì„œíŠ¸ ê°œìµœ ì¼',
+    start_date DATE NOT NULL COMMENT 'í‹°ì¼“ ì˜ˆë§¤ ì‹œìž‘ ì‹œê°„',
+    end_date DATE NOT NULL COMMENT 'í‹°ì¼“ ì˜ˆë§¤ ì¢…ë£Œ ì‹œê°„',
     FOREIGN KEY (concert_id) REFERENCES CONCERT(concert_id)
-) COMMENT = 'ÄÜ¼­Æ® ÀÏÁ¤';
+) COMMENT = 'ì½˜ì„œíŠ¸ ì¼ì •';
 
 CREATE TABLE CONCERT_SEAT (
     seat_id BIGINT PRIMARY KEY,
     schedule_id BIGINT NOT NULL,
-    seat_num VARCHAR(3) NOT NULL COMMENT 'ÁÂ¼® ¹øÈ£',
-    seat_amount INT NOT NULL COMMENT 'ÁÂ¼® ±Ý¾×',
-    seat_status VARCHAR(10) NOT NULL COMMENT 'ÁÂ¼® Á¡À¯ ¿©ºÎ (STAND_BY, RESERVED, ASSIGN)',
+    seat_num VARCHAR(3) NOT NULL COMMENT 'ì¢Œì„ ë²ˆí˜¸',
+    seat_amount INT NOT NULL COMMENT 'ì¢Œì„ ê¸ˆì•¡',
+    seat_status VARCHAR(10) NOT NULL COMMENT 'ì¢Œì„ ì ìœ  ì—¬ë¶€ (STAND_BY, RESERVED, ASSIGN)',
     FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id)
-) COMMENT = 'ÄÜ¼­Æ® ÁÂ¼®';
+) COMMENT = 'ì½˜ì„œíŠ¸ ì¢Œì„';
 
--- index Ãß°¡
+-- index ì¶”ê°€
 CREATE INDEX idx_concert_seat_schedule_id ON CONCERT_SEAT(seat_status);
 
 CREATE TABLE RESERVATION (
@@ -53,33 +52,26 @@ CREATE TABLE RESERVATION (
     user_id BIGINT NOT NULL,
     schedule_id BIGINT NOT NULL,
     seat_id BIGINT NOT NULL,
-    concert_title VARCHAR(255) NOT NULL COMMENT 'ÄÜ¼­Æ® ¸í',
-    open_date DATE NOT NULL COMMENT 'ÄÜ¼­Æ® °³ÃÖ ÀÏ',
-    seat_num VARCHAR(3) NOT NULL COMMENT 'ÁÂ¼® ¹øÈ£',
-    seat_amount INT NOT NULL COMMENT 'ÁÂ¼® ±Ý¾×',
-    reserve_status VARCHAR(10) NOT NULL COMMENT '¿¹¾à »óÅÂ (PENDING, RESERVED, CANCELED)',
+    concert_title VARCHAR(255) NOT NULL COMMENT 'ì½˜ì„œíŠ¸ ëª…',
+    open_date DATE NOT NULL COMMENT 'ì½˜ì„œíŠ¸ ê°œìµœ ì¼',
+    seat_num VARCHAR(3) NOT NULL COMMENT 'ì¢Œì„ ë²ˆí˜¸',
+    seat_amount INT NOT NULL COMMENT 'ì¢Œì„ ê¸ˆì•¡',
+    reserve_status VARCHAR(10) NOT NULL COMMENT 'ì˜ˆì•½ ìƒíƒœ (PENDING, RESERVED, CANCELED)',
     FOREIGN KEY (user_id) REFERENCES USER(user_id),
     FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id),
     FOREIGN KEY (seat_id) REFERENCES CONCERT_SEAT(seat_id)
-) COMMENT = '¿¹¾à Á¤º¸';
+) COMMENT = 'ì˜ˆì•½ ì •ë³´';
 
 
 CREATE TABLE PAYMENT (
     pay_id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     reserve_id BIGINT NOT NULL,
-    pay_amount INT NOT NULL COMMENT '°áÁ¦ ±Ý¾×',
-    is_pay BOOLEAN DEFAULT FALSE COMMENT '°áÁ¦ ¿©ºÎ(true / false)',
+    pay_amount INT NOT NULL COMMENT 'ê²°ì œ ê¸ˆì•¡',
+    is_pay BOOLEAN DEFAULT FALSE COMMENT 'ê²°ì œ ì—¬ë¶€(true / false)',
     FOREIGN KEY (user_id) REFERENCES USER(user_id),
     FOREIGN KEY (reserve_id) REFERENCES RESERVATION(reserve_id) 
-) COMMENT = '°áÁ¦ Á¤º¸';
-
-
-
-
-
-
-
+) COMMENT = 'ê²°ì œ ì •ë³´';
 
 
 

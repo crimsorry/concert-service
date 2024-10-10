@@ -10,8 +10,7 @@ CREATE TABLE USER_QUEUE (
     queue_id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     token VARCHAR(255) NOT NULL COMMENT '토큰 값',
-    status VARCHAR(10) NOT NULL COMMENT '상태 값 (STAND_BY, ACTIVE, DONE, EXPIRED)',
-    entered_at DATE NOT NULL COMMENT '진입시간',
+    status VARCHAR(10) NOT NULL COMMENT '상태 값 (STAND_BY, ACTIVE, EXPIRED)',
     expired_at DATE COMMENT '만료시간',
     FOREIGN KEY (user_id) REFERENCES USER(user_id)
 ) COMMENT = '대기열';
@@ -32,6 +31,7 @@ CREATE TABLE CONCERT_SCHEDULE (
     open_date DATE NOT NULL COMMENT '콘서트 개최 일',
     start_date DATE NOT NULL COMMENT '티켓 예매 시작 시간',
     end_date DATE NOT NULL COMMENT '티켓 예매 종료 시간',
+    capacity INT NOT NULL COMMENT '남은 좌석 수',
     FOREIGN KEY (concert_id) REFERENCES CONCERT(concert_id)
 ) COMMENT = '콘서트 일정';
 
@@ -39,7 +39,7 @@ CREATE TABLE CONCERT_SEAT (
     seat_id BIGINT PRIMARY KEY,
     schedule_id BIGINT NOT NULL,
     seat_num VARCHAR(3) NOT NULL COMMENT '좌석 번호',
-    seat_amount INT NOT NULL COMMENT '좌석 금액',
+    amount INT NOT NULL COMMENT '좌석 금액',
     seat_status VARCHAR(10) NOT NULL COMMENT '좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)',
     FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id)
 ) COMMENT = '콘서트 좌석';
@@ -55,7 +55,7 @@ CREATE TABLE RESERVATION (
     concert_title VARCHAR(255) NOT NULL COMMENT '콘서트 명',
     open_date DATE NOT NULL COMMENT '콘서트 개최 일',
     seat_num VARCHAR(3) NOT NULL COMMENT '좌석 번호',
-    seat_amount INT NOT NULL COMMENT '좌석 금액',
+    amount INT NOT NULL COMMENT '좌석 금액',
     reserve_status VARCHAR(10) NOT NULL COMMENT '예약 상태 (PENDING, RESERVED, CANCELED)',
     FOREIGN KEY (user_id) REFERENCES USER(user_id),
     FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id),
@@ -67,11 +67,21 @@ CREATE TABLE PAYMENT (
     pay_id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     reserve_id BIGINT NOT NULL,
-    pay_amount INT NOT NULL COMMENT '결제 금액',
+    amount INT NOT NULL COMMENT '결제 금액',
     is_pay BOOLEAN DEFAULT FALSE COMMENT '결제 여부(true / false)',
+    create_at DATE NOT NULL COMMENT '생성 시간',
     FOREIGN KEY (user_id) REFERENCES USER(user_id),
-    FOREIGN KEY (reserve_id) REFERENCES RESERVATION(reserve_id) 
+    FOREIGN KEY (reserve_id) REFERENCES RESERVATION(reserve_id)
 ) COMMENT = '결제 정보';
+
+CREATE TABLE AMOUNT_HISTORY (
+    point_id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    amount INT NOT NULL COMMENT '결제 금액',
+    point_type VARCHAR(10) NOT NULL COMMENT '결제 타입 (CHARGE, USE)',
+    create_at DATE NOT NULL COMMENT '생성 일',
+    FOREIGN KEY (user_id) REFERENCES USER(user_id)
+) COMMENT = '금액 이력';
 
 
 

@@ -30,7 +30,7 @@ public class ConcertService {
     }
 
     /* 좌석 예약 요청 */
-    public PayDto processReserve(String queueToken, ConcertReserveReq concertReserveReq){
+    public PayDto processReserve(String queueToken, Long seatId){
         return new PayDto(1L, 1L, 1L, 400, false, LocalDateTime.of(2024, 10, 10, 12, 12, 1));
     }
 

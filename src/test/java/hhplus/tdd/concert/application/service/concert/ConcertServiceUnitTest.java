@@ -55,10 +55,10 @@ public class ConcertServiceUnitTest {
     public void 좌석_예약_성공() {
         // given
         String queueToken = "testToken";
-        ConcertReserveReq reserveReq = new ConcertReserveReq(1L, 1L);
+        long seatId = 1L;
 
         // when
-        PayDto result = concertService.processReserve(queueToken, reserveReq);
+        PayDto result = concertService.processReserve(queueToken, seatId);
 
         // then
         assertEquals(1L, result.reserveId());

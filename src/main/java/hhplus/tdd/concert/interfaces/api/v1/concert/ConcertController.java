@@ -64,9 +64,10 @@ public class ConcertController {
     @Operation(summary = "좌석 예약 요청")
     public ResponseEntity<PayRes> createConcertReserve(
             @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
-            @RequestBody ConcertReserveReq concertReserveReq
+            @Schema(description = "콘서트 좌석 ID")
+            @RequestParam(required = true, defaultValue = "1") long seatId
     ){
-        PayDto restResponse = concertService.processReserve(queueToken, concertReserveReq);
+        PayDto restResponse = concertService.processReserve(queueToken, seatId);
         return new ResponseEntity<>(PayRes.from(restResponse), HttpStatus.OK);
     }
 

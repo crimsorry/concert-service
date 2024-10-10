@@ -15,10 +15,6 @@ CREATE TABLE USER_QUEUE (
     FOREIGN KEY (user_id) REFERENCES USER(user_id)
 ) COMMENT = '대기열';
 
--- index 추가
-CREATE INDEX idx_user_queue_status ON USER_QUEUE(status);
-CREATE INDEX idx_user_queue_entered_at ON USER_QUEUE(entered_at);
-
 CREATE TABLE CONCERT (
     concert_id BIGINT PRIMARY KEY,
     concert_title VARCHAR(255) NOT NULL COMMENT '콘서트 명',
@@ -43,9 +39,6 @@ CREATE TABLE CONCERT_SEAT (
     seat_status VARCHAR(10) NOT NULL COMMENT '좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)',
     FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id)
 ) COMMENT = '콘서트 좌석';
-
--- index 추가
-CREATE INDEX idx_concert_seat_schedule_id ON CONCERT_SEAT(seat_status);
 
 CREATE TABLE RESERVATION (
     reserve_id BIGINT PRIMARY KEY,
@@ -82,6 +75,3 @@ CREATE TABLE AMOUNT_HISTORY (
     create_at DATE NOT NULL COMMENT '생성 일',
     FOREIGN KEY (user_id) REFERENCES USER(user_id)
 ) COMMENT = '금액 이력';
-
-
-

@@ -11,7 +11,7 @@ erDiagram
         bigint queue_id PK
         bigint user_id FK
         varchar token "토큰 값"
-        varchar status "상태 값 (STAND_BY, ACTIVE, EXPIRED)"
+        enum status "상태 값 (STAND_BY, ACTIVE, EXPIRED)"
         date expired_at "만료 시간"
     }
     CONCERT {
@@ -32,7 +32,7 @@ erDiagram
         bigint schedule_id FK
         varchar seat_num "좌석 번호"
         int amount "좌석 금액"
-        varchar sear_status "좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)"
+        enum sear_status "좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)"
     }
     PAYMENT {
         bigint pay_id PK
@@ -51,7 +51,7 @@ erDiagram
         date open_date "콘서트 개최 일"
         varchar seat_num "좌석 번호"
         int amount "좌석 금액"
-        varchar reserve_statue "예약 상태 (PENDING, RESERVED, CANCELED)"
+        enum reserve_statue "예약 상태 (PENDING, RESERVED, CANCELED)"
     }
     AMOUNT_HISTORY {
         bigint point_id PK

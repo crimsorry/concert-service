@@ -1,8 +1,6 @@
 package hhplus.tdd.concert.application.service.payment;
 
-import hhplus.tdd.concert.application.dto.ReservationDto;
-import hhplus.tdd.concert.application.dto.SReserveStatus;
-import hhplus.tdd.concert.application.dto.UserDto;
+import hhplus.tdd.concert.application.dto.*;
 import hhplus.tdd.concert.application.exception.FailException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,18 +14,18 @@ import java.util.List;
 public class PayService {
 
     /* 잔액 충전 */
-    public boolean chargeAmount(String queueToken, int amount){
+    public UpdateChargeDto chargeAmount(String queueToken, int amount){
         if(amount<0){
             throw new FailException("충전 금액이 0 이하입니다.");
         }else if(amount>5000000){
             throw new FailException("충전 한도 초과입니다.");
         }
-        return true;
+        return new UpdateChargeDto(true);
     }
 
     /* 잔액 조회 */
-    public int loadAmount(String queueToken){
-        return 300;
+    public LoadAmountDto loadAmount(String queueToken){
+        return new LoadAmountDto(300);
     }
 
     /* 결제 처리 */

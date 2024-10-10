@@ -1,6 +1,10 @@
 package hhplus.tdd.concert.interfaces.api.v1.userqueue;
 
+import hhplus.tdd.concert.application.dto.QueueNumDto;
+import hhplus.tdd.concert.application.dto.QueueTokenDto;
 import hhplus.tdd.concert.application.service.userqueue.UserQueueService;
+import hhplus.tdd.concert.interfaces.api.dto.response.QueueNumRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.QueueTokenRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,21 +26,21 @@ public class UserQueueController {
 
     @PostMapping("/{userId}/queue/token")
     @Operation(summary = "유저 대기열 토큰 발급")
-    public ResponseEntity<?> createUserQueue(
+    public ResponseEntity<QueueTokenRes> createUserQueue(
             @Schema(description = "유저 ID")
             @PathVariable("userId") long userId
     ){
-        String restResponse = userQueueService.enqueueUser(userId);
-        return new ResponseEntity<>(restResponse, HttpStatus.OK);
+        QueueTokenDto restResponse = userQueueService.enqueueUser(userId);
+        return new ResponseEntity<>(QueueTokenRes.from(restResponse), HttpStatus.OK);
     }
 
     @GetMapping("/queue/token")
     @Operation(summary = "유저 대기번호 조회")
-    public ResponseEntity<Long> getUserQueueNum(
+    public ResponseEntity<QueueNumRes> getUserQueueNum(
             @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken
     ){
-        long restResponse = userQueueService.loadQueueUser(queueToken);
-        return new ResponseEntity<>(restResponse, HttpStatus.OK);
+        QueueNumDto restResponse = userQueueService.loadQueueUser(queueToken);
+        return new ResponseEntity<>(QueueNumRes.from(restResponse), HttpStatus.OK);
     }
 
 

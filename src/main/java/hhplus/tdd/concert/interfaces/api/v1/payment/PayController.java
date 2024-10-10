@@ -1,8 +1,12 @@
 package hhplus.tdd.concert.interfaces.api.v1.payment;
 
+import hhplus.tdd.concert.application.dto.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.ReservationDto;
+import hhplus.tdd.concert.application.dto.UpdateChargeDto;
 import hhplus.tdd.concert.application.service.payment.PayService;
+import hhplus.tdd.concert.interfaces.api.dto.response.LoadAmountRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.ReservationRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.UpdateChargeRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,22 +31,22 @@ public class PayController {
 
     @PatchMapping("")
     @Operation(summary = "잔액 충전")
-    public ResponseEntity<?> updateCharge(
+    public ResponseEntity<UpdateChargeRes> updateCharge(
             @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
             @Schema(description = "충전 금액")
             @RequestParam(required = true, defaultValue = "1") int amount
     ){
-        payService.chargeAmount(queueToken, amount);
-        return new ResponseEntity<>(HttpStatus.OK);
+        UpdateChargeDto restResponse = payService.chargeAmount(queueToken, amount);
+        return new ResponseEntity<>(UpdateChargeRes.from(restResponse), HttpStatus.OK);
     }
 
     @GetMapping("")
     @Operation(summary = "잔액 조회")
-    public ResponseEntity<Integer> getAmount(
+    public ResponseEntity<LoadAmountRes> getAmount(
             @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken
     ){
-        int restResponse = payService.loadAmount(queueToken);
-        return new ResponseEntity<>(restResponse, HttpStatus.OK);
+        LoadAmountDto restResponse = payService.loadAmount(queueToken);
+        return new ResponseEntity<>(LoadAmountRes.from(restResponse), HttpStatus.OK);
     }
 
     @PatchMapping("/seat/{payId}")

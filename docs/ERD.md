@@ -12,7 +12,8 @@ erDiagram
         bigint user_id FK
         varchar token "토큰 값"
         enum status "상태 값 (STAND_BY, ACTIVE, EXPIRED)"
-        date expired_at "만료 시간"
+        datetime create_at "생성 시간"
+        datetime expired_at "만료 시간"
     }
     CONCERT {
         bigint concert_id PK
@@ -22,9 +23,9 @@ erDiagram
     CONCERT_SCHEDULE {
         bigint schedule_id PK
         bigint concert_id FK
-        date open_date "콘서트 개최 일"
-        date start_date "티켓 예매 시작 시간"
-        date end_date "티켓 예매 종료 시간"
+        datetime open_date "콘서트 개최 일"
+        datetime start_date "티켓 예매 시작 시간"
+        datetime end_date "티켓 예매 종료 시간"
         int capacity "남은 좌석 수"
     }
     CONCERT_SEAT {
@@ -40,15 +41,14 @@ erDiagram
         bigint reserve_id PK
         int amount "결제 금액"
         boolean is_pay "결제 여부(true / false)"
-        date create_at "생성 시간"
+        datetime create_at "생성 시간"
     }
     RESERVATION {
         bigint reserve_id PK
         bigint user_id FK
         bigint seat_id FK
-        bigint schedule_id FK
         varchar concert_title "콘서트 명"
-        date open_date "콘서트 개최 일"
+        datetime open_date "콘서트 개최 일"
         varchar seat_num "좌석 번호"
         int amount "좌석 금액"
         enum reserve_statue "예약 상태 (PENDING, RESERVED, CANCELED)"
@@ -57,8 +57,8 @@ erDiagram
         bigint point_id PK
         bigint user_id FK
         int amount "결제 금액"
-       	varchar point_type "결제 타입 (CHARGE, USE)"
-        date create_at "생성 일"
+       	enum point_type "결제 타입 (CHARGE, USE)"
+        datetime create_at "생성 일"
     }
 	USER ||--o{ USER_QUEUE : "enter queue"
     USER ||--o{ PAYMENT : "has pay"

@@ -1,7 +1,9 @@
 package hhplus.tdd.concert.interfaces.api.dto.response;
 
 import hhplus.tdd.concert.application.dto.ReservationDto;
-import hhplus.tdd.concert.domain.enums.ReserveStatus;
+import hhplus.tdd.concert.application.dto.SReserveStatus;
+import hhplus.tdd.concert.application.dto.SSeatStatus;
+import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
 
 import java.time.LocalDateTime;
 
@@ -23,8 +25,16 @@ public record ReservationRes(
                 dto.openDate(),
                 dto.seatNum(),
                 dto.amount(),
-                dto.reserveStatus()
+                mapToSStatus(dto.reserveStatus())
         );
+    }
+
+    private static ReserveStatus mapToSStatus(SReserveStatus sReserveStatus) {
+        return switch (sReserveStatus) {
+            case PENDING -> ReserveStatus.PENDING;
+            case RESERVED -> ReserveStatus.RESERVED;
+            case CANCELED -> ReserveStatus.CANCELED;
+        };
     }
 
 }

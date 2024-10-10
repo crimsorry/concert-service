@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.dto;
 
-import hhplus.tdd.concert.domain.enums.ReserveStatus;
+import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +11,6 @@ public record ReservationDto(
         LocalDateTime openDate,
         String seatNum,
         Integer amount,
-        ReserveStatus reserveStatus
+        SReserveStatus reserveStatus
 ) {
 }

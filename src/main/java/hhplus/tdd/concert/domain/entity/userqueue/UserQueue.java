@@ -1,7 +1,6 @@
 package hhplus.tdd.concert.domain.entity.userqueue;
 
 import hhplus.tdd.concert.domain.entity.user.User;
-import hhplus.tdd.concert.domain.enums.UserQueueStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;

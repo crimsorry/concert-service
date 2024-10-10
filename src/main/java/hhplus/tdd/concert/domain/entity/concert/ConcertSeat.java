@@ -1,6 +1,5 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
-import hhplus.tdd.concert.domain.enums.SeatStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;

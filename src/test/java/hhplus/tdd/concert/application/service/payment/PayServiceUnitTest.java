@@ -1,18 +1,22 @@
-package hhplus.tdd.concert.application.service.user;
+package hhplus.tdd.concert.application.service.payment;
 
+import hhplus.tdd.concert.application.dto.ReservationDto;
 import hhplus.tdd.concert.application.exception.FailException;
+import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceUnitTest {
+class PayServiceUnitTest {
 
     @InjectMocks
-    private UserService userService;
+    private PayService payService;
 
     @Test
     public void 잔액_충전_성공() {
@@ -21,7 +25,7 @@ class UserServiceUnitTest {
         int amountToCharge = 500;
 
         // when
-        boolean result = userService.chargeAmount(queueToken, amountToCharge);
+        boolean result = payService.chargeAmount(queueToken, amountToCharge);
 
         // then
         assertTrue(result);
@@ -35,7 +39,7 @@ class UserServiceUnitTest {
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            userService.chargeAmount(queueToken, amountToCharge);
+            payService.chargeAmount(queueToken, amountToCharge);
         });
 
         // 결과 검증
@@ -50,7 +54,7 @@ class UserServiceUnitTest {
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            userService.chargeAmount(queueToken, amountToCharge);
+            payService.chargeAmount(queueToken, amountToCharge);
         });
 
         // 결과 검증
@@ -63,10 +67,24 @@ class UserServiceUnitTest {
         String queueToken = "testToken";
 
         // when
-        int result = userService.amount(queueToken);
+        int result = payService.loadAmount(queueToken);
 
         // then
         assertEquals(300, result);
+    }
+
+    @Test
+    public void 결제_처리_성공() {
+        // given
+        String queueToken = "testToken";
+        long payId = 1L;
+
+        // when
+        List<ReservationDto> result = payService.processPay(queueToken, payId);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(ReserveStatus.RESERVED, result.get(0).reserveStatus());
     }
 
 }

@@ -71,17 +71,4 @@ public class ConcertController {
         return new ResponseEntity<>(PayRes.from(restResponse), HttpStatus.OK);
     }
 
-    @PatchMapping("/pay")
-    @Operation(summary = "결제 처리")
-    public ResponseEntity<List<ReservationRes>> updateConcertPay(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
-            @Schema(description = "결제 ID")
-            @RequestParam(required = true, defaultValue = "1") long payId
-    ){
-        List<ReservationDto> restResponse = concertService.processPay(queueToken, payId);
-        return new ResponseEntity<>(restResponse.stream()
-                .map(ReservationRes::from)
-                .collect(Collectors.toList()), HttpStatus.OK);
-    }
-
 }

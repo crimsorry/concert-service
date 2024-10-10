@@ -1,14 +1,10 @@
 package hhplus.tdd.concert.application.service.concert;
 
 import hhplus.tdd.concert.application.dto.*;
-import hhplus.tdd.concert.domain.enums.ReserveStatus;
-import hhplus.tdd.concert.domain.enums.SeatStatus;
-import hhplus.tdd.concert.interfaces.api.dto.request.ConcertReserveReq;
-import org.junit.jupiter.api.BeforeEach;
+import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,20 +60,6 @@ public class ConcertServiceUnitTest {
         assertEquals(1L, result.reserveId());
         assertEquals(400, result.amount());
         assertEquals(false, result.isPay());
-    }
-
-    @Test
-    public void 결제_처리_성공() {
-        // given
-        String queueToken = "testToken";
-        long payId = 1L;
-
-        // when
-        List<ReservationDto> result = concertService.processPay(queueToken, payId);
-
-        // then
-        assertEquals(1, result.size());
-        assertEquals(ReserveStatus.RESERVED, result.get(0).reserveStatus());
     }
 
 }

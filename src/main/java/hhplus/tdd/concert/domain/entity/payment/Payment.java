@@ -1,6 +1,7 @@
-package hhplus.tdd.concert.domain.entity.user;
+package hhplus.tdd.concert.domain.entity.payment;
 
 import hhplus.tdd.concert.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;

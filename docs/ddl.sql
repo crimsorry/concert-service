@@ -43,7 +43,6 @@ CREATE TABLE CONCERT_SEAT (
 CREATE TABLE RESERVATION (
     reserve_id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    schedule_id BIGINT NOT NULL,
     seat_id BIGINT NOT NULL,
     concert_title VARCHAR(255) NOT NULL COMMENT '콘서트 명',
     open_date DATE NOT NULL COMMENT '콘서트 개최 일',
@@ -51,7 +50,6 @@ CREATE TABLE RESERVATION (
     amount INT NOT NULL COMMENT '좌석 금액',
     reserve_status ENUM('PENDING', 'RESERVED', 'CANCELED') NOT NULL COMMENT '예약 상태',
     FOREIGN KEY (user_id) REFERENCES USER(user_id),
-    FOREIGN KEY (schedule_id) REFERENCES CONCERT_SCHEDULE(schedule_id),
     FOREIGN KEY (seat_id) REFERENCES CONCERT_SEAT(seat_id)
 ) COMMENT = '예약 정보';
 

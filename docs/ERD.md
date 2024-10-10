@@ -66,7 +66,6 @@ erDiagram
     USER ||--o{ AMOUNT_HISTORY : "has point"
     CONCERT ||--o{ CONCERT_SCHEDULE : "has concert schedule"
     CONCERT_SCHEDULE ||--o{ CONCERT_SEAT : "has c oncert seat"
-    CONCERT_SCHEDULE ||--o{ RESERVATION : "has reserve"
     PAYMENT ||--|| RESERVATION : "pay to reserve"
     CONCERT_SEAT ||--o{ RESERVATION : "has reserve"
     
@@ -75,7 +74,6 @@ erDiagram
 * 사용자는 대기열을 여러건 생성 가능합니다. (대기열 만료 상태 ENUM 관리)
 * 콘서트에는 콘서트 스케줄이 여러건 존재합니다. 
 * 콘서트 스케줄 당 여러개의 좌석이 존재합니다.
-* 콘서트 스케줄 당 여러건의 예약이 존재합니다. (???)
 * 콘서트 좌석 당 여러건의 예약이 존재합니다.
 * 사용자는 콘서트를 여러건 예약 할 수 있습니다. 
 * 사용자는 콘서트 예약를 확정하기 위해 좌석을 결제합니다. 

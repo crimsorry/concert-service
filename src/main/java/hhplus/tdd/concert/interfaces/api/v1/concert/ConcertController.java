@@ -8,16 +8,26 @@ import hhplus.tdd.concert.application.service.concert.ConcertService;
 import hhplus.tdd.concert.interfaces.api.dto.request.ConcertReserveReq;
 import hhplus.tdd.concert.interfaces.api.dto.response.ConcertScheduleRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.ConcertSeatRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.PayRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.ReservationRes;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "콘서트 API", description = "모든 API 는 대기열 토큰 값이 필요합니다.")
 @RestController
 @RequestMapping("/api/v1/concert")
 @RequiredArgsConstructor
@@ -26,10 +36,10 @@ public class ConcertController {
 
     private final ConcertService concertService;
 
-    /* 예약 가능 날짜 조회 */
     @GetMapping("/date")
-    public ResponseEntity<?> getConcertDate(
-            @RequestHeader("queueToken") String queueToken
+    @Operation(summary = "예약 가능 날짜 조회")
+    public ResponseEntity<List<ConcertScheduleRes>> getConcertDate(
+            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken
     ){
         List<ConcertScheduleDto> restResponse = concertService.loadConcertDate(queueToken);
         return new ResponseEntity<>(restResponse.stream()
@@ -37,10 +47,11 @@ public class ConcertController {
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    /* 예약 가능 좌석 조회 */
     @GetMapping("/seat")
-    public ResponseEntity<?> getConcertSeat(
-            @RequestHeader("queueToken") String queueToken,
+    @Operation(summary = "예약 가능 좌석 조회")
+    public ResponseEntity<List<ConcertSeatRes>> getConcertSeat(
+            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
+            @Schema(description = "콘서트 스케줄 ID")
             @RequestParam(required = true, defaultValue = "1") long scheduleId
     ){
         List<ConcertSeatDto> restResponse = concertService.loadConcertSeat(queueToken, scheduleId);
@@ -49,20 +60,21 @@ public class ConcertController {
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    /* 좌석 예약 요청 */
     @PostMapping("/reserve")
-    public ResponseEntity<?> createConcertReserve(
-            @RequestHeader("queueToken") String queueToken,
+    @Operation(summary = "좌석 예약 요청")
+    public ResponseEntity<PayRes> createConcertReserve(
+            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
             @RequestBody ConcertReserveReq concertReserveReq
     ){
-        PayDto restResponse =  concertService.processReserve(queueToken, concertReserveReq);
-        return new ResponseEntity<>(restResponse, HttpStatus.OK);
+        PayDto restResponse = concertService.processReserve(queueToken, concertReserveReq);
+        return new ResponseEntity<>(PayRes.from(restResponse), HttpStatus.OK);
     }
 
-    /* 결제 처리 */
     @PatchMapping("/pay")
-    public ResponseEntity<?> updateConcertPay(
-            @RequestHeader("queueToken") String queueToken,
+    @Operation(summary = "결제 처리")
+    public ResponseEntity<List<ReservationRes>> updateConcertPay(
+            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
+            @Schema(description = "결제 ID")
             @RequestParam(required = true, defaultValue = "1") long payId
     ){
         List<ReservationDto> restResponse = concertService.processPay(queueToken, payId);

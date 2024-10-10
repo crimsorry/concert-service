@@ -1,5 +1,6 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
+import hhplus.tdd.concert.domain.enums.SeatStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -37,5 +38,5 @@ public class ConcertSeat {
     @Comment("좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)")
     @Column
     @Enumerated(EnumType.STRING)
-    private String seatStatus;
+    private SeatStatus seatStatus;
 }

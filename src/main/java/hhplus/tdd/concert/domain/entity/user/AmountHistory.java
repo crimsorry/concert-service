@@ -1,5 +1,6 @@
 package hhplus.tdd.concert.domain.entity.user;
 
+import hhplus.tdd.concert.domain.enums.PointType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -36,7 +37,7 @@ public class AmountHistory {
     @Comment("포인트 타입 (CHARGE, USE)")
     @Column
     @Enumerated(EnumType.STRING)
-    private String pointType;
+    private PointType pointType;
 
     @NotNull
     @Comment("생성 일")

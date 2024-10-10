@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
 import hhplus.tdd.concert.domain.entity.user.User;
+import hhplus.tdd.concert.domain.enums.ReserveStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -63,5 +64,5 @@ public class Reservation {
     @Comment("예약 상태 (PENDING, RESERVED, CANCELED)")
     @Column
     @Enumerated(EnumType.STRING)
-    private String reserveStatus;
+    private ReserveStatus reserveStatus;
 }

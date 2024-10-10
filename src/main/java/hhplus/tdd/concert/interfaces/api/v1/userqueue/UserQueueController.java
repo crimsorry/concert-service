@@ -20,11 +20,11 @@ public class UserQueueController {
 
     private final UserQueueService userQueueService;
 
-    @PostMapping("/queue/token")
+    @PostMapping("/{userId}/queue/token")
     @Operation(summary = "유저 대기열 토큰 발급")
     public ResponseEntity<?> createUserQueue(
             @Schema(description = "유저 ID")
-            @RequestParam(required = true, defaultValue = "1") long userId
+            @PathVariable("userId") long userId
     ){
         String restResponse = userQueueService.enqueueUser(userId);
         return new ResponseEntity<>(restResponse, HttpStatus.OK);

@@ -45,12 +45,12 @@ public class PayController {
         return new ResponseEntity<>(restResponse, HttpStatus.OK);
     }
 
-    @PatchMapping("/seat")
+    @PatchMapping("/seat/{payId}")
     @Operation(summary = "결제 처리")
     public ResponseEntity<List<ReservationRes>> updateConcertPay(
             @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
             @Schema(description = "결제 ID")
-            @RequestParam(required = true, defaultValue = "1") long payId
+            @PathVariable("payId") long payId
     ){
         List<ReservationDto> restResponse = payService.processPay(queueToken, payId);
         return new ResponseEntity<>(restResponse.stream()

@@ -10,9 +10,28 @@
 
 ### [[플로우 차트]](https://github.com/crimsorry/hhplus-concert-service/blob/docs/step5/docs/%ED%94%8C%EB%A1%9C%EC%9A%B0%20%EC%B0%A8%ED%8A%B8.md)
 
+
+
+### [ERD]
+
+### [패키지 구조]
+
+### [API 명세]
+
+### [Mock API 작성]
+
 * 파일위치: /docs 하위
 
 
+
+### [기술 스택]
+
+* SpringBoot 3.4 
+* DB: Mysql 8
+* DB ORM: JPA 
+* api 문서: spring docs > OpenAPI Specification 지원
+* 아키텍처: Clean + Layered 
+* test: JUnit + AssertJ
 
 
 

@@ -2,7 +2,7 @@ package hhplus.tdd.concert.interfaces.api.v1.userqueue;
 
 import hhplus.tdd.concert.application.dto.QueueNumDto;
 import hhplus.tdd.concert.application.dto.QueueTokenDto;
-import hhplus.tdd.concert.application.service.userqueue.UserQueueService;
+import hhplus.tdd.concert.application.service.UserQueueService;
 import hhplus.tdd.concert.interfaces.api.dto.response.QueueNumRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.QueueTokenRes;
 import io.swagger.v3.oas.annotations.Operation;

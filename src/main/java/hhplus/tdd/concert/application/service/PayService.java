@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.application.service.payment;
+package hhplus.tdd.concert.application.service;
 
 import hhplus.tdd.concert.application.dto.*;
 import hhplus.tdd.concert.application.exception.FailException;

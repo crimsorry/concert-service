@@ -1,7 +1,6 @@
-package hhplus.tdd.concert.application.service.concert;
+package hhplus.tdd.concert.application.service;
 
 import hhplus.tdd.concert.application.dto.*;
-import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

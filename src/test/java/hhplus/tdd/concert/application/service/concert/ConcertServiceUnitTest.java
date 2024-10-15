@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.application.service.concert;
 
 import hhplus.tdd.concert.application.dto.*;
+import hhplus.tdd.concert.application.service.ConcertService;
 import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

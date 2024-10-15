@@ -1,3 +1,4 @@
+-- FK 연관관계를 설정할 때, 개발자가 의도하지 않은 deadlock이나 cascade 관련 문제가 발생할 수 있습니다. 이러한 이유로 이번 프로젝트에서는 JPA 엔터티에서 연관관계를 직접 관리하고, DDL 작성 시 FK 제약 조건을 삭제하여 데이터베이스 제약 대신 JPA의 연관관계 관리 기능을 활용할 계획입니다.
 
 CREATE TABLE USER (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '사용자 ID',

@@ -3,7 +3,7 @@ package hhplus.tdd.concert.interfaces.api.v1.payment;
 import hhplus.tdd.concert.application.dto.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.ReservationDto;
 import hhplus.tdd.concert.application.dto.UpdateChargeDto;
-import hhplus.tdd.concert.application.service.payment.PayService;
+import hhplus.tdd.concert.application.service.PayService;
 import hhplus.tdd.concert.interfaces.api.dto.response.LoadAmountRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.ReservationRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.UpdateChargeRes;

@@ -2,6 +2,7 @@ package hhplus.tdd.concert.application.service.payment;
 
 import hhplus.tdd.concert.application.dto.ReservationDto;
 import hhplus.tdd.concert.application.exception.FailException;
+import hhplus.tdd.concert.application.service.PayService;
 import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

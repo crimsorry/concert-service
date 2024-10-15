@@ -1,10 +1,9 @@
 package hhplus.tdd.concert.application.service.userqueue;
 
-import org.junit.jupiter.api.BeforeEach;
+import hhplus.tdd.concert.application.service.UserQueueService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +20,7 @@ public class UserQueueServiceTest {
         long userId = 1L;
 
         // when
-        String result = userQueueService.enqueueUser(userId);
+        String result = userQueueService.enqueueUser(userId).queueToken();
 
         // then
         assertEquals("user-token", result);
@@ -33,7 +32,7 @@ public class UserQueueServiceTest {
         String queueToken = "testToken";
 
         // when
-        long result = userQueueService.loadQueueUser(queueToken);
+        long result = userQueueService.loadQueueUser(queueToken).num();
 
         // then
         assertEquals(1, result);

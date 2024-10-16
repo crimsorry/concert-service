@@ -1,7 +1,6 @@
-package hhplus.tdd.concert.interfaces.api.dto.response;
+package hhplus.tdd.concert.interfaces.api.dto.response.payment;
 
-import hhplus.tdd.concert.application.dto.LoadAmountDto;
-import hhplus.tdd.concert.application.dto.UpdateChargeDto;
+import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 
 public record LoadAmountRes(
         int amount

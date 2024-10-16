@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.service.payment;
 
-import hhplus.tdd.concert.application.dto.ReservationDto;
+import hhplus.tdd.concert.application.dto.concert.ReservationDto;
 import hhplus.tdd.concert.application.exception.FailException;
 import hhplus.tdd.concert.application.service.PayService;
 import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;

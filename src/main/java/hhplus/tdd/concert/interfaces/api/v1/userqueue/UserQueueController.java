@@ -1,10 +1,10 @@
 package hhplus.tdd.concert.interfaces.api.v1.userqueue;
 
-import hhplus.tdd.concert.application.dto.QueueNumDto;
-import hhplus.tdd.concert.application.dto.QueueTokenDto;
+import hhplus.tdd.concert.application.dto.userqueue.QueueNumDto;
+import hhplus.tdd.concert.application.dto.userqueue.QueueTokenDto;
 import hhplus.tdd.concert.application.service.UserQueueService;
-import hhplus.tdd.concert.interfaces.api.dto.response.QueueNumRes;
-import hhplus.tdd.concert.interfaces.api.dto.response.QueueTokenRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.QueueNumRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.QueueTokenRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

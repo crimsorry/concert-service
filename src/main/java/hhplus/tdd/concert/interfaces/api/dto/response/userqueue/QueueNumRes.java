@@ -1,6 +1,6 @@
-package hhplus.tdd.concert.interfaces.api.dto.response;
+package hhplus.tdd.concert.interfaces.api.dto.response.userqueue;
 
-import hhplus.tdd.concert.application.dto.QueueNumDto;
+import hhplus.tdd.concert.application.dto.userqueue.QueueNumDto;
 
 public record QueueNumRes(
         int num

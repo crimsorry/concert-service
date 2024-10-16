@@ -26,4 +26,5 @@ public class Concert {
     @Comment("콘서트 장소")
     @Column(length = 255)
     private String concertPlace;
+
 }

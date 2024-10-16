@@ -1,7 +1,6 @@
-package hhplus.tdd.concert.interfaces.api.dto.response;
+package hhplus.tdd.concert.interfaces.api.dto.response.payment;
 
-import hhplus.tdd.concert.application.dto.PayDto;
-import hhplus.tdd.concert.application.dto.UpdateChargeDto;
+import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
 
 public record UpdateChargeRes(
         boolean isCharge

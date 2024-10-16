@@ -1,6 +1,6 @@
-package hhplus.tdd.concert.application.dto;
+package hhplus.tdd.concert.application.dto.concert;
 
-import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
+import hhplus.tdd.concert.application.dto.userqueue.UserDto;
 
 import java.time.LocalDateTime;
 

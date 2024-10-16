@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.application.service;
 
-import hhplus.tdd.concert.application.dto.QueueNumDto;
-import hhplus.tdd.concert.application.dto.QueueTokenDto;
+import hhplus.tdd.concert.application.dto.userqueue.QueueNumDto;
+import hhplus.tdd.concert.application.dto.userqueue.QueueTokenDto;
 import hhplus.tdd.concert.application.exception.FailException;
 import hhplus.tdd.concert.domain.entity.user.User;
 import hhplus.tdd.concert.domain.repository.user.UserRepository;

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.application.dto;
+package hhplus.tdd.concert.application.dto.payment;
 
 import java.time.LocalDateTime;
 

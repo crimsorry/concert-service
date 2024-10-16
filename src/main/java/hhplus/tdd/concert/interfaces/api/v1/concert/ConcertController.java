@@ -1,12 +1,12 @@
 package hhplus.tdd.concert.interfaces.api.v1.concert;
 
-import hhplus.tdd.concert.application.dto.ConcertScheduleDto;
-import hhplus.tdd.concert.application.dto.ConcertSeatDto;
-import hhplus.tdd.concert.application.dto.PayDto;
+import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
+import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
+import hhplus.tdd.concert.application.dto.payment.PayDto;
 import hhplus.tdd.concert.application.service.ConcertService;
-import hhplus.tdd.concert.interfaces.api.dto.response.ConcertScheduleRes;
-import hhplus.tdd.concert.interfaces.api.dto.response.ConcertSeatRes;
-import hhplus.tdd.concert.interfaces.api.dto.response.PayRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.concert.ConcertScheduleRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.concert.ConcertSeatRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.payment.PayRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

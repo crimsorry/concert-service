@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Comment("대기열")
 public class UserQueue {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("대기열 ID")
     private Long queueId;
 

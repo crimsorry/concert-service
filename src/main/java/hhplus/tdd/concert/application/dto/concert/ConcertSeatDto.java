@@ -1,6 +1,4 @@
-package hhplus.tdd.concert.application.dto;
-
-import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
+package hhplus.tdd.concert.application.dto.concert;
 
 public record ConcertSeatDto(
         Long seatId,

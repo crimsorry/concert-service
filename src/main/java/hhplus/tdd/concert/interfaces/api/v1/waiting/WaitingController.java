@@ -1,10 +1,10 @@
 package hhplus.tdd.concert.interfaces.api.v1.waiting;
 
 import hhplus.tdd.concert.application.dto.waiting.QueueNumDto;
-import hhplus.tdd.concert.application.dto.waiting.QueueTokenDto;
+import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
 import hhplus.tdd.concert.application.service.WaitingService;
 import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.QueueNumRes;
-import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.QueueTokenRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.WaitingTokenRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,20 +26,20 @@ public class WaitingController {
 
     @PostMapping("/{userId}/queue/token")
     @Operation(summary = "유저 대기열 토큰 발급")
-    public ResponseEntity<QueueTokenRes> createUserQueue(
+    public ResponseEntity<WaitingTokenRes> createUserQueue(
             @Schema(description = "유저 ID")
             @PathVariable("userId") long userId
     ){
-        QueueTokenDto restResponse = waitingService.enqueueMember(userId);
-        return new ResponseEntity<>(QueueTokenRes.from(restResponse), HttpStatus.OK);
+        WaitingTokenDto restResponse = waitingService.enqueueMember(userId);
+        return new ResponseEntity<>(WaitingTokenRes.from(restResponse), HttpStatus.OK);
     }
 
     @GetMapping("/queue/token")
     @Operation(summary = "유저 대기번호 조회")
     public ResponseEntity<QueueNumRes> getUserQueueNum(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        QueueNumDto restResponse = waitingService.loadWaiting(queueToken);
+        QueueNumDto restResponse = waitingService.loadWaiting(waitingToken);
         return new ResponseEntity<>(QueueNumRes.from(restResponse), HttpStatus.OK);
     }
 

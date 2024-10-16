@@ -32,9 +32,9 @@ public class ConcertController {
     @GetMapping("/date")
     @Operation(summary = "예약 가능 날짜 조회")
     public ResponseEntity<List<ConcertScheduleRes>> getConcertDate(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        List<ConcertScheduleDto> restResponse = concertService.loadConcertDate(queueToken);
+        List<ConcertScheduleDto> restResponse = concertService.loadConcertDate(waitingToken);
         return new ResponseEntity<>(restResponse.stream()
                 .map(ConcertScheduleRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);
@@ -43,11 +43,11 @@ public class ConcertController {
     @GetMapping("/{scheduleId}/seat")
     @Operation(summary = "예약 가능 좌석 조회")
     public ResponseEntity<List<ConcertSeatRes>> getConcertSeat(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
             @Schema(description = "콘서트 스케줄 ID")
             @PathVariable("scheduleId") long scheduleId
     ){
-        List<ConcertSeatDto> restResponse = concertService.loadConcertSeat(queueToken, scheduleId);
+        List<ConcertSeatDto> restResponse = concertService.loadConcertSeat(waitingToken, scheduleId);
         return new ResponseEntity<>(restResponse.stream()
                 .map(ConcertSeatRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);
@@ -56,11 +56,11 @@ public class ConcertController {
     @PostMapping("/{seatId}/reserve")
     @Operation(summary = "좌석 예약 요청")
     public ResponseEntity<PayRes> createConcertReserve(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
             @Schema(description = "콘서트 좌석 ID")
             @PathVariable("seatId") long seatId
     ){
-        PayDto restResponse = concertService.processReserve(queueToken, seatId);
+        PayDto restResponse = concertService.processReserve(waitingToken, seatId);
         return new ResponseEntity<>(PayRes.from(restResponse), HttpStatus.OK);
     }
 

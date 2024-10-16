@@ -20,7 +20,7 @@ public class WaitingUnitTest {
         Waiting waiting = null; // 대기열 없는 상태
 
         // when & then
-        Waiting result = Waiting.generateOrReturnQueueToken(waiting, member);
+        Waiting result = Waiting.generateOrReturnWaitingToken(waiting, member);
 
         // 결과검증
         assertNotNull(result);
@@ -44,7 +44,7 @@ public class WaitingUnitTest {
                 .build();
 
         // when & then
-        Waiting result = Waiting.generateOrReturnQueueToken(waiting, member);
+        Waiting result = Waiting.generateOrReturnWaitingToken(waiting, member);
 
         // 결과검증
         assertNotNull(result);

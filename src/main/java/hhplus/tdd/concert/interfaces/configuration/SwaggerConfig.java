@@ -15,7 +15,7 @@ import java.util.List;
 
 @SecurityScheme(
         type = SecuritySchemeType.APIKEY,
-        name = "queueToken",
+        name = "waitingToken",
         description = "대기열 Token 입력해주세요.",
         in = SecuritySchemeIn.HEADER)
 @Configuration
@@ -31,7 +31,7 @@ public class SwaggerConfig {
 
     private List<SecurityRequirement> getSecurityRequirement() {
         List<SecurityRequirement> requirements = new ArrayList<>();
-        requirements.add(new SecurityRequirement().addList("queueToken"));
+        requirements.add(new SecurityRequirement().addList("waitingToken"));
         return requirements;
     }
 

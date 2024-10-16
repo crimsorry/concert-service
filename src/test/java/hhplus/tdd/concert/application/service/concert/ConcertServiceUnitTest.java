@@ -23,10 +23,10 @@ public class ConcertServiceUnitTest {
     @Test
     public void 예약_가능_날짜_조회() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
 
         // when
-        List<ConcertScheduleDto> result = concertService.loadConcertDate(queueToken);
+        List<ConcertScheduleDto> result = concertService.loadConcertDate(waitingToken);
 
         // then
         assertEquals(1, result.size());
@@ -37,11 +37,11 @@ public class ConcertServiceUnitTest {
     @Test
     public void 예약_가능_좌석_조회() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
         long scheduleId = 1L;
 
         // when
-        List<ConcertSeatDto> result = concertService.loadConcertSeat(queueToken, scheduleId);
+        List<ConcertSeatDto> result = concertService.loadConcertSeat(waitingToken, scheduleId);
 
         // then
         assertEquals(1, result.size());
@@ -53,11 +53,11 @@ public class ConcertServiceUnitTest {
     @Test
     public void 좌석_예약_성공() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
         long seatId = 1L;
 
         // when
-        PayDto result = concertService.processReserve(queueToken, seatId);
+        PayDto result = concertService.processReserve(waitingToken, seatId);
 
         // then
         assertEquals(1L, result.reserveId());

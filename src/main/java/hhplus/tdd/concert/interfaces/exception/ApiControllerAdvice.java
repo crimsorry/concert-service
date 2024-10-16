@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.interfaces.exception;
 
-import hhplus.tdd.concert.application.exception.FailException;
+import hhplus.tdd.concert.domain.exception.FailException;
 import hhplus.tdd.concert.interfaces.api.dto.response.ErrorRes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

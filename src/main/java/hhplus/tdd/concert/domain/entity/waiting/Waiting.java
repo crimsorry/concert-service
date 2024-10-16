@@ -50,9 +50,15 @@ public class Waiting {
     @Column
     private LocalDateTime expiredAt;
 
-    public static void validateWaiting(Waiting waiting){
+    public static void checkWaitingExistence(Waiting waiting){
         if(waiting == null){
-            throw new FailException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new FailException(ErrorCode.WAITING_MEMBER_NOT_FOUND);
+        }
+    }
+
+    public static void checkWaitingExpired(Waiting waiting){
+        if(waiting.expiredAt.isBefore(LocalDateTime.now())){
+            throw new FailException(ErrorCode.WAITING_MEMBER_NOT_FOUND);
         }
     }
 

@@ -4,10 +4,12 @@ import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
 import hhplus.tdd.concert.application.dto.concert.SSeatStatus;
 import hhplus.tdd.concert.application.dto.payment.PayDto;
+import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.domain.exception.FailException;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.repository.concert.ConcertScheduleRepository;
+import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,11 +24,13 @@ public class ConcertService {
 
     private final WaitingRepository waitingRepository;
     private final ConcertScheduleRepository concertScheduleRepository;
+    private final ConcertSeatRepository concertSeatRepository;
 
     /* 예약 가능 날짜 조회 */
     public List<ConcertScheduleDto> loadConcertDate(String waitingToken){
         Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.validateWaiting(waiting);
+        Waiting.checkWaitingExistence(waiting);
+
         LocalDateTime now = LocalDateTime.now();
         List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDates(now, 0);
         return ConcertScheduleDto.from(concertSchedules);
@@ -35,13 +39,15 @@ public class ConcertService {
     /* 예약 가능 좌석 조회 */
     public List<ConcertSeatDto> loadConcertSeat(String waitingToken, long scheduleId){
         Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.validateWaiting(waiting);
+        Waiting.checkWaitingExistence(waiting);
 
+        // TODO: 대기열: 토큰 순번 확인 로직 추가 필요.
 
+        ConcertSchedule concertSchedule = concertScheduleRepository.findByScheduleId(scheduleId);
+        ConcertSchedule.checkConcertScheduleExistence(concertSchedule);
 
-        List<ConcertSeatDto> concertSeatDtos = new ArrayList<>();
-        concertSeatDtos.add(new ConcertSeatDto(1L, "A01", 3000, SSeatStatus.STAND_BY));
-        return concertSeatDtos;
+        List<ConcertSeat> concertSeats = concertSeatRepository.findByConcertSchedule(concertSchedule);
+        return ConcertSeatDto.from(concertSeats);
     }
 
     /* 좌석 예약 요청 */

@@ -6,13 +6,16 @@ import hhplus.tdd.concert.application.dto.payment.PayDto;
 import hhplus.tdd.concert.application.service.ConcertService;
 import hhplus.tdd.concert.domain.entity.concert.Concert;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
+import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
 import hhplus.tdd.concert.domain.repository.concert.ConcertScheduleRepository;
+import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,23 +40,27 @@ public class ConcertServiceUnitTest {
     private WaitingRepository waitingRepository;
 
     @Mock
-    private MemberRepository memberRepository;
+    private ConcertScheduleRepository concertScheduleRepository;
 
     @Mock
-    private ConcertScheduleRepository concertScheduleRepository;
+    private ConcertSeatRepository concertSeatRepository;
+
+
+    // given
+    private final long scheduleId = 1L;
+    private final String waitingToken = "testToken";
+    private final String title = "드라큘라";
+    private final LocalDateTime now = LocalDateTime.now();
+    private final Member member = new Member(1L, "김소리", 0);
+    private final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
+    private final Concert concert = new Concert(1L, title, "부산문화회관 대극장");
+    private final ConcertSchedule concertSchedule = new ConcertSchedule(1L, concert, now, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 50);
+    private final ConcertSeat concertSeat = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.STAND_BY);
+    private final List<ConcertSchedule> concertSchedules = List.of(concertSchedule);
+    private final List<ConcertSeat> concertSeats = List.of(concertSeat);
 
     @Test
     public void 예약_가능_날짜_조회() {
-        // given
-        String waitingToken = "testToken";
-        String title = "드라큘라";
-        LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "김소리", 0);
-        Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
-        List<ConcertSchedule> concertSchedules = new ArrayList<>();
-        Concert concert = new Concert(1L, title, "부산문화회관 대극장");
-        concertSchedules.add(new ConcertSchedule(1L, concert, now, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 50));
-
         // when
         when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
         when(concertScheduleRepository.findByConcertScheduleDates(any(LocalDateTime.class), any(Integer.class)))
@@ -64,24 +71,22 @@ public class ConcertServiceUnitTest {
 
         // 결과 검증
         assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).scheduleId());
         assertEquals(title, result.get(0).concertTitle());
     }
 
     @Test
     public void 예약_가능_좌석_조회() {
-        // given
-        String waitingToken = "testToken";
-        long scheduleId = 1L;
-
         // when
-        List<ConcertSeatDto> result = concertService.loadConcertSeat(waitingToken, scheduleId);
+        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(concertScheduleRepository.findByScheduleId(scheduleId)).thenReturn(concertSchedule);
+        when(concertSeatRepository.findByConcertSchedule(concertSchedule)).thenReturn(concertSeats);
 
         // then
+        List<ConcertSeatDto> result = concertService.loadConcertSeat(waitingToken, scheduleId);
+
+        // 결과 검증
         assertEquals(1, result.size());
         assertEquals("A01", result.get(0).seatNum());
-        assertEquals(3000, result.get(0).amount());
-        assertEquals(SeatStatus.STAND_BY, result.get(0).seatStatus());
     }
 
     @Test

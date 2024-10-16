@@ -21,7 +21,7 @@ public class WaitingService {
     /* 유저 대기열 생성 */
     public WaitingTokenDto enqueueMember(long memberId){
         Member member = memberRepository.findByMemberId(memberId);
-        Member.validateMember(member);
+        Member.checkMemberExistence(member);
         // TODO: 대기열 순번 관리 추리 및 동시성 처리.
         Waiting existWaiting = waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED);
         Waiting waiting = Waiting.generateOrReturnWaitingToken(existWaiting, member);

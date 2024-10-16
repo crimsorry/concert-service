@@ -1,6 +1,8 @@
 package hhplus.tdd.concert.domain.entity.waiting;
 
 import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.exception.ErrorCode;
+import hhplus.tdd.concert.domain.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -47,6 +49,12 @@ public class Waiting {
     @Comment("만료시간")
     @Column
     private LocalDateTime expiredAt;
+
+    public static void validateWaiting(Waiting waiting){
+        if(waiting == null){
+            throw new FailException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+    }
 
     /* 대기열 발급 or 만료되지 않은 대기열 반환 로직 */
     public static Waiting generateOrReturnWaitingToken(Waiting waiting, Member member){

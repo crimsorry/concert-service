@@ -1,5 +1,6 @@
 package hhplus.tdd.concert.domain.entity.member;
 
+import hhplus.tdd.concert.domain.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -27,4 +28,10 @@ public class Member {
     @Comment("잔액")
     @Column(columnDefinition = "INT DEFAULT 0")
     private Integer charge;
+
+    public static void validateMember(Member member){
+        if(member == null){
+            throw new FailException("존재하지 않는 유저입니다.");
+        }
+    }
 }

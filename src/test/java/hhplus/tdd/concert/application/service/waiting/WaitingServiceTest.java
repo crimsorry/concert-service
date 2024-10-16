@@ -5,6 +5,7 @@ import hhplus.tdd.concert.application.service.WaitingService;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
+import hhplus.tdd.concert.domain.exception.FailException;
 import hhplus.tdd.concert.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;

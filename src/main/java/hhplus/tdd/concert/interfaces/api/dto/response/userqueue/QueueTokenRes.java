@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.interfaces.api.dto.response.userqueue;
 
-import hhplus.tdd.concert.application.dto.userqueue.QueueTokenDto;
+import hhplus.tdd.concert.application.dto.waiting.QueueTokenDto;
 
 public record QueueTokenRes(
         String queueToken

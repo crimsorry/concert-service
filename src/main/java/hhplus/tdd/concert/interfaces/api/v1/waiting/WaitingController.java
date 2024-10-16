@@ -1,8 +1,8 @@
-package hhplus.tdd.concert.interfaces.api.v1.userqueue;
+package hhplus.tdd.concert.interfaces.api.v1.waiting;
 
-import hhplus.tdd.concert.application.dto.userqueue.QueueNumDto;
-import hhplus.tdd.concert.application.dto.userqueue.QueueTokenDto;
-import hhplus.tdd.concert.application.service.UserQueueService;
+import hhplus.tdd.concert.application.dto.waiting.QueueNumDto;
+import hhplus.tdd.concert.application.dto.waiting.QueueTokenDto;
+import hhplus.tdd.concert.application.service.WaitingService;
 import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.QueueNumRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.QueueTokenRes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @Slf4j
-public class UserQueueController {
+public class WaitingController {
 
-    private final UserQueueService userQueueService;
+    private final WaitingService waitingService;
 
     @PostMapping("/{userId}/queue/token")
     @Operation(summary = "유저 대기열 토큰 발급")
@@ -30,7 +30,7 @@ public class UserQueueController {
             @Schema(description = "유저 ID")
             @PathVariable("userId") long userId
     ){
-        QueueTokenDto restResponse = userQueueService.enqueueUser(userId);
+        QueueTokenDto restResponse = waitingService.enqueueMember(userId);
         return new ResponseEntity<>(QueueTokenRes.from(restResponse), HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class UserQueueController {
     public ResponseEntity<QueueNumRes> getUserQueueNum(
             @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken
     ){
-        QueueNumDto restResponse = userQueueService.loadQueueUser(queueToken);
+        QueueNumDto restResponse = waitingService.loadWaiting(queueToken);
         return new ResponseEntity<>(QueueNumRes.from(restResponse), HttpStatus.OK);
     }
 

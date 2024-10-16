@@ -3,15 +3,10 @@ package hhplus.tdd.concert.domain.entity.concert;
 import hhplus.tdd.concert.domain.exception.ErrorCode;
 import hhplus.tdd.concert.domain.exception.FailException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(MockitoExtension.class)
 public class ConcertScheduleUnitTest {
 
     @Test

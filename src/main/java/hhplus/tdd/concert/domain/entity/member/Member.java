@@ -7,6 +7,7 @@ import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
 
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -35,4 +36,11 @@ public class Member {
             throw new FailException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
+
+    public static void checkMemberCharge(Member member, int amount){
+        if(member.getCharge() + amount > 10000000){
+            throw new FailException(ErrorCode.FULL_PAY);
+        }
+    }
+
 }

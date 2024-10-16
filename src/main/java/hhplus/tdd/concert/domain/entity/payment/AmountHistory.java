@@ -1,6 +1,8 @@
 package hhplus.tdd.concert.domain.entity.payment;
 
 import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.exception.ErrorCode;
+import hhplus.tdd.concert.domain.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -43,4 +45,23 @@ public class AmountHistory {
     @Comment("생성 일")
     @Column
     private LocalDateTime createAt;
+
+    public static AmountHistory generateAmountHistory(int amount, PointType pointType, Member member){
+        AmountHistory amountHistory = AmountHistory
+                .builder()
+                .member(member)
+                .amount(amount)
+                .pointType(pointType)
+                .createAt(LocalDateTime.now())
+                .build();
+
+        return amountHistory;
+    }
+
+    public static void checkAmountMinus(int amount){
+        if(amount<0){
+            throw new FailException(ErrorCode.AMNIOTIC_PAY);
+        }
+    }
+
 }

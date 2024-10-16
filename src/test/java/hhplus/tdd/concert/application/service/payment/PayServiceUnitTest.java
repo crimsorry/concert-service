@@ -24,11 +24,11 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_충전_성공() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
         int amountToCharge = 500;
 
         // when
-        UpdateChargeDto result = payService.chargeAmount(queueToken, amountToCharge);
+        UpdateChargeDto result = payService.chargeAmount(waitingToken, amountToCharge);
 
         // then
         assertTrue(result.isCharge());
@@ -37,12 +37,12 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_충전_실패_음수_또는_0() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
         int amountToCharge = -500;
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            payService.chargeAmount(queueToken, amountToCharge);
+            payService.chargeAmount(waitingToken, amountToCharge);
         });
 
         // 결과 검증
@@ -52,12 +52,12 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_충전_실패_500만_포인트_초과(){
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
         int amountToCharge = 6000000;
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            payService.chargeAmount(queueToken, amountToCharge);
+            payService.chargeAmount(waitingToken, amountToCharge);
         });
 
         // 결과 검증
@@ -67,10 +67,10 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_조회() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
 
         // when
-        LoadAmountDto result = payService.loadAmount(queueToken);
+        LoadAmountDto result = payService.loadAmount(waitingToken);
 
         // then
         assertEquals(300, result.amount());
@@ -79,11 +79,11 @@ class PayServiceUnitTest {
     @Test
     public void 결제_처리_성공() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
         long payId = 1L;
 
         // when
-        List<ReservationDto> result = payService.processPay(queueToken, payId);
+        List<ReservationDto> result = payService.processPay(waitingToken, payId);
 
         // then
         assertEquals(1, result.size());

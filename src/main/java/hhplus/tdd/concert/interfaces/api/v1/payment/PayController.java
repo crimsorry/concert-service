@@ -32,31 +32,31 @@ public class PayController {
     @PatchMapping("")
     @Operation(summary = "잔액 충전")
     public ResponseEntity<UpdateChargeRes> updateCharge(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
             @Schema(description = "충전 금액")
             @RequestParam(required = true, defaultValue = "1") int amount
     ){
-        UpdateChargeDto restResponse = payService.chargeAmount(queueToken, amount);
+        UpdateChargeDto restResponse = payService.chargeAmount(waitingToken, amount);
         return new ResponseEntity<>(UpdateChargeRes.from(restResponse), HttpStatus.OK);
     }
 
     @GetMapping("")
     @Operation(summary = "잔액 조회")
     public ResponseEntity<LoadAmountRes> getAmount(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        LoadAmountDto restResponse = payService.loadAmount(queueToken);
+        LoadAmountDto restResponse = payService.loadAmount(waitingToken);
         return new ResponseEntity<>(LoadAmountRes.from(restResponse), HttpStatus.OK);
     }
 
     @PatchMapping("/seat/{payId}")
     @Operation(summary = "결제 처리")
     public ResponseEntity<List<ReservationRes>> updateConcertPay(
-            @Parameter(hidden = true) @RequestHeader("queueToken") String queueToken,
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
             @Schema(description = "결제 ID")
             @PathVariable("payId") long payId
     ){
-        List<ReservationDto> restResponse = payService.processPay(queueToken, payId);
+        List<ReservationDto> restResponse = payService.processPay(waitingToken, payId);
         return new ResponseEntity<>(restResponse.stream()
                 .map(ReservationRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);

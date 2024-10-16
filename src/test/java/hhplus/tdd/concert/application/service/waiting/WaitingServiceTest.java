@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.service.waiting;
 
-import hhplus.tdd.concert.application.dto.waiting.QueueTokenDto;
+import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
 import hhplus.tdd.concert.application.service.WaitingService;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
@@ -48,11 +48,11 @@ public class WaitingServiceTest {
         });
 
         // then
-        QueueTokenDto result = waitingService.enqueueMember(memberId);
+        WaitingTokenDto result = waitingService.enqueueMember(memberId);
 
         // 결과 검증
         assertNotNull(result);
-        assertNotNull(result.queueToken());
+        assertNotNull(result.waitingToken());
         verify(memberRepository).findByMemberId(memberId);
         verify(waitingRepository).findByMemberAndStatusNot(member, WaitingStatus.EXPIRED);
         verify(waitingRepository).save(any(Waiting.class));
@@ -61,10 +61,10 @@ public class WaitingServiceTest {
     @Test
     public void 유저_대기열_순서_조회() {
         // given
-        String queueToken = "testToken";
+        String waitingToken = "testToken";
 
         // when
-        long result = waitingService.loadWaiting(queueToken).num();
+        long result = waitingService.loadWaiting(waitingToken).num();
 
         // then
         assertEquals(1, result);

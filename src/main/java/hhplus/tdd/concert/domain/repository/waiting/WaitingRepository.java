@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
     Waiting findByMemberAndStatusNot(Member member, WaitingStatus status);
+    Waiting findByToken(String waitingToken);
 
 }

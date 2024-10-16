@@ -1,5 +1,6 @@
 package hhplus.tdd.concert.domain.entity.member;
 
+import hhplus.tdd.concert.domain.exception.ErrorCode;
 import hhplus.tdd.concert.domain.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,9 +30,9 @@ public class Member {
     @Column(columnDefinition = "INT DEFAULT 0")
     private Integer charge;
 
-    public static void validateMember(Member member){
+    public static void checkMemberExistence(Member member){
         if(member == null){
-            throw new FailException("존재하지 않는 유저입니다.");
+            throw new FailException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
 }

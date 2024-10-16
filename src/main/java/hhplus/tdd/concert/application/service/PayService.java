@@ -5,7 +5,13 @@ import hhplus.tdd.concert.application.dto.concert.SReserveStatus;
 import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
 import hhplus.tdd.concert.application.dto.waiting.UserDto;
+import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
+import hhplus.tdd.concert.domain.entity.payment.PointType;
+import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.domain.repository.payment.AmountHistoryRepository;
+import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +23,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PayService {
 
+    private final WaitingRepository waitingRepository;
+    private final AmountHistoryRepository amountHistoryRepository;
 
     /* 잔액 충전 */
     public UpdateChargeDto chargeAmount(String waitingToken, int amount){
-//        if(amount<0){
-//            throw new FailException("충전 금액이 0 이하입니다.");
-//        }else if(amount>5000000){
-//            throw new FailException("충전 한도 초과입니다.");
-//        }
+        // 대기열 존재 여부 확인
+        Waiting waiting = waitingRepository.findByToken(waitingToken);
+        Waiting.checkWaitingExistence(waiting);
+        Member member = waiting.getMember();
+
+        // 포인트 충전
+        AmountHistory.checkAmountMinus(amount);
+        Member.checkMemberCharge(member, amount);
+        member.setCharge(member.getCharge() + amount);
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, waiting.getMember());
+        amountHistoryRepository.save(amountHistory);
+
         return new UpdateChargeDto(true);
     }
 

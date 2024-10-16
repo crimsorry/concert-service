@@ -11,7 +11,7 @@ public enum ErrorCode {
     NOT_FOUND_CONCERT_SCHEDULE("E204", "존재하지 않는 콘서트 스케줄입니다."),
     NOT_FOUND_CONCERT_SEAT("E205", "존재하지 않는 좌석입니다."),
     AMNIOTIC_PAY("E300", "양수 값만 충전 가능합니다."),
-    FULL_PAY("E301", "충전 한도 조과. (한도: 100만원)"),
+    FULL_PAY("E301", "충전 한도 조과. (한도: 1000만원)"),
     EMPTY_PAY("E302", "잔액이 부족합니다.");
 
     private final String code;

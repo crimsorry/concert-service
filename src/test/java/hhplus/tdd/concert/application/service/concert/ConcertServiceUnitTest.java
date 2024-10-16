@@ -4,15 +4,28 @@ import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
 import hhplus.tdd.concert.application.dto.payment.PayDto;
 import hhplus.tdd.concert.application.service.ConcertService;
+import hhplus.tdd.concert.domain.entity.concert.Concert;
+import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
+import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
+import hhplus.tdd.concert.domain.repository.concert.ConcertScheduleRepository;
+import hhplus.tdd.concert.domain.repository.member.MemberRepository;
+import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ConcertServiceUnitTest {
@@ -20,18 +33,39 @@ public class ConcertServiceUnitTest {
     @InjectMocks
     private ConcertService concertService;
 
+    @Mock
+    private WaitingRepository waitingRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
+
+    @Mock
+    private ConcertScheduleRepository concertScheduleRepository;
+
     @Test
     public void 예약_가능_날짜_조회() {
         // given
         String waitingToken = "testToken";
+        String title = "드라큘라";
+        LocalDateTime now = LocalDateTime.now();
+        Member member = new Member(1L, "김소리", 0);
+        Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
+        List<ConcertSchedule> concertSchedules = new ArrayList<>();
+        Concert concert = new Concert(1L, title, "부산문화회관 대극장");
+        concertSchedules.add(new ConcertSchedule(1L, concert, now, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 50));
 
         // when
-        List<ConcertScheduleDto> result = concertService.loadConcertDate(waitingToken);
+        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(concertScheduleRepository.findByConcertScheduleDates(any(LocalDateTime.class), any(Integer.class)))
+                .thenReturn(concertSchedules);
 
         // then
+        List<ConcertScheduleDto> result = concertService.loadConcertDate(waitingToken);
+
+        // 결과 검증
         assertEquals(1, result.size());
         assertEquals(1L, result.get(0).scheduleId());
-        assertEquals(LocalDateTime.of(2024, 10, 15, 12, 1, 1), result.get(0).openDate());
+        assertEquals(title, result.get(0).concertTitle());
     }
 
     @Test

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public record ConcertScheduleDto(
         Long scheduleId,
+        String concertTitle,
         LocalDateTime openDate,
         LocalDateTime startDate,
         LocalDateTime endDate
@@ -16,6 +17,7 @@ public record ConcertScheduleDto(
     public static ConcertScheduleDto from(ConcertSchedule concertSchedule) {
         return new ConcertScheduleDto(
                 concertSchedule.getScheduleId(),
+                concertSchedule.getConcert().getConcertTitle(),
                 concertSchedule.getOpenDate(),
                 concertSchedule.getStartDate(),
                 concertSchedule.getEndDate()

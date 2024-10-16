@@ -1,6 +1,6 @@
-package hhplus.tdd.concert.interfaces.api.dto.response;
+package hhplus.tdd.concert.interfaces.api.dto.response.userqueue;
 
-import hhplus.tdd.concert.application.dto.UserDto;
+import hhplus.tdd.concert.application.dto.userqueue.UserDto;
 
 public record UserRes(
         long userId,

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.application.dto;
+package hhplus.tdd.concert.application.dto.payment;
 
 public record UpdateChargeDto(
         boolean isCharge

@@ -1,6 +1,6 @@
-package hhplus.tdd.concert.interfaces.api.dto.response;
+package hhplus.tdd.concert.interfaces.api.dto.response.concert;
 
-import hhplus.tdd.concert.application.dto.ConcertScheduleDto;
+import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 
 import java.time.LocalDateTime;
 

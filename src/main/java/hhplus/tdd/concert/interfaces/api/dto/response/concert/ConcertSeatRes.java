@@ -1,7 +1,7 @@
-package hhplus.tdd.concert.interfaces.api.dto.response;
+package hhplus.tdd.concert.interfaces.api.dto.response.concert;
 
-import hhplus.tdd.concert.application.dto.ConcertSeatDto;
-import hhplus.tdd.concert.application.dto.SSeatStatus;
+import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
+import hhplus.tdd.concert.application.dto.concert.SSeatStatus;
 
 public record ConcertSeatRes(
         Long seatId,

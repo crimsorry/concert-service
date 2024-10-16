@@ -1,5 +1,8 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
+import hhplus.tdd.concert.domain.exception.ErrorCode;
+import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -38,4 +41,11 @@ public class ConcertSeat {
     @Column
     @Enumerated(EnumType.STRING)
     private SeatStatus seatStatus;
+
+    public static void checkConcertSeatExistence(ConcertSeat concertSeat){
+        if(concertSeat == null){
+            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SEAT);
+        }
+    }
+
 }

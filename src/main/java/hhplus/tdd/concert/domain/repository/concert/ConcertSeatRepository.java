@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface ConcertSeatRepository extends JpaRepository<ConcertSeat, Long> {
 
+    ConcertSeat findBySeatId(Long seatId);
     List<ConcertSeat> findByConcertSchedule(ConcertSchedule concertSchedule);
 
 }

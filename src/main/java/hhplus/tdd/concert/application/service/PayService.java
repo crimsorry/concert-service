@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PayService {
 
+
     /* 잔액 충전 */
     public UpdateChargeDto chargeAmount(String waitingToken, int amount){
 //        if(amount<0){

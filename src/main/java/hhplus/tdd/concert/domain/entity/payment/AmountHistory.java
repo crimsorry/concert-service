@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.domain.entity.payment;
 
-import hhplus.tdd.concert.domain.entity.user.User;
+import hhplus.tdd.concert.domain.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -24,9 +24,9 @@ public class AmountHistory {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @Comment("사용자 ID")
-    private User user;
+    private Member member;
 
     @NotNull
     @Comment("포인트 금액")

@@ -1,6 +1,8 @@
 package hhplus.tdd.concert.application.service.payment;
 
 import hhplus.tdd.concert.application.dto.concert.ReservationDto;
+import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
+import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
 import hhplus.tdd.concert.application.exception.FailException;
 import hhplus.tdd.concert.application.service.PayService;
 import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
@@ -26,10 +28,10 @@ class PayServiceUnitTest {
         int amountToCharge = 500;
 
         // when
-        boolean result = payService.chargeAmount(queueToken, amountToCharge);
+        UpdateChargeDto result = payService.chargeAmount(queueToken, amountToCharge);
 
         // then
-        assertTrue(result);
+        assertTrue(result.isCharge());
     }
 
     @Test
@@ -68,10 +70,10 @@ class PayServiceUnitTest {
         String queueToken = "testToken";
 
         // when
-        int result = payService.loadAmount(queueToken);
+        LoadAmountDto result = payService.loadAmount(queueToken);
 
         // then
-        assertEquals(300, result);
+        assertEquals(300, result.amount());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.application.dto.userqueue;
+package hhplus.tdd.concert.application.dto.waiting;
 
 public record UserDto(
         long userId,

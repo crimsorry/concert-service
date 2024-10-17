@@ -75,7 +75,6 @@ public class PayService {
         Payment.checkPaymentExistence(payment); // 존재여부 확인
         Payment.checkPaymentStatue(payment); // 결제 안했는지 확인
         ConcertSeat.checkConcertSeatReserved(concertSeat); // 임시배정 존재 X
-        // TODO: 임시배정 만료는 만료 스케줄러에서 확인
         Member.checkMemberChargeLess(member, payment.getAmount()); // 잔액 부족 확인
 
         // 결제 완료 처리

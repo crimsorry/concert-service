@@ -1,8 +1,8 @@
 package hhplus.tdd.concert.application.dto.waiting;
 
-public record UserDto(
-        long userId,
-        String userName,
+public record MemberDto(
+        long memberId,
+        String memberName,
         Integer charge
 ) {
 }

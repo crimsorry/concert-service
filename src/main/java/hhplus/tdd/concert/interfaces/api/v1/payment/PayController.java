@@ -51,15 +51,13 @@ public class PayController {
 
     @PatchMapping("/seat/{payId}")
     @Operation(summary = "결제 처리")
-    public ResponseEntity<List<ReservationRes>> updateConcertPay(
+    public ResponseEntity<ReservationRes> updateConcertPay(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
             @Schema(description = "결제 ID")
             @PathVariable("payId") long payId
     ){
-        List<ReservationDto> restResponse = payService.processPay(waitingToken, payId);
-        return new ResponseEntity<>(restResponse.stream()
-                .map(ReservationRes::from)
-                .collect(Collectors.toList()), HttpStatus.OK);
+        ReservationDto restResponse = payService.processPay(waitingToken, payId);
+        return new ResponseEntity<>(ReservationRes.from(restResponse), HttpStatus.OK);
     }
 
 

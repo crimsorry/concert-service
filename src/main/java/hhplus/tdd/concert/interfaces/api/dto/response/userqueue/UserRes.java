@@ -1,17 +1,17 @@
 package hhplus.tdd.concert.interfaces.api.dto.response.userqueue;
 
-import hhplus.tdd.concert.application.dto.waiting.UserDto;
+import hhplus.tdd.concert.application.dto.waiting.MemberDto;
 
 public record UserRes(
-        long userId,
-        String userName,
+        long memberId,
+        String memberName,
         Integer charge
 ) {
 
-    public static UserRes from(UserDto dto) {
+    public static UserRes from(MemberDto dto) {
         return new UserRes(
-                dto.userId(),
-                dto.userName(),
+                dto.memberId(),
+                dto.memberName(),
                 dto.charge()
         );
     }

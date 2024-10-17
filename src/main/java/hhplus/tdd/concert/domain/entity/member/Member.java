@@ -33,13 +33,19 @@ public class Member {
 
     public static void checkMemberExistence(Member member){
         if(member == null){
-            throw new FailException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new FailException(ErrorCode.NOT_FOUNT_MEMBER);
         }
     }
 
     public static void checkMemberCharge(Member member, int amount){
         if(member.getCharge() + amount > 10000000){
             throw new FailException(ErrorCode.FULL_PAY);
+        }
+    }
+
+    public static void checkMemberChargeLess(Member member, int amount){
+        if(member.getCharge() < amount){
+            throw new FailException(ErrorCode.EMPTY_PAY);
         }
     }
 

@@ -2,6 +2,8 @@ package hhplus.tdd.concert.domain.entity.payment;
 
 import hhplus.tdd.concert.domain.entity.concert.Reservation;
 import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.exception.ErrorCode;
+import hhplus.tdd.concert.domain.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -47,4 +50,19 @@ public class Payment {
     @Comment("생성 시간")
     @Column
     private LocalDateTime createAt;
+
+    public static void checkPaymentExistence(Payment payment){
+        if(payment == null){
+            throw new FailException(ErrorCode.NOT_FOUNT_PAYMENT);
+        }
+    }
+
+    public static void checkPaymentStatue(Payment payment){
+        if(payment.isPay){
+            throw new FailException(ErrorCode.SUCCESS_PAY_SEAT);
+        }
+    }
+
+
+
 }

@@ -13,6 +13,7 @@ import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.repository.payment.AmountHistoryRepository;
 import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,9 +36,10 @@ public class PayService extends BaseService {
         Waiting waiting = findAndCheckWaiting(waitingToken);
         Member member = waiting.getMember();
 
-        // 포인트 충전
         AmountHistory.checkAmountMinus(amount);
         Member.checkMemberCharge(member, amount);
+
+        // 포인트 충전
         member.setCharge(member.getCharge() + amount);
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);
@@ -56,6 +58,7 @@ public class PayService extends BaseService {
     }
 
     /* 결제 처리 */
+    @Transactional
     public ReservationDto processPay(String waitingToken, long payId){
         // 대기열 존재 여부 확인
         Waiting waiting = findAndCheckWaiting(waitingToken);
@@ -65,6 +68,8 @@ public class PayService extends BaseService {
         Payment payment = paymentRepository.findByPayId(payId);
         ConcertSeat concertSeat = payment.getReservation().getSeat();
         Reservation reservation = payment.getReservation();
+
+        // 예외처리
         Payment.checkPaymentExistence(payment); // 존재여부 확인
         Payment.checkPaymentStatue(payment); // 결제 안했는지 확인
         ConcertSeat.checkConcertSeatReserved(concertSeat); // 임시배정 존재 X
@@ -74,7 +79,6 @@ public class PayService extends BaseService {
         payment.setIsPay(true);
         concertSeat.setSeatStatus(SeatStatus.ASSIGN);
         reservation.setReserveStatus(ReserveStatus.RESERVED);
-
         member.setCharge(member.getCharge() - payment.getAmount());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);

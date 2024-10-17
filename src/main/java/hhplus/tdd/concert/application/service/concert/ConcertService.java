@@ -1,8 +1,9 @@
-package hhplus.tdd.concert.application.service;
+package hhplus.tdd.concert.application.service.concert;
 
 import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
 import hhplus.tdd.concert.application.dto.payment.PayDto;
+import hhplus.tdd.concert.application.service.BaseService;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.domain.entity.concert.Reservation;

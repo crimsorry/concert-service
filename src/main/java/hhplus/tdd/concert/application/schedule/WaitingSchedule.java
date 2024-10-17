@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.schedule;
 
-import hhplus.tdd.concert.application.service.WaitingService;
+import hhplus.tdd.concert.application.service.waiting.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

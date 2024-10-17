@@ -3,7 +3,7 @@ package hhplus.tdd.concert.interfaces.api.v1.payment;
 import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.concert.ReservationDto;
 import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
-import hhplus.tdd.concert.application.service.PayService;
+import hhplus.tdd.concert.application.service.payment.PayService;
 import hhplus.tdd.concert.interfaces.api.dto.response.payment.LoadAmountRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.concert.ReservationRes;
 import hhplus.tdd.concert.interfaces.api.dto.response.payment.UpdateChargeRes;
@@ -16,9 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "결제 API", description = "모든 API 는 대기열 토큰 값이 필요합니다.")
 @RestController

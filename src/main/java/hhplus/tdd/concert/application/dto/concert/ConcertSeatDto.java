@@ -1,6 +1,5 @@
 package hhplus.tdd.concert.application.dto.concert;
 
-import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
 

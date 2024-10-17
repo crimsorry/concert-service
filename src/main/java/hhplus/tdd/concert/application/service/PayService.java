@@ -29,6 +29,7 @@ public class PayService {
     /* 잔액 충전 */
     public UpdateChargeDto chargeAmount(String waitingToken, int amount){
         // 대기열 존재 여부 확인
+        // TODO: waiting 메소드화 or aop
         Waiting waiting = waitingRepository.findByToken(waitingToken);
         Waiting.checkWaitingExistence(waiting);
         Member member = waiting.getMember();
@@ -45,7 +46,13 @@ public class PayService {
 
     /* 잔액 조회 */
     public LoadAmountDto loadAmount(String waitingToken){
-        return new LoadAmountDto(300);
+        // 대기열 존재 여부 확인
+        Waiting waiting = waitingRepository.findByToken(waitingToken);
+        Waiting.checkWaitingExistence(waiting);
+        Member member = waiting.getMember();
+
+        // 잔액 조회
+        return new LoadAmountDto(member.getCharge());
     }
 
     /* 결제 처리 */

@@ -17,11 +17,13 @@ import hhplus.tdd.concert.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ConcertService extends BaseService {
 
@@ -63,16 +65,29 @@ public class ConcertService extends BaseService {
         Waiting waiting = findAndCheckWaiting(waitingToken);
         Member member = waiting.getMember();
 
+        log.info("test: 11");
+
         // 좌석 상태 확인
         ConcertSeat.checkConcertSeatExistence(concertSeat);
+
+        log.info("test: 12");
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
+        log.info("test: 13");
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
+
+        log.info("test: 14");
         Payment payment = Payment.generatePayment(member, reservation);
+
+        log.info("test: 15");
         ConcertSchedule concertSchedule = concertSeat.getSchedule();
+
+        log.info("test: 16");
 
         // 좌석 임시배정
         concertSeat.setSeatStatus(SeatStatus.RESERVED);
+
+        log.info("test: 17");
         concertSchedule.setCapacity(concertSchedule.getCapacity()-1);
         waiting.setExpiredAt(LocalDateTime.now().plusMinutes(10));
         reservationRepository.save(reservation);

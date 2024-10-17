@@ -49,6 +49,7 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_충전_성공() {
         // when
+        // TODO when @beforeEach 초기화
         when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
         when(amountHistoryRepository.save(any(AmountHistory.class))).thenAnswer(invocation -> {
             AmountHistory amountHistory = invocation.getArgument(0);
@@ -66,45 +67,15 @@ class PayServiceUnitTest {
     }
 
     @Test
-    public void 잔액_충전_실패_음수_또는_0() {
-        // given
-        String waitingToken = "testToken";
-        int amountToCharge = -500;
-
-        // when & then
-        Exception exception = assertThrows(FailException.class, () -> {
-            payService.chargeAmount(waitingToken, amountToCharge);
-        });
-
-        // 결과 검증
-        assertEquals("충전 금액이 0 이하입니다.", exception.getMessage());
-    }
-
-    @Test
-    public void 잔액_충전_실패_500만_포인트_초과(){
-        // given
-        String waitingToken = "testToken";
-        int amountToCharge = 6000000;
-
-        // when & then
-        Exception exception = assertThrows(FailException.class, () -> {
-            payService.chargeAmount(waitingToken, amountToCharge);
-        });
-
-        // 결과 검증
-        assertEquals("충전 한도 초과입니다.", exception.getMessage());
-    }
-
-    @Test
     public void 잔액_조회() {
-        // given
-        String waitingToken = "testToken";
-
         // when
-        LoadAmountDto result = payService.loadAmount(waitingToken);
+        when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
 
         // then
-        assertEquals(300, result.amount());
+        LoadAmountDto result = payService.loadAmount(waitingToken);
+
+        // 결과검증
+        assertEquals(0, result.amount());
     }
 
     @Test

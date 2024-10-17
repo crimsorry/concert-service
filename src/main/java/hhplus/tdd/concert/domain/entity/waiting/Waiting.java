@@ -56,12 +56,6 @@ public class Waiting {
         }
     }
 
-    public static void checkWaitingExpired(Waiting waiting){
-        if(waiting.expiredAt.isBefore(LocalDateTime.now())){
-            throw new FailException(ErrorCode.EXPIRED_WAITING_TOKEN);
-        }
-    }
-
     /* 대기열 발급 or 만료되지 않은 대기열 반환 로직 */
     public static Waiting generateOrReturnWaitingToken(Waiting waiting, Member member){
         // 대기열이 null 이거나 만료시간이 경과한 경우 (스케줄러 텀이 1분으므로 만료에도 불구하고 stand_by 나 active 남은 경우 생김)

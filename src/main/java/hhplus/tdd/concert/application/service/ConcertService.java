@@ -31,7 +31,7 @@ public class ConcertService {
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
 
-    /* 예약 가능 날짜 조회 */
+    /* 예약 가능 날짜 조회 - 스케줄러를 통해 ACTIVE 상태 토큰만 들어옴 */
     public List<ConcertScheduleDto> loadConcertDate(String waitingToken){
         Waiting waiting = waitingRepository.findByToken(waitingToken);
         Waiting.checkWaitingExistence(waiting);

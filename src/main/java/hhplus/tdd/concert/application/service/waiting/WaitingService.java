@@ -3,10 +3,13 @@ package hhplus.tdd.concert.application.service.waiting;
 import hhplus.tdd.concert.application.dto.waiting.QueueNumDto;
 import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
 import hhplus.tdd.concert.application.service.BaseService;
+import hhplus.tdd.concert.domain.entity.concert.*;
 import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.entity.payment.Payment;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
 import hhplus.tdd.concert.domain.repository.member.MemberRepository;
+import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
@@ -21,11 +24,13 @@ public class WaitingService extends BaseService {
     private final int maxMember = 10;
     private final MemberRepository memberRepository;
     private final WaitingRepository waitingRepository;
+    private final PaymentRepository paymentRepository;
 
-    public WaitingService(MemberRepository memberRepository, WaitingRepository waitingRepository) {
+    public WaitingService(MemberRepository memberRepository, WaitingRepository waitingRepository, PaymentRepository paymentRepository) {
         super(waitingRepository);
         this.memberRepository = memberRepository;
         this.waitingRepository = waitingRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     /* 유저 대기열 생성 */
@@ -53,6 +58,16 @@ public class WaitingService extends BaseService {
         List<Waiting> waitings = waitingRepository.findByExpiredAtLessThan(LocalDateTime.now());
         for(Waiting waiting : waitings){
             waiting.setStatus(WaitingStatus.EXPIRED);
+            Member member = waiting.getMember();
+            Payment payment = paymentRepository.findByPayId(member.getMemberId());
+            ConcertSeat concertSeat = payment.getReservation().getSeat();
+            Reservation reservation = payment.getReservation();
+            ConcertSchedule concertSchedule = concertSeat.getSchedule();
+
+            // 결제 실패 처리
+            concertSeat.setSeatStatus(SeatStatus.STAND_BY);
+            reservation.setReserveStatus(ReserveStatus.CANCELED);
+            concertSchedule.setCapacity(concertSchedule.getCapacity()+1);
         }
     }
 

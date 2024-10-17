@@ -4,10 +4,7 @@ import hhplus.tdd.concert.application.dto.concert.ReservationDto;
 import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
 import hhplus.tdd.concert.application.service.BaseService;
-import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.domain.entity.concert.Reservation;
-import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
-import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
+import hhplus.tdd.concert.domain.entity.concert.*;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
 import hhplus.tdd.concert.domain.entity.payment.Payment;
@@ -77,6 +74,7 @@ public class PayService extends BaseService {
         payment.setIsPay(true);
         concertSeat.setSeatStatus(SeatStatus.ASSIGN);
         reservation.setReserveStatus(ReserveStatus.RESERVED);
+
         member.setCharge(member.getCharge() - payment.getAmount());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);

@@ -14,6 +14,7 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
     Waiting findByMemberAndStatusNot(Member member, WaitingStatus status);
     List<Waiting> findByExpiredAtLessThan(LocalDateTime localDateTime);
+    int countByWaitingIdLessThanANDStatus(long waitingId, WaitingStatus statue);
     Waiting findByToken(String waitingToken);
 
 }

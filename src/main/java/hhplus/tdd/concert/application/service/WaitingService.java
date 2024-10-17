@@ -31,9 +31,13 @@ public class WaitingService {
         return new WaitingTokenDto(waiting.getToken());
     }
 
-    /* 유저 대기열 조회 */
+    /* 유저 대기열 순번 조회 */
     public QueueNumDto loadWaiting(String waitingToken){
-        return new QueueNumDto(1);
+        Waiting waiting = waitingRepository.findByToken(waitingToken);
+        Waiting.checkWaitingExistence(waiting);
+
+        int sequence = waitingRepository.countByWaitingIdLessThanANDStatus(waiting.getMember().getMemberId(), WaitingStatus.STAND_BY);
+        return new QueueNumDto(sequence);
     }
 
     /* 대기열 만료 */

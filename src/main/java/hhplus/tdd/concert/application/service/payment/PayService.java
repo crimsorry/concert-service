@@ -1,8 +1,9 @@
-package hhplus.tdd.concert.application.service;
+package hhplus.tdd.concert.application.service.payment;
 
 import hhplus.tdd.concert.application.dto.concert.ReservationDto;
 import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
+import hhplus.tdd.concert.application.service.BaseService;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.domain.entity.concert.Reservation;
 import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
@@ -18,7 +19,7 @@ import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PayService extends BaseService{
+public class PayService extends BaseService {
 
     private final WaitingRepository waitingRepository;
     private final AmountHistoryRepository amountHistoryRepository;

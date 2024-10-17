@@ -1,14 +1,14 @@
-package hhplus.tdd.concert.application.service;
+package hhplus.tdd.concert.application.service.waiting;
 
 import hhplus.tdd.concert.application.dto.waiting.QueueNumDto;
 import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
+import hhplus.tdd.concert.application.service.BaseService;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
 import hhplus.tdd.concert.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class WaitingService extends BaseService{
+public class WaitingService extends BaseService {
 
     private final int maxMember = 10;
     private final MemberRepository memberRepository;
@@ -66,7 +66,7 @@ public class WaitingService extends BaseService{
             List<Waiting> waitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.STAND_BY, PageRequest.of(0, maxMember-activeWaiting));
             for(Waiting waiting : waitings){
                 waiting.setStatus(WaitingStatus.ACTIVE);
-                waiting.setExpiredAt(LocalDateTime.now().plusMinutes(5));
+                waiting.setExpiredAt(LocalDateTime.now().plusMinutes(10));
             }
         }
     }

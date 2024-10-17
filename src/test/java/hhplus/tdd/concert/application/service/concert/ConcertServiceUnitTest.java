@@ -3,7 +3,6 @@ package hhplus.tdd.concert.application.service.concert;
 import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
 import hhplus.tdd.concert.application.dto.payment.PayDto;
-import hhplus.tdd.concert.application.service.ConcertService;
 import hhplus.tdd.concert.application.service.TestBase;
 import hhplus.tdd.concert.domain.entity.concert.Reservation;
 import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;

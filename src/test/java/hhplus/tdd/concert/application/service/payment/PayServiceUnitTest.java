@@ -4,7 +4,6 @@ import hhplus.tdd.concert.application.dto.concert.ReservationDto;
 import hhplus.tdd.concert.application.dto.concert.SReserveStatus;
 import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
-import hhplus.tdd.concert.application.service.PayService;
 import hhplus.tdd.concert.application.service.TestBase;
 import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
 import hhplus.tdd.concert.domain.repository.payment.AmountHistoryRepository;

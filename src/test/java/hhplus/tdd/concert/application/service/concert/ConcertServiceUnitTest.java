@@ -79,7 +79,7 @@ public class ConcertServiceUnitTest {
         // when
         when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
         when(concertScheduleRepository.findByScheduleId(scheduleId)).thenReturn(concertSchedule);
-        when(concertSeatRepository.findByConcertSchedule(concertSchedule)).thenReturn(concertSeats);
+        when(concertSeatRepository.findBySchedule(concertSchedule)).thenReturn(concertSeats);
 
         // then
         List<ConcertSeatDto> result = concertService.loadConcertSeat(waitingToken, scheduleId);

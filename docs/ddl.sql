@@ -12,7 +12,7 @@ CREATE TABLE waiting (
     token VARCHAR(255) NOT NULL COMMENT '토큰 값',
     status VARCHAR(10) NOT NULL COMMENT '상태 값',
     create_at DATETIME NOT NULL COMMENT '생성시간',
-    expired_at DATETIME NOT NULL COMMENT '만료시간'
+    expired_at DATETIME COMMENT '만료시간'
 ) COMMENT = '대기열';
 
 CREATE TABLE concert (

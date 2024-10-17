@@ -5,7 +5,6 @@ import hhplus.tdd.concert.application.service.WaitingService;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
-import hhplus.tdd.concert.domain.exception.FailException;
 import hhplus.tdd.concert.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;
@@ -14,13 +13,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WaitingServiceTest {
+public class WaitingServiceUnitTest {
 
     @InjectMocks
     private WaitingService waitingService;
@@ -70,4 +73,6 @@ public class WaitingServiceTest {
         // then
         assertEquals(1, result);
     }
+
+
 }

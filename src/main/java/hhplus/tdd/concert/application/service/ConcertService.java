@@ -49,7 +49,7 @@ public class ConcertService {
         ConcertSchedule concertSchedule = concertScheduleRepository.findByScheduleId(scheduleId);
         ConcertSchedule.checkConcertScheduleExistence(concertSchedule);
 
-        List<ConcertSeat> concertSeats = concertSeatRepository.findByConcertSchedule(concertSchedule);
+        List<ConcertSeat> concertSeats = concertSeatRepository.findBySchedule(concertSchedule);
         return ConcertSeatDto.from(concertSeats);
     }
 

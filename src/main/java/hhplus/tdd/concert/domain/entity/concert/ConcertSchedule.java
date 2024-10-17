@@ -1,5 +1,7 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
+import hhplus.tdd.concert.domain.exception.ErrorCode;
+import hhplus.tdd.concert.domain.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 public class ConcertSchedule {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("스케줄 ID")
     private Long scheduleId;
 
@@ -45,4 +48,10 @@ public class ConcertSchedule {
     @Comment("남은 좌석 수")
     @Column
     private Integer capacity;
+
+    public static void checkConcertScheduleExistence(ConcertSchedule concertSchedule){
+        if(concertSchedule == null){
+            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SCHEDULE);
+        }
+    }
 }

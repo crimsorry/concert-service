@@ -1,10 +1,15 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
+import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.exception.ErrorCode;
+import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
 
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -14,6 +19,7 @@ import org.hibernate.annotations.Comment;
 public class ConcertSeat {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("좌석 ID")
     private Long seatId;
 
@@ -38,4 +44,25 @@ public class ConcertSeat {
     @Column
     @Enumerated(EnumType.STRING)
     private SeatStatus seatStatus;
+
+    public static void checkConcertSeatExistence(ConcertSeat concertSeat){
+        if(concertSeat == null){
+            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SEAT);
+        }
+    }
+
+    public static void checkConcertSeatReserved(ConcertSeat concertSeat){
+        if(concertSeat.getSeatStatus() != SeatStatus.RESERVED){
+            throw new FailException(ErrorCode.NOT_FOUND_SEAT_RESERVED);
+        }
+    }
+
+    public static void checkConcertSeatStatus(ConcertSeat concertSeat){
+        if(concertSeat.getSeatStatus() == SeatStatus.ASSIGN){
+            throw new FailException(ErrorCode.ASSIGN_SEAT);
+        }else if(concertSeat.getSeatStatus() == SeatStatus.RESERVED){
+            throw new FailException(ErrorCode.RESERVED_SEAT);
+        }
+    }
+
 }

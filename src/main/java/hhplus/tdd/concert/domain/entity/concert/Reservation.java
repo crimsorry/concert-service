@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
-import hhplus.tdd.concert.domain.entity.user.User;
+import hhplus.tdd.concert.domain.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -18,14 +18,15 @@ import java.time.LocalDateTime;
 public class Reservation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("예약 ID")
     private Long reserveId;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @Comment("사용자 ID")
-    private User user;
+    private Member member;
 
     @NotNull
     @ManyToOne
@@ -58,4 +59,18 @@ public class Reservation {
     @Column
     @Enumerated(EnumType.STRING)
     private ReserveStatus reserveStatus;
+
+    public static Reservation generateReservation(Member member, ConcertSeat seat){
+        Reservation reservation = Reservation.builder()
+                .member(member)
+                .seat(seat)
+                .concertTitle(seat.getSchedule().getConcert().getConcertTitle())
+                .openDate(seat.getSchedule().getOpenDate())
+                .seatNum(seat.getSeatNum())
+                .amount(seat.getAmount())
+                .reserveStatus(ReserveStatus.PENDING)
+                .build();
+        return reservation;
+    }
+
 }

@@ -1,38 +1,89 @@
 package hhplus.tdd.concert.application.service.payment;
 
-import hhplus.tdd.concert.application.dto.*;
-import hhplus.tdd.concert.application.exception.FailException;
-import lombok.RequiredArgsConstructor;
+import hhplus.tdd.concert.application.dto.concert.ReservationDto;
+import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
+import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
+import hhplus.tdd.concert.application.service.BaseService;
+import hhplus.tdd.concert.domain.entity.concert.*;
+import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
+import hhplus.tdd.concert.domain.entity.payment.Payment;
+import hhplus.tdd.concert.domain.entity.payment.PointType;
+import hhplus.tdd.concert.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.domain.repository.payment.AmountHistoryRepository;
+import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
+import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
-public class PayService {
+public class PayService extends BaseService {
+
+    private final WaitingRepository waitingRepository;
+    private final AmountHistoryRepository amountHistoryRepository;
+    private final PaymentRepository paymentRepository;
+
+    public PayService(WaitingRepository waitingRepository, WaitingRepository waitingRepository1, AmountHistoryRepository amountHistoryRepository, PaymentRepository paymentRepository) {
+        super(waitingRepository);
+        this.waitingRepository = waitingRepository1;
+        this.amountHistoryRepository = amountHistoryRepository;
+        this.paymentRepository = paymentRepository;
+    }
 
     /* 잔액 충전 */
-    public UpdateChargeDto chargeAmount(String queueToken, int amount){
-        if(amount<0){
-            throw new FailException("충전 금액이 0 이하입니다.");
-        }else if(amount>5000000){
-            throw new FailException("충전 한도 초과입니다.");
-        }
+    public UpdateChargeDto chargeAmount(String waitingToken, int amount){
+        // 대기열 존재 여부 확인
+        Waiting waiting = findAndCheckWaiting(waitingToken);
+        Member member = waiting.getMember();
+
+        AmountHistory.checkAmountMinus(amount);
+        Member.checkMemberCharge(member, amount);
+
+        // 포인트 충전
+        member.setCharge(member.getCharge() + amount);
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, waiting.getMember());
+        amountHistoryRepository.save(amountHistory);
+
         return new UpdateChargeDto(true);
     }
 
     /* 잔액 조회 */
-    public LoadAmountDto loadAmount(String queueToken){
-        return new LoadAmountDto(300);
+    public LoadAmountDto loadAmount(String waitingToken){
+        // 대기열 존재 여부 확인
+        Waiting waiting = findAndCheckWaiting(waitingToken);
+        Member member = waiting.getMember();
+
+        // 잔액 조회
+        return new LoadAmountDto(member.getCharge());
     }
 
     /* 결제 처리 */
-    public List<ReservationDto> processPay(String queueToken, long payId){
-        List<ReservationDto> reservationDtos = new ArrayList<>();
-        reservationDtos.add(new ReservationDto(1L, new UserDto(1L, "김소리", 5000), "콘서트 명", LocalDateTime.of(2024, 10, 15, 12, 1, 1), "A01", 300, SReserveStatus.RESERVED));
-        return reservationDtos;
+    @Transactional
+    public ReservationDto processPay(String waitingToken, long payId){
+        // 대기열 존재 여부 확인
+        Waiting waiting = findAndCheckWaiting(waitingToken);
+        Member member = waiting.getMember();
+
+        // 결제 정보
+        Payment payment = paymentRepository.findByPayId(payId);
+        ConcertSeat concertSeat = payment.getReservation().getSeat();
+        Reservation reservation = payment.getReservation();
+
+        // 예외처리
+        Payment.checkPaymentExistence(payment); // 존재여부 확인
+        Payment.checkPaymentStatue(payment); // 결제 안했는지 확인
+        ConcertSeat.checkConcertSeatReserved(concertSeat); // 임시배정 존재 X
+        Member.checkMemberChargeLess(member, payment.getAmount()); // 잔액 부족 확인
+
+        // 결제 완료 처리
+        payment.setIsPay(true);
+        concertSeat.setSeatStatus(SeatStatus.ASSIGN);
+        reservation.setReserveStatus(ReserveStatus.RESERVED);
+        member.setCharge(member.getCharge() - payment.getAmount());
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
+        amountHistoryRepository.save(amountHistory);
+
+        return ReservationDto.from(reservation);
     }
 
 }

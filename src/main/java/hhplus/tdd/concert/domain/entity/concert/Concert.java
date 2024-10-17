@@ -14,6 +14,7 @@ import org.hibernate.annotations.Comment;
 public class Concert {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("콘서트 ID")
     private Long concertId;
 
@@ -26,4 +27,5 @@ public class Concert {
     @Comment("콘서트 장소")
     @Column(length = 255)
     private String concertPlace;
+
 }

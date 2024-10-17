@@ -1,6 +1,5 @@
 package hhplus.tdd.concert.domain.entity.member;
 
-import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
 import hhplus.tdd.concert.domain.exception.ErrorCode;
 import hhplus.tdd.concert.domain.exception.FailException;
 import org.junit.jupiter.api.Test;

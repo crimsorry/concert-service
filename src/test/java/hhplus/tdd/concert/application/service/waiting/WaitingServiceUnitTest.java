@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.application.service.waiting;
 
 import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
+import hhplus.tdd.concert.application.service.TestBase;
 import hhplus.tdd.concert.application.service.WaitingService;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WaitingServiceUnitTest {
+public class WaitingServiceUnitTest extends TestBase {
 
     @InjectMocks
     private WaitingService waitingService;
@@ -33,12 +34,6 @@ public class WaitingServiceUnitTest {
 
     @Mock
     private WaitingRepository waitingRepository;
-
-    private final String waitingToken = "testToken";
-    private final LocalDateTime now = LocalDateTime.now();
-    private final Member member = new Member(1L, "김소리", 150000);
-    private final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, now, LocalDateTime.now().plusMinutes(30));
-
 
     @Test
     public void 유저_대기열_생성_성공() {

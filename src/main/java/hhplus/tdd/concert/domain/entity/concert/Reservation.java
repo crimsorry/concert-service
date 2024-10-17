@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Reservation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("예약 ID")
     private Long reserveId;
 

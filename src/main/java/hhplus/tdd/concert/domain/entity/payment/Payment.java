@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 public class Payment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("결제 ID")
     private Long payId;
 

@@ -10,17 +10,15 @@
 
 ### [[플로우 차트]](https://github.com/crimsorry/hhplus-concert-service/blob/docs/step5/docs/%ED%94%8C%EB%A1%9C%EC%9A%B0%20%EC%B0%A8%ED%8A%B8.md)
 
+### [[ERD]](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/ERD.md)
 
+### [[패키지 구조]](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/%ED%8C%A8%ED%82%A4%EC%A7%80%20%EA%B5%AC%EC%A1%B0.md)
 
-### [ERD]
+### [[API 명세]](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/API%20%EB%AA%85%EC%84%B8.yaml)
 
-### [패키지 구조]
+### [[Mock API 작성]](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/Mock%20API%20%EC%9E%91%EC%84%B1.md)
 
-### [API 명세]
-
-### [Mock API 작성]
-
-* 파일위치: /docs 하위
+### [[Swagger]](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/Swagger.md)
 
 
 

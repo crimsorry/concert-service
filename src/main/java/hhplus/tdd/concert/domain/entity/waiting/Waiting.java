@@ -56,12 +56,6 @@ public class Waiting {
         }
     }
 
-//    public static void checkWaitingStatue(Waiting waiting){
-//        if(waiting.getStatus() == WaitingStatus.ACTIVE){
-//            throw new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER);
-//        }
-//    }
-
     public static void checkWaitingExpired(Waiting waiting){
         if(waiting.expiredAt.isBefore(LocalDateTime.now())){
             throw new FailException(ErrorCode.EXPIRED_WAITING_TOKEN);

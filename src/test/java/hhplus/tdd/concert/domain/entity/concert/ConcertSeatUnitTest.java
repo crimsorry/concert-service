@@ -37,4 +37,34 @@ public class ConcertSeatUnitTest {
         // 결과 검증
         assertEquals(ErrorCode.NOT_FOUND_SEAT_RESERVED.getMessage(), exception.getMessage());
     }
+
+    @Test
+    public void 콘서트_좌석_상태_예약_완료(){
+        // given
+        ConcertSeat concertSeat = new ConcertSeat();
+        concertSeat.setSeatStatus(SeatStatus.ASSIGN);
+
+        // when & then
+        Exception exception = assertThrows(FailException.class, () -> {
+            ConcertSeat.checkConcertSeatStatus(concertSeat);
+        });
+
+        // 결과 검증
+        assertEquals(ErrorCode.ASSIGN_SEAT.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void 콘서트_좌석_상태_임시배정(){
+        // given
+        ConcertSeat concertSeat = new ConcertSeat();
+        concertSeat.setSeatStatus(SeatStatus.RESERVED);
+
+        // when & then
+        Exception exception = assertThrows(FailException.class, () -> {
+            ConcertSeat.checkConcertSeatStatus(concertSeat);
+        });
+
+        // 결과 검증
+        assertEquals(ErrorCode.RESERVED_SEAT.getMessage(), exception.getMessage());
+    }
 }

@@ -49,11 +49,10 @@ public class WaitingServiceUnitTest {
 
         // when
         when(memberRepository.findByMemberId(memberId)).thenReturn(member);
-        when(waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED))
-                .thenReturn(waiting); // 대기열이 없을 때 null 반환
+        when(waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED)).thenReturn(waiting);
         when(waitingRepository.save(any(Waiting.class))).thenAnswer(invocation -> {
             Waiting savedQueue = invocation.getArgument(0);
-            savedQueue.setWaitingId(1L); // save 후에 ID가 생성됨을 가정
+            savedQueue.setWaitingId(1L); // save 후에 ID가 생성됨 가정
             return savedQueue;
         });
 

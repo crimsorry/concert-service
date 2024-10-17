@@ -16,6 +16,7 @@ import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -56,6 +57,7 @@ public class ConcertService extends BaseService {
     }
 
     /* 좌석 예약 요청 */
+    @Transactional
     public PayDto processReserve(String waitingToken, Long seatId){
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(seatId);
         Waiting waiting = findAndCheckWaiting(waitingToken);
@@ -65,12 +67,14 @@ public class ConcertService extends BaseService {
         ConcertSeat.checkConcertSeatExistence(concertSeat);
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        // 좌석 임시배정
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
         Payment payment = Payment.generatePayment(member, reservation);
         ConcertSchedule concertSchedule = concertSeat.getSchedule();
+
+        // 좌석 임시배정
         concertSeat.setSeatStatus(SeatStatus.RESERVED);
         concertSchedule.setCapacity(concertSchedule.getCapacity()-1);
+        waiting.setExpiredAt(LocalDateTime.now().plusMinutes(10));
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 

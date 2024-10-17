@@ -81,7 +81,6 @@ public class WaitingService extends BaseService {
             List<Waiting> waitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.STAND_BY, PageRequest.of(0, maxMember-activeWaiting));
             for(Waiting waiting : waitings){
                 waiting.setStatus(WaitingStatus.ACTIVE);
-                waiting.setExpiredAt(LocalDateTime.now().plusMinutes(10));
             }
         }
     }

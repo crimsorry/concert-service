@@ -26,7 +26,6 @@ public class ConcertService {
     private final ConcertScheduleRepository concertScheduleRepository;
     private final ConcertSeatRepository concertSeatRepository;
 
-    // TODO: 스케줄러 - 대기열 토큰 만료
     // TODO: 스케줄러 - active 토큰 전환
 
     /* 예약 가능 날짜 조회 */

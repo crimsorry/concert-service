@@ -95,7 +95,7 @@ class PayServiceUnitTest {
     public void 결제_처리_성공() {
         // when
         when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
-        when(paymentRepository.findByPaymentId(eq(1L))).thenReturn(payment);
+        when(paymentRepository.findByPayId(eq(1L))).thenReturn(payment);
 
         // then
         ReservationDto result = payService.processPay(waitingToken, 1L);

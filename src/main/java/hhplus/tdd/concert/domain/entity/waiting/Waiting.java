@@ -78,7 +78,6 @@ public class Waiting {
                     .token(waitingToken)
                     .status(WaitingStatus.STAND_BY)
                     .createAt(LocalDateTime.now())
-                    .expiredAt(LocalDateTime.now().plusMinutes(30))
                     .build();
             return newWaiting;
         }

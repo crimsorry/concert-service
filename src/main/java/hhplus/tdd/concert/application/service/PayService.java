@@ -69,7 +69,7 @@ public class PayService {
         Member member = waiting.getMember();
 
         // 결제 정보
-        Payment payment = paymentRepository.findByPaymentId(payId);
+        Payment payment = paymentRepository.findByPayId(payId);
         ConcertSeat concertSeat = payment.getReservation().getSeat();
         Reservation reservation = payment.getReservation();
         Payment.checkPaymentExistence(payment); // 존재여부 확인

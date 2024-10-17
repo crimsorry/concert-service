@@ -72,7 +72,7 @@ public class WaitingServiceUnitTest {
     public void 유저_대기열_순서_조회() {
         // when
         when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
-        when(waitingRepository.countByWaitingIdLessThanANDStatus(member.getMemberId(), WaitingStatus.STAND_BY)).thenReturn(0);
+        when(waitingRepository.countByWaitingIdLessThanAndStatus(member.getMemberId(), WaitingStatus.STAND_BY)).thenReturn(0);
 
         // then
         long result = waitingService.loadWaiting(waitingToken).num();

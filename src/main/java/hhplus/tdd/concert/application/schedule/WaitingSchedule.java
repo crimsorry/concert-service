@@ -20,7 +20,7 @@ public class WaitingSchedule {
     /* 대기열 active 전환 스케줄러 */
     @Scheduled(cron = "*/10 * * * * *")
     public void activeWaitingSchedule(){
-        waitingService.expiredWaiting();
+        waitingService.activeWaiting();
     }
 
 }

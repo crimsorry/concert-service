@@ -295,7 +295,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QueueNumRes"
+                  "$ref": "#/components/schemas/WaitingNumRes"
                 }
               }
             }
@@ -509,7 +509,7 @@
           }
         }
       },
-      "QueueNumRes": {
+      "WaitingNumRes": {
         "type": "object",
         "properties": {
           "num": {

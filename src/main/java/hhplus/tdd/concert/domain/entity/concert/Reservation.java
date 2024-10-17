@@ -58,4 +58,18 @@ public class Reservation {
     @Column
     @Enumerated(EnumType.STRING)
     private ReserveStatus reserveStatus;
+
+    public static Reservation generateReservation(Member member, ConcertSeat seat){
+        Reservation reservation = Reservation.builder()
+                .member(member)
+                .seat(seat)
+                .concertTitle(seat.getSchedule().getConcert().getConcertTitle())
+                .openDate(seat.getSchedule().getOpenDate())
+                .seatNum(seat.getSeatNum())
+                .amount(seat.getAmount())
+                .reserveStatus(ReserveStatus.PENDING)
+                .build();
+        return reservation;
+    }
+
 }

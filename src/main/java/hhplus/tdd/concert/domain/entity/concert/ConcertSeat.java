@@ -56,4 +56,12 @@ public class ConcertSeat {
         }
     }
 
+    public static void checkConcertSeatStatus(ConcertSeat concertSeat){
+        if(concertSeat.getSeatStatus() == SeatStatus.ASSIGN){
+            throw new FailException(ErrorCode.ASSIGN_SEAT);
+        }else if(concertSeat.getSeatStatus() == SeatStatus.RESERVED){
+            throw new FailException(ErrorCode.RESERVED_SEAT);
+        }
+    }
+
 }

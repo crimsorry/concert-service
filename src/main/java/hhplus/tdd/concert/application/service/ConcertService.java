@@ -2,20 +2,23 @@ package hhplus.tdd.concert.application.service;
 
 import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
-import hhplus.tdd.concert.application.dto.concert.SSeatStatus;
 import hhplus.tdd.concert.application.dto.payment.PayDto;
-import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.domain.exception.FailException;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
+import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
+import hhplus.tdd.concert.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
+import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.entity.payment.Payment;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
+import hhplus.tdd.concert.domain.repository.concert.ReservationRepository;
+import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,8 +28,8 @@ public class ConcertService {
     private final WaitingRepository waitingRepository;
     private final ConcertScheduleRepository concertScheduleRepository;
     private final ConcertSeatRepository concertSeatRepository;
-
-    // TODO: 스케줄러 - active 토큰 전환
+    private final ReservationRepository reservationRepository;
+    private final PaymentRepository paymentRepository;
 
     /* 예약 가능 날짜 조회 */
     public List<ConcertScheduleDto> loadConcertDate(String waitingToken){
@@ -43,8 +46,6 @@ public class ConcertService {
         Waiting waiting = waitingRepository.findByToken(waitingToken);
         Waiting.checkWaitingExistence(waiting);
 
-        // TODO: 대기열: 토큰 순번 확인 로직 추가 필요.
-
         ConcertSchedule concertSchedule = concertScheduleRepository.findByScheduleId(scheduleId);
         ConcertSchedule.checkConcertScheduleExistence(concertSchedule);
 
@@ -54,35 +55,23 @@ public class ConcertService {
 
     /* 좌석 예약 요청 */
     public PayDto processReserve(String waitingToken, Long seatId){
-        // TODO: wating 유효성 체크 중복 관리.
-        // 대기열 토큰 존재 여부 확인
+        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(seatId);
+        // TODO: waiting 유효성 체크 중복 관리.
         Waiting waiting = waitingRepository.findByToken(waitingToken);
         Waiting.checkWaitingExistence(waiting);
+        Member member = waiting.getMember();
 
-
-        // 토큰 만료면 error
-
-        // stand_by면 error > 대기하고 와라..? 이상한대
-
-
-        // 만약에 좌석 조회 안하고 사용자가 예약부터 바로 들어가면 어떻하지??
-
-        // active 인지 확인
-        // active 면 좌석 예약
-
-        // TODO: 좌석 동시성 처리
-
-        // 좌석 존재 여부 확인
-        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(seatId);
+        // 좌석 상태 확인
         ConcertSeat.checkConcertSeatExistence(concertSeat);
+        ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        // active 상태에서 30분 동안은 좌석 예약 가능하게?
-        // 아니면 그냥 자동적으로 30분 동안 동작 안하지만 않으면 되게?
+        // 좌석 임시배정
+        Reservation reservation = Reservation.generateReservation(member, concertSeat);
+        Payment payment = Payment.generatePayment(member, reservation);
+        concertSeat.setSeatStatus(SeatStatus.RESERVED);
+        reservationRepository.save(reservation);
+        paymentRepository.save(payment);
 
-        // 좌석 stand by > pending
-        // 결제내역 false 생성
-        // 예약 pending 생성
-
-        return new PayDto(1L, 1L, 1L, 400, false, LocalDateTime.of(2024, 10, 10, 12, 12, 1));
+        return PayDto.from(payment, reservation);
     }
 }

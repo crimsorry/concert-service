@@ -3,7 +3,6 @@ package hhplus.tdd.concert.interfaces.api.dto.response.concert;
 import hhplus.tdd.concert.application.dto.concert.ReservationDto;
 import hhplus.tdd.concert.application.dto.concert.SReserveStatus;
 import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
-import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.UserRes;
 
 import java.time.LocalDateTime;
 

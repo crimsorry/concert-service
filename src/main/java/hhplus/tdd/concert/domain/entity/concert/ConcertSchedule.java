@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class ConcertSchedule {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("스케줄 ID")
     private Long scheduleId;
 

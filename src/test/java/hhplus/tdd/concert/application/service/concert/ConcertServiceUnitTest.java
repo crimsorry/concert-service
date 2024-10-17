@@ -2,16 +2,20 @@ package hhplus.tdd.concert.application.service.concert;
 
 import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
+import hhplus.tdd.concert.application.dto.concert.ReservationDto;
+import hhplus.tdd.concert.application.dto.concert.SReserveStatus;
+import hhplus.tdd.concert.application.dto.payment.PayDto;
 import hhplus.tdd.concert.application.service.ConcertService;
-import hhplus.tdd.concert.domain.entity.concert.Concert;
-import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
-import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.domain.entity.concert.SeatStatus;
+import hhplus.tdd.concert.domain.entity.concert.*;
 import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
+import hhplus.tdd.concert.domain.entity.payment.Payment;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
 import hhplus.tdd.concert.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
+import hhplus.tdd.concert.domain.repository.concert.ReservationRepository;
+import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +28,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +45,12 @@ public class ConcertServiceUnitTest {
 
     @Mock
     private ConcertSeatRepository concertSeatRepository;
+
+    @Mock
+    private ReservationRepository reservationRepository;
+
+    @Mock
+    private PaymentRepository paymentRepository;
 
 
     // given
@@ -82,6 +93,31 @@ public class ConcertServiceUnitTest {
         // 결과 검증
         assertEquals(1, result.size());
         assertEquals("A01", result.get(0).seatNum());
+    }
+
+    @Test
+    public void 좌석_예약() {
+        // when
+        when(concertSeatRepository.findBySeatId(concertSeat.getSeatId())).thenReturn(concertSeat);
+        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
+            Reservation reservation = invocation.getArgument(0);
+            reservation.setReserveId(1L);
+            reservation.setReserveStatus(ReserveStatus.RESERVED);
+            return reservation;
+        });
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> {
+            Payment payment = invocation.getArgument(0);
+            payment.setPayId(1L);
+            payment.setIsPay(true);
+            return payment;
+        });
+
+        // then
+        PayDto result = concertService.processReserve(waitingToken, 1L);
+
+        // 결과검증
+        assertEquals(true, result.isPay());
     }
 
 }

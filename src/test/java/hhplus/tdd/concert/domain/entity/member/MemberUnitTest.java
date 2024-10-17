@@ -21,7 +21,7 @@ public class MemberUnitTest {
         });
 
         // 결과 검증
-        assertEquals(ErrorCode.MEMBER_NOT_FOUND.getMessage(), exception.getMessage());
+        assertEquals(ErrorCode.NOT_FOUNT_MEMBER.getMessage(), exception.getMessage());
     }
 
     @Test
@@ -37,6 +37,21 @@ public class MemberUnitTest {
 
         // 결과 검증
         assertEquals(ErrorCode.FULL_PAY.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void 잔액_부족(){
+        // given
+        int amount = 4000;
+        Member member = new Member(1L, "김소리", 300);
+
+        // when & then
+        Exception exception = assertThrows(FailException.class, () -> {
+            Member.checkMemberChargeLess(member, amount);
+        });
+
+        // 결과 검증
+        assertEquals(ErrorCode.EMPTY_PAY.getMessage(), exception.getMessage());
     }
 
 }

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public record ReservationRes(
         long reserveId,
-        UserRes user,
+        String memberName,
         String concertTitle,
         LocalDateTime openDate,
         String seatNum,
@@ -20,7 +20,7 @@ public record ReservationRes(
     public static ReservationRes from(ReservationDto dto) {
         return new ReservationRes(
                 dto.reserveId(),
-                UserRes.from(dto.user()),  // UserDto -> UserRes로 변환
+                dto.memberName(),
                 dto.concertTitle(),
                 dto.openDate(),
                 dto.seatNum(),

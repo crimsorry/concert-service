@@ -1,17 +1,20 @@
 package hhplus.tdd.concert.application.service.payment;
 
 import hhplus.tdd.concert.application.dto.concert.ReservationDto;
+import hhplus.tdd.concert.application.dto.concert.SReserveStatus;
 import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
+import hhplus.tdd.concert.domain.entity.concert.*;
 import hhplus.tdd.concert.domain.entity.member.Member;
 import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
+import hhplus.tdd.concert.domain.entity.payment.Payment;
 import hhplus.tdd.concert.domain.entity.payment.PointType;
 import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
 import hhplus.tdd.concert.domain.exception.FailException;
 import hhplus.tdd.concert.application.service.PayService;
-import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
 import hhplus.tdd.concert.domain.repository.payment.AmountHistoryRepository;
+import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,11 +43,21 @@ class PayServiceUnitTest {
     @Mock
     private AmountHistoryRepository amountHistoryRepository;
 
+    @Mock
+    private PaymentRepository paymentRepository;
+
+    // TODO: 테스트 코드 전역 변수 공통으로 묶기.
     private final int amount = 500;
+    private final LocalDateTime now = LocalDateTime.now();
     private final String waitingToken = "testToken";
-    private final Member member = new Member(1L, "김소리", 0);
-    private final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
+    private final Member member = new Member(1L, "김소리", 150000);
+    private final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, now, LocalDateTime.now().plusMinutes(30));
     private final AmountHistory amountHistory = new AmountHistory(1L, member, amount, PointType.CHARGE, LocalDateTime.now());
+    private final Concert concert = new Concert(1L, "드라큘라", "부산문화회관 대극장");
+    private final ConcertSchedule concertSchedule = new ConcertSchedule(1L, concert, now, LocalDateTime.now().minusDays(1), now.plusDays(1), 50);
+    private final ConcertSeat concertSeat = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.RESERVED);
+    private final Reservation reservation = new Reservation(1L, member, concertSeat, "드라큘라", LocalDateTime.now(), "A01", 140000, ReserveStatus.PENDING);
+    private final Payment payment = new Payment(1L, member, reservation, 140000, false, now);
 
     @Test
     public void 잔액_충전_성공() {
@@ -80,16 +93,16 @@ class PayServiceUnitTest {
 
     @Test
     public void 결제_처리_성공() {
-        // given
-        String waitingToken = "testToken";
-        long payId = 1L;
-
         // when
-        List<ReservationDto> result = payService.processPay(waitingToken, payId);
+        when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
+        when(paymentRepository.findByPaymentId(eq(1L))).thenReturn(payment);
 
         // then
-        assertEquals(1, result.size());
-        assertEquals(ReserveStatus.RESERVED, result.get(0).reserveStatus());
+        ReservationDto result = payService.processPay(waitingToken, 1L);
+
+        // 결과검증
+        assertEquals("드라큘라", result.concertTitle());
+        assertEquals(SReserveStatus.RESERVED, result.reserveStatus());
     }
 
 }

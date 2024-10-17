@@ -34,6 +34,12 @@ public class WaitingServiceUnitTest {
     @Mock
     private WaitingRepository waitingRepository;
 
+    private final String waitingToken = "testToken";
+    private final LocalDateTime now = LocalDateTime.now();
+    private final Member member = new Member(1L, "김소리", 150000);
+    private final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, now, LocalDateTime.now().plusMinutes(30));
+
+
     @Test
     public void 유저_대기열_생성_성공() {
         // given
@@ -64,14 +70,15 @@ public class WaitingServiceUnitTest {
 
     @Test
     public void 유저_대기열_순서_조회() {
-        // given
-        String waitingToken = "testToken";
-
         // when
-        long result = waitingService.loadWaiting(waitingToken).num();
+        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(waitingRepository.countByWaitingIdLessThanANDStatus(member.getMemberId(), WaitingStatus.STAND_BY)).thenReturn(0);
 
         // then
-        assertEquals(1, result);
+        long result = waitingService.loadWaiting(waitingToken).num();
+
+        // 결과 검증
+        assertEquals(0, result);
     }
 
 

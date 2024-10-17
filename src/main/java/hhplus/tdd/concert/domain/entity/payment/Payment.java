@@ -63,6 +63,17 @@ public class Payment {
         }
     }
 
+    public static Payment generatePayment(Member member, Reservation reservation){
+        Payment payment = Payment.builder()
+                .member(member)
+                .reservation(reservation)
+                .amount(reservation.getAmount())
+                .isPay(false)
+                .createAt(LocalDateTime.now())
+                .build();
+        return payment;
+    }
+
 
 
 }

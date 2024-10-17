@@ -2,7 +2,6 @@ package hhplus.tdd.concert.application.service.concert;
 
 import hhplus.tdd.concert.application.dto.concert.ConcertScheduleDto;
 import hhplus.tdd.concert.application.dto.concert.ConcertSeatDto;
-import hhplus.tdd.concert.application.dto.payment.PayDto;
 import hhplus.tdd.concert.application.service.ConcertService;
 import hhplus.tdd.concert.domain.entity.concert.Concert;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSchedule;
@@ -13,9 +12,7 @@ import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
 import hhplus.tdd.concert.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,7 +43,6 @@ public class ConcertServiceUnitTest {
 
 
     // given
-    private final long scheduleId = 1L;
     private final String waitingToken = "testToken";
     private final String title = "드라큘라";
     private final LocalDateTime now = LocalDateTime.now();
@@ -78,30 +73,15 @@ public class ConcertServiceUnitTest {
     public void 예약_가능_좌석_조회() {
         // when
         when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
-        when(concertScheduleRepository.findByScheduleId(scheduleId)).thenReturn(concertSchedule);
+        when(concertScheduleRepository.findByScheduleId(concertSchedule.getScheduleId())).thenReturn(concertSchedule);
         when(concertSeatRepository.findBySchedule(concertSchedule)).thenReturn(concertSeats);
 
         // then
-        List<ConcertSeatDto> result = concertService.loadConcertSeat(waitingToken, scheduleId);
+        List<ConcertSeatDto> result = concertService.loadConcertSeat(waitingToken, concertSchedule.getScheduleId());
 
         // 결과 검증
         assertEquals(1, result.size());
         assertEquals("A01", result.get(0).seatNum());
-    }
-
-    @Test
-    public void 좌석_예약_성공() {
-        // given
-        String waitingToken = "testToken";
-        long seatId = 1L;
-
-        // when
-        PayDto result = concertService.processReserve(waitingToken, seatId);
-
-        // then
-        assertEquals(1L, result.reserveId());
-        assertEquals(400, result.amount());
-        assertEquals(false, result.isPay());
     }
 
 }

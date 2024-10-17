@@ -9,6 +9,7 @@ import hhplus.tdd.concert.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class WaitingService {
         Waiting waiting = waitingRepository.findByToken(waitingToken);
         Waiting.checkWaitingExistence(waiting);
 
-        int waitings = waitingRepository.countByWaitingIdLessThanANDStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
+        int waitings = waitingRepository.countByWaitingIdLessThanAndStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
         return new QueueNumDto(waitings);
     }
 
@@ -47,6 +48,21 @@ public class WaitingService {
         List<Waiting> waitings = waitingRepository.findByExpiredAtLessThan(LocalDateTime.now());
         for(Waiting waiting : waitings){
             waiting.setStatus(WaitingStatus.EXPIRED);
+        }
+    }
+
+    /* 대기열 active 전환 */
+    @Transactional
+    public void activeWaiting(){
+        // 현재 active 갯수 세기
+        int activeWaiting = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.ACTIVE, PageRequest.of(0, maxMember)).size();
+        // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
+        if(activeWaiting < maxMember){
+            List<Waiting> waitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.STAND_BY, PageRequest.of(0, maxMember-activeWaiting));
+            for(Waiting waiting : waitings){
+                waiting.setStatus(WaitingStatus.ACTIVE);
+                waiting.setExpiredAt(LocalDateTime.now().plusMinutes(5));
+            }
         }
     }
 

@@ -41,7 +41,6 @@ class PayServiceUnitTest extends TestBase {
     @Test
     public void 잔액_충전_성공() {
         // when
-        // TODO when @beforeEach 초기화
         when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
         when(amountHistoryRepository.save(any(AmountHistory.class))).thenAnswer(invocation -> {
             AmountHistory amountHistory = invocation.getArgument(0);

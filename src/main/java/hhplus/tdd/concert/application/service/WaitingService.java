@@ -16,12 +16,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class WaitingService {
+public class WaitingService extends BaseService{
 
     private final int maxMember = 10;
     private final MemberRepository memberRepository;
     private final WaitingRepository waitingRepository;
+
+    public WaitingService(MemberRepository memberRepository, WaitingRepository waitingRepository) {
+        super(waitingRepository);
+        this.memberRepository = memberRepository;
+        this.waitingRepository = waitingRepository;
+    }
 
     /* 유저 대기열 생성 */
     public WaitingTokenDto enqueueMember(long memberId){
@@ -36,8 +41,7 @@ public class WaitingService {
 
     /* 유저 대기열 순번 조회 */
     public QueueNumDto loadWaiting(String waitingToken){
-        Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
+        Waiting waiting = findAndCheckWaiting(waitingToken);
 
         int waitings = waitingRepository.countByWaitingIdLessThanAndStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
         return new QueueNumDto(waitings);

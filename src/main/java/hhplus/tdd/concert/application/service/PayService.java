@@ -1,10 +1,8 @@
 package hhplus.tdd.concert.application.service;
 
 import hhplus.tdd.concert.application.dto.concert.ReservationDto;
-import hhplus.tdd.concert.application.dto.concert.SReserveStatus;
 import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
-import hhplus.tdd.concert.application.dto.waiting.MemberDto;
 import hhplus.tdd.concert.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.domain.entity.concert.Reservation;
 import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
@@ -17,27 +15,26 @@ import hhplus.tdd.concert.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.domain.repository.payment.AmountHistoryRepository;
 import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
-public class PayService {
+public class PayService extends BaseService{
 
     private final WaitingRepository waitingRepository;
     private final AmountHistoryRepository amountHistoryRepository;
     private final PaymentRepository paymentRepository;
 
+    public PayService(WaitingRepository waitingRepository, WaitingRepository waitingRepository1, AmountHistoryRepository amountHistoryRepository, PaymentRepository paymentRepository) {
+        super(waitingRepository);
+        this.waitingRepository = waitingRepository1;
+        this.amountHistoryRepository = amountHistoryRepository;
+        this.paymentRepository = paymentRepository;
+    }
+
     /* 잔액 충전 */
     public UpdateChargeDto chargeAmount(String waitingToken, int amount){
         // 대기열 존재 여부 확인
-        // TODO: waiting 메소드화 or aop
-        Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
+        Waiting waiting = findAndCheckWaiting(waitingToken);
         Member member = waiting.getMember();
 
         // 포인트 충전
@@ -53,8 +50,7 @@ public class PayService {
     /* 잔액 조회 */
     public LoadAmountDto loadAmount(String waitingToken){
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
+        Waiting waiting = findAndCheckWaiting(waitingToken);
         Member member = waiting.getMember();
 
         // 잔액 조회
@@ -64,8 +60,7 @@ public class PayService {
     /* 결제 처리 */
     public ReservationDto processPay(String waitingToken, long payId){
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
+        Waiting waiting = findAndCheckWaiting(waitingToken);
         Member member = waiting.getMember();
 
         // 결제 정보
@@ -82,7 +77,6 @@ public class PayService {
         concertSeat.setSeatStatus(SeatStatus.ASSIGN);
         reservation.setReserveStatus(ReserveStatus.RESERVED);
         member.setCharge(member.getCharge() - payment.getAmount());
-        // TODO: 결제 로직 공통 메소드
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);
 

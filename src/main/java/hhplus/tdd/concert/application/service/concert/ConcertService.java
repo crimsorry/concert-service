@@ -68,7 +68,9 @@ public class ConcertService extends BaseService {
         // 좌석 임시배정
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
         Payment payment = Payment.generatePayment(member, reservation);
+        ConcertSchedule concertSchedule = concertSeat.getSchedule();
         concertSeat.setSeatStatus(SeatStatus.RESERVED);
+        concertSchedule.setCapacity(concertSchedule.getCapacity()-1);
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 

@@ -59,7 +59,7 @@ public class WaitingService extends BaseService {
         for(Waiting waiting : waitings){
             waiting.setStatus(WaitingStatus.EXPIRED);
             Member member = waiting.getMember();
-            Payment payment = paymentRepository.findByPayId(member.getMemberId());
+            Payment payment = paymentRepository.findByMember(member);
             ConcertSeat concertSeat = payment.getReservation().getSeat();
             Reservation reservation = payment.getReservation();
             ConcertSchedule concertSchedule = concertSeat.getSchedule();

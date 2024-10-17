@@ -52,7 +52,6 @@ public class ConcertServiceUnitTest {
     @Mock
     private PaymentRepository paymentRepository;
 
-
     // given
     private final String waitingToken = "testToken";
     private final String title = "드라큘라";

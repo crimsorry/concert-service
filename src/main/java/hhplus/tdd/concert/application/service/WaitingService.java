@@ -27,6 +27,7 @@ public class WaitingService {
     public WaitingTokenDto enqueueMember(long memberId){
         Member member = memberRepository.findByMemberId(memberId);
         Member.checkMemberExistence(member);
+
         Waiting existWaiting = waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED);
         Waiting waiting = Waiting.generateOrReturnWaitingToken(existWaiting, member);
         waitingRepository.save(waiting);
@@ -65,6 +66,5 @@ public class WaitingService {
             }
         }
     }
-
 
 }

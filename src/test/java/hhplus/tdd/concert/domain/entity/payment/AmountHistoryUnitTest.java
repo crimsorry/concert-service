@@ -10,6 +10,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AmountHistoryUnitTest {
 
+    private final Member member = new Member(1L, "김소리", 0);
+
+    @Test
+    public void 포인트_내역_빌더() {
+        // given
+        int amount = 500;
+        PointType pointType = PointType.CHARGE;
+
+        // when & then
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, pointType, member);
+
+        // 결과 검증
+        assertEquals(member, amountHistory.getMember());
+        assertEquals(amount, amountHistory.getAmount());
+    }
+
     @Test
     public void 유저_포인트_내역_생성(){
         // given

@@ -51,18 +51,6 @@ public class Payment {
     @Column
     private LocalDateTime createAt;
 
-    public static void checkPaymentExistence(Payment payment){
-        if(payment == null){
-            throw new FailException(ErrorCode.NOT_FOUNT_PAYMENT);
-        }
-    }
-
-    public static void checkPaymentStatue(Payment payment){
-        if(payment.isPay){
-            throw new FailException(ErrorCode.SUCCESS_PAY_SEAT);
-        }
-    }
-
     public static Payment generatePayment(Member member, Reservation reservation){
         Payment payment = Payment.builder()
                 .member(member)
@@ -74,6 +62,16 @@ public class Payment {
         return payment;
     }
 
+    public static void checkPaymentExistence(Payment payment){
+        if(payment == null){
+            throw new FailException(ErrorCode.NOT_FOUNT_PAYMENT);
+        }
+    }
 
+    public static void checkPaymentStatue(Payment payment){
+        if(payment.isPay){
+            throw new FailException(ErrorCode.SUCCESS_PAY_SEAT);
+        }
+    }
 
 }

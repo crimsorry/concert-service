@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.interfaces.api.dto.response.userqueue;
+package hhplus.tdd.concert.interfaces.api.dto.response.waiting;
 
 import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
 

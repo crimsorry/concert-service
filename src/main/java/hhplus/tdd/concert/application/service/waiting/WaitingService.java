@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.service.waiting;
 
-import hhplus.tdd.concert.application.dto.waiting.QueueNumDto;
+import hhplus.tdd.concert.application.dto.waiting.WaitingNumDto;
 import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
 import hhplus.tdd.concert.application.service.BaseService;
 import hhplus.tdd.concert.domain.entity.concert.*;
@@ -45,11 +45,11 @@ public class WaitingService extends BaseService {
     }
 
     /* 유저 대기열 순번 조회 */
-    public QueueNumDto loadWaiting(String waitingToken){
+    public WaitingNumDto loadWaiting(String waitingToken){
         Waiting waiting = findAndCheckWaiting(waitingToken);
 
         int waitings = waitingRepository.countByWaitingIdLessThanAndStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
-        return new QueueNumDto(waitings);
+        return new WaitingNumDto(waitings);
     }
 
     /* 대기열 만료 */

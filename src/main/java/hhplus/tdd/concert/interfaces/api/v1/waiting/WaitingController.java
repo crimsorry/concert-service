@@ -1,12 +1,11 @@
 package hhplus.tdd.concert.interfaces.api.v1.waiting;
 
-import hhplus.tdd.concert.application.dto.waiting.QueueNumDto;
+import hhplus.tdd.concert.application.dto.waiting.WaitingNumDto;
 import hhplus.tdd.concert.application.dto.waiting.WaitingTokenDto;
 import hhplus.tdd.concert.application.service.waiting.WaitingService;
 import hhplus.tdd.concert.interfaces.api.dto.response.ErrorRes;
-import hhplus.tdd.concert.interfaces.api.dto.response.concert.ConcertScheduleRes;
-import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.QueueNumRes;
-import hhplus.tdd.concert.interfaces.api.dto.response.userqueue.WaitingTokenRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.waiting.WaitingNumRes;
+import hhplus.tdd.concert.interfaces.api.dto.response.waiting.WaitingTokenRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -55,7 +54,7 @@ public class WaitingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = QueueNumRes.class))),
+                            schema = @Schema(implementation = WaitingNumRes.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorRes.class))),
@@ -63,11 +62,11 @@ public class WaitingController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorRes.class))),
     })
-    public ResponseEntity<QueueNumRes> getUserQueueNum(
+    public ResponseEntity<WaitingNumRes> getUserQueueNum(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        QueueNumDto restResponse = waitingService.loadWaiting(waitingToken);
-        return new ResponseEntity<>(QueueNumRes.from(restResponse), HttpStatus.OK);
+        WaitingNumDto restResponse = waitingService.loadWaiting(waitingToken);
+        return new ResponseEntity<>(WaitingNumRes.from(restResponse), HttpStatus.OK);
     }
 
 

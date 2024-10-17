@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WaitingService {
 
+    private final int maxMember = 10;
     private final MemberRepository memberRepository;
     private final WaitingRepository waitingRepository;
 
@@ -36,8 +37,8 @@ public class WaitingService {
         Waiting waiting = waitingRepository.findByToken(waitingToken);
         Waiting.checkWaitingExistence(waiting);
 
-        int sequence = waitingRepository.countByWaitingIdLessThanANDStatus(waiting.getMember().getMemberId(), WaitingStatus.STAND_BY);
-        return new QueueNumDto(sequence);
+        int waitings = waitingRepository.countByWaitingIdLessThanANDStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
+        return new QueueNumDto(waitings);
     }
 
     /* 대기열 만료 */
@@ -48,7 +49,6 @@ public class WaitingService {
             waiting.setStatus(WaitingStatus.EXPIRED);
         }
     }
-
 
 
 }

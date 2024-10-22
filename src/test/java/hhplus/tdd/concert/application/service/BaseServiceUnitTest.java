@@ -1,10 +1,11 @@
 package hhplus.tdd.concert.application.service;
 
-import hhplus.tdd.concert.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
-import hhplus.tdd.concert.domain.exception.ErrorCode;
-import hhplus.tdd.concert.domain.exception.FailException;
-import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.application.service.BaseService;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

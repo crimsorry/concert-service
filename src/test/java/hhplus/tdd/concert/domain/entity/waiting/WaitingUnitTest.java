@@ -1,8 +1,10 @@
 package hhplus.tdd.concert.domain.entity.waiting;
 
-import hhplus.tdd.concert.domain.entity.member.Member;
-import hhplus.tdd.concert.domain.exception.ErrorCode;
-import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.common.config.FailException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

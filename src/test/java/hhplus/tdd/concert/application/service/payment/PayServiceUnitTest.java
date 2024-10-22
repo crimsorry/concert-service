@@ -1,14 +1,15 @@
 package hhplus.tdd.concert.application.service.payment;
 
-import hhplus.tdd.concert.application.dto.concert.ReservationDto;
-import hhplus.tdd.concert.application.dto.concert.SReserveStatus;
-import hhplus.tdd.concert.application.dto.payment.LoadAmountDto;
-import hhplus.tdd.concert.application.dto.payment.UpdateChargeDto;
+import hhplus.tdd.concert.app.application.dto.concert.ReservationDto;
+import hhplus.tdd.concert.app.application.dto.payment.LoadAmountDto;
+import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeDto;
+import hhplus.tdd.concert.app.application.service.payment.PayService;
+import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
+import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
+import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.application.service.TestBase;
-import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
-import hhplus.tdd.concert.domain.repository.payment.AmountHistoryRepository;
-import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.common.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -79,7 +80,7 @@ class PayServiceUnitTest extends TestBase {
 
         // 결과검증
         assertEquals(title, result.concertTitle());
-        assertEquals(SReserveStatus.RESERVED, result.reserveStatus());
+        assertEquals(ReserveStatus.RESERVED, result.reserveStatus());
     }
 
 }

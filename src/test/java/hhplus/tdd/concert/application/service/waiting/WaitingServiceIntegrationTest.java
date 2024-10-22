@@ -1,15 +1,17 @@
 package hhplus.tdd.concert.application.service.waiting;
 
+import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
+import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.application.service.TestBase;
-import hhplus.tdd.concert.domain.entity.concert.*;
-import hhplus.tdd.concert.domain.entity.member.Member;
-import hhplus.tdd.concert.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
-import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.domain.repository.concert.ReservationRepository;
-import hhplus.tdd.concert.domain.repository.member.MemberRepository;
-import hhplus.tdd.concert.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
+import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
+import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,10 +1,11 @@
 package hhplus.tdd.concert.domain.entity.payment;
 
-import hhplus.tdd.concert.domain.entity.concert.Reservation;
-import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
-import hhplus.tdd.concert.domain.entity.member.Member;
-import hhplus.tdd.concert.domain.exception.ErrorCode;
-import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.common.config.FailException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

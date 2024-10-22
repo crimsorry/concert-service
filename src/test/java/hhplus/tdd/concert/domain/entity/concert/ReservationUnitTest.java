@@ -1,6 +1,8 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
-import hhplus.tdd.concert.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.concert.*;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.common.types.SeatStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

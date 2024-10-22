@@ -1,10 +1,11 @@
 package hhplus.tdd.concert.application.service.concert;
 
+import hhplus.tdd.concert.app.application.service.concert.ConcertService;
 import hhplus.tdd.concert.application.service.TestBase;
-import hhplus.tdd.concert.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.domain.repository.member.MemberRepository;
-import hhplus.tdd.concert.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,12 +1,12 @@
 package hhplus.tdd.concert.application.service;
 
-import hhplus.tdd.concert.domain.entity.concert.*;
-import hhplus.tdd.concert.domain.entity.member.Member;
-import hhplus.tdd.concert.domain.entity.payment.AmountHistory;
-import hhplus.tdd.concert.domain.entity.payment.Payment;
-import hhplus.tdd.concert.domain.entity.payment.PointType;
-import hhplus.tdd.concert.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.domain.entity.waiting.WaitingStatus;
+import hhplus.tdd.concert.app.domain.entity.concert.*;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

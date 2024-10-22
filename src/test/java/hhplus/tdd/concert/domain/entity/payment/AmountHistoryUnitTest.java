@@ -1,8 +1,10 @@
 package hhplus.tdd.concert.domain.entity.payment;
 
-import hhplus.tdd.concert.domain.entity.member.Member;
-import hhplus.tdd.concert.domain.exception.ErrorCode;
-import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
+import hhplus.tdd.concert.common.types.PointType;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.common.config.FailException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

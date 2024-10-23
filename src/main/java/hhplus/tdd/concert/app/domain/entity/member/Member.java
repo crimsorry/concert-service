@@ -50,4 +50,12 @@ public class Member {
         }
     }
 
+    public void charge(Integer amount){
+        setCharge(getCharge() + amount);
+    }
+
+    public void withdraw(Integer amount){
+        setCharge(getCharge() - amount);
+    }
+
 }

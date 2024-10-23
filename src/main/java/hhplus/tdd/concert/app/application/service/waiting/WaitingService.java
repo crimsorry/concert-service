@@ -4,9 +4,9 @@ import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumQuery;
 import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenCommand;
 import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
@@ -63,9 +63,9 @@ public class WaitingService {
             Reservation reservation = payment.getReservation();
 
             // 결제 실패 처리
-            waiting.setStatus(WaitingStatus.EXPIRED);
-            concertSeat.setSeatStatus(SeatStatus.STAND_BY);
-            reservation.setReserveStatus(ReserveStatus.CANCELED);
+            concertSeat.open();
+            reservation.cancel();
+            waiting.stop();
         }
     }
 
@@ -78,7 +78,7 @@ public class WaitingService {
         if(activeWaiting < maxMember){
             List<Waiting> waitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.STAND_BY, PageRequest.of(0, maxMember-activeWaiting));
             for(Waiting waiting : waitings){
-                waiting.setStatus(WaitingStatus.ACTIVE);
+                waiting.in();
             }
         }
     }

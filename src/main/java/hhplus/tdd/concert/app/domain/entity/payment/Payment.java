@@ -76,4 +76,8 @@ public class Payment {
         }
     }
 
+    public void done(){
+        setIsPay(true);
+    }
+
 }

@@ -79,4 +79,17 @@ public class Waiting {
         return UUID.randomUUID().toString();
     }
 
+    public void stop(){
+        setStatus(WaitingStatus.EXPIRED);
+    }
+
+    public void in(){
+        setStatus(WaitingStatus.ACTIVE);
+    }
+
+    public void limitPayTime(){
+        setExpiredAt(LocalDateTime.now().plusMinutes(10));
+    }
+
+
 }

@@ -60,8 +60,8 @@ public class AmountHistory {
         return amountHistory;
     }
 
-    public static void checkAmountMinus(int amount){
-        if(amount<0){
+    public static void checkAmountMinusOrZero(int amount){
+        if(amount<=0){
             throw new FailException(ErrorCode.AMNIOTIC_PAY, LogLevel.INFO);
         }
     }

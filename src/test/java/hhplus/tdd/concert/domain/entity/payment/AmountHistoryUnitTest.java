@@ -49,7 +49,7 @@ public class AmountHistoryUnitTest {
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            AmountHistory.checkAmountMinus(amount);
+            AmountHistory.checkAmountMinusOrZero(amount);
         });
 
         // 결과 검증

@@ -57,13 +57,13 @@ public class WaitingService {
     public void expiredWaiting(){
         List<Waiting> waitings = waitingRepository.findByExpiredAtLessThan(LocalDateTime.now());
         for(Waiting waiting : waitings){
-            waiting.setStatus(WaitingStatus.EXPIRED);
             Member member = waiting.getMember();
             Payment payment = paymentRepository.findByMember(member);
             ConcertSeat concertSeat = payment.getReservation().getSeat();
             Reservation reservation = payment.getReservation();
 
             // 결제 실패 처리
+            waiting.setStatus(WaitingStatus.EXPIRED);
             concertSeat.setSeatStatus(SeatStatus.STAND_BY);
             reservation.setReserveStatus(ReserveStatus.CANCELED);
         }

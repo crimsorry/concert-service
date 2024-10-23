@@ -39,12 +39,6 @@ public class ConcertServiceUnitTest {
     @Mock
     private ConcertSeatRepository concertSeatRepository;
 
-    @Mock
-    private ReservationRepository reservationRepository;
-
-    @Mock
-    private PaymentRepository paymentRepository;
-
     @Test
     public void 예약_가능_날짜_조회() {
         // when

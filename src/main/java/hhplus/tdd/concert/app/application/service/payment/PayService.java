@@ -15,6 +15,7 @@ import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.common.types.PointType;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class PayService {
         Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
-        AmountHistory.checkAmountMinus(amount);
+        AmountHistory.checkAmountMinusOrZero(amount);
         Member.checkMemberCharge(member, amount);
 
         // 포인트 충전
@@ -76,6 +77,7 @@ public class PayService {
         payment.setIsPay(true);
         concertSeat.setSeatStatus(SeatStatus.ASSIGN);
         reservation.setReserveStatus(ReserveStatus.RESERVED);
+        waiting.setStatus(WaitingStatus.EXPIRED);
         member.setCharge(member.getCharge() - payment.getAmount());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);

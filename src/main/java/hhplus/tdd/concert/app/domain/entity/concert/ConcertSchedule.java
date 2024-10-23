@@ -45,11 +45,6 @@ public class ConcertSchedule {
     @Column
     private LocalDateTime endDate;
 
-    @NotNull
-    @Comment("남은 좌석 수")
-    @Column
-    private Integer capacity;
-
     public static void checkConcertScheduleExistence(ConcertSchedule concertSchedule){
         if(concertSchedule == null){
             throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SCHEDULE, LogLevel.INFO);

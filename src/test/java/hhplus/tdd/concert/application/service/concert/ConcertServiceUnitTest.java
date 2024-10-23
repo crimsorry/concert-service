@@ -53,7 +53,7 @@ public class ConcertServiceUnitTest {
     public void 예약_가능_날짜_조회() {
         // when
         when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
-        when(concertScheduleRepository.findByConcertScheduleDates(any(LocalDateTime.class), any(Integer.class)))
+        when(concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(any(LocalDateTime.class)))
                 .thenReturn(testBase.concertSchedules);
 
         // then

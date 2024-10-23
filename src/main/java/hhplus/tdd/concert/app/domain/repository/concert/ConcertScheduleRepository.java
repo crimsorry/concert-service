@@ -12,7 +12,11 @@ import java.util.List;
 public interface ConcertScheduleRepository extends JpaRepository<ConcertSchedule, Long> {
 
     ConcertSchedule findByScheduleId(Long scheduleId);
-    @Query("SELECT cs FROM ConcertSchedule cs WHERE cs.startDate <= :now AND cs.endDate >= :now AND cs.capacity > :capacity")
-    List<ConcertSchedule> findByConcertScheduleDates(LocalDateTime now, int capacity);
+    @Query("SELECT DISTINCT cs FROM ConcertSchedule cs " +
+            "JOIN ConcertSeat seat ON seat.schedule = cs " +
+            "WHERE cs.startDate <= :now " +
+            "AND cs.endDate >= :now " +
+            "AND seat.seatStatus = hhplus.tdd.concert.common.types.SeatStatus.STAND_BY")
+    List<ConcertSchedule> findByConcertScheduleDatesWithStandBySeats(LocalDateTime now);
 
 }

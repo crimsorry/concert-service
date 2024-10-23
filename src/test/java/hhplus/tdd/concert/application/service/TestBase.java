@@ -26,7 +26,7 @@ public class TestBase {
     public final Waiting waitingActive2 = new Waiting(23L, member2, waitingToken2, WaitingStatus.ACTIVE, now, now.plusMinutes(30));
     public final Waiting waitingExpired = new Waiting(91L, member, waitingToken, WaitingStatus.ACTIVE, now.minusMinutes(30), now.minusMinutes(10));
     public final Concert concert = new Concert(1L, title, "부산문화회관 대극장");
-    public final ConcertSchedule concertSchedule = new ConcertSchedule(1L, concert, now, now.minusDays(1), now.plusDays(1), 50);
+    public final ConcertSchedule concertSchedule = new ConcertSchedule(1L, concert, now, now.minusDays(1), now.plusDays(1));
     public final ConcertSeat concertSeatReserve = new ConcertSeat(105L, concertSchedule, "F01", 140000, SeatStatus.RESERVED);
     public final ConcertSeat concertSeatStandBy = new ConcertSeat(106L, concertSchedule, "F01", 140000, SeatStatus.STAND_BY);
     public final Reservation reservationReserve = new Reservation(18L, member, concertSeatReserve, "드라큘라", now, "A01", 140000, ReserveStatus.PENDING);

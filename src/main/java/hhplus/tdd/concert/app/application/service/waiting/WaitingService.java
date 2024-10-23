@@ -63,12 +63,10 @@ public class WaitingService {
             Payment payment = paymentRepository.findByMember(member);
             ConcertSeat concertSeat = payment.getReservation().getSeat();
             Reservation reservation = payment.getReservation();
-            ConcertSchedule concertSchedule = concertSeat.getSchedule();
 
             // 결제 실패 처리
             concertSeat.setSeatStatus(SeatStatus.STAND_BY);
             reservation.setReserveStatus(ReserveStatus.CANCELED);
-            concertSchedule.setCapacity(concertSchedule.getCapacity()+1);
         }
     }
 

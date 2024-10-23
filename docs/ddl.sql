@@ -31,7 +31,6 @@ CREATE TABLE concert_schedule (
     open_date DATETIME NOT NULL COMMENT '콘서트 개최 일',
     start_date DATETIME NOT NULL COMMENT '티켓 예매 시작 시간',
     end_date DATETIME NOT NULL COMMENT '티켓 예매 종료 시간',
-    capacity INT NOT NULL COMMENT '남은 좌석 수',  
     INDEX idx_concert_id (concert_id)
 ) COMMENT = '콘서트 일정';
 

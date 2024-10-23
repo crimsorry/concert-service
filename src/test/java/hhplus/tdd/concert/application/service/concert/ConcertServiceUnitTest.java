@@ -27,7 +27,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ConcertServiceUnitTest extends TestBase {
+public class ConcertServiceUnitTest {
+
+    private final TestBase testBase = new TestBase();
 
     @InjectMocks
     private ConcertService concertService;
@@ -50,27 +52,27 @@ public class ConcertServiceUnitTest extends TestBase {
     @Test
     public void 예약_가능_날짜_조회() {
         // when
-        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
         when(concertScheduleRepository.findByConcertScheduleDates(any(LocalDateTime.class), any(Integer.class)))
-                .thenReturn(concertSchedules);
+                .thenReturn(testBase.concertSchedules);
 
         // then
-        List<ConcertScheduleDto> result = concertService.loadConcertDate(waitingToken);
+        List<ConcertScheduleDto> result = concertService.loadConcertDate(testBase.waitingToken);
 
         // 결과 검증
         assertEquals(1, result.size());
-        assertEquals(title, result.get(0).concertTitle());
+        assertEquals(testBase.title, result.get(0).concertTitle());
     }
 
     @Test
     public void 예약_가능_좌석_조회() {
         // when
-        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
-        when(concertScheduleRepository.findByScheduleId(concertSchedule.getScheduleId())).thenReturn(concertSchedule);
-        when(concertSeatRepository.findBySchedule(concertSchedule)).thenReturn(concertSeats);
+        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(concertScheduleRepository.findByScheduleId(testBase.concertSchedule.getScheduleId())).thenReturn(testBase.concertSchedule);
+        when(concertSeatRepository.findBySchedule(testBase.concertSchedule)).thenReturn(testBase.concertSeats);
 
         // then
-        List<ConcertSeatDto> result = concertService.loadConcertSeat(waitingToken, concertSchedule.getScheduleId());
+        List<ConcertSeatDto> result = concertService.loadConcertSeat(testBase.waitingToken, testBase.concertSchedule.getScheduleId());
 
         // 결과 검증
         assertEquals(1, result.size());
@@ -80,8 +82,8 @@ public class ConcertServiceUnitTest extends TestBase {
     @Test
     public void 좌석_예약() {
         // when
-        when(concertSeatRepository.findBySeatId(concertSeatStandBy.getSeatId())).thenReturn(concertSeatStandBy);
-        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(concertSeatRepository.findBySeatId(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
+        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
         when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
             Reservation reservation = invocation.getArgument(0);
             reservation.setReserveId(1L);
@@ -96,7 +98,7 @@ public class ConcertServiceUnitTest extends TestBase {
         });
 
         // then
-        PayDto result = concertService.processReserve(waitingToken, 1L);
+        PayDto result = concertService.processReserve(testBase.waitingToken, 1L);
 
         // 결과검증
         assertEquals(true, result.isPay());

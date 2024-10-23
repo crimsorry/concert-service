@@ -24,7 +24,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class PayServiceUnitTest extends TestBase {
+class PayServiceUnitTest {
+
+    private final TestBase testBase = new TestBase();
 
     @InjectMocks
     private PayService payService;
@@ -41,18 +43,18 @@ class PayServiceUnitTest extends TestBase {
     @Test
     public void 잔액_충전_성공() {
         // when
-        when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
+        when(waitingRepository.findByToken(eq(testBase.waitingToken))).thenReturn(testBase.waiting);
         when(amountHistoryRepository.save(any(AmountHistory.class))).thenAnswer(invocation -> {
             AmountHistory amountHistory = invocation.getArgument(0);
             amountHistory.setPointId(1L); // save 후에 ID가 생성됨을 가정
             return amountHistory;
         });
         // then
-        UpdateChargeDto result = payService.chargeAmount(waitingToken, amount);
+        UpdateChargeDto result = payService.chargeAmount(testBase.waitingToken, testBase.amount);
 
         // 결과검증
         assertNotNull(result);
-        verify(waitingRepository).findByToken(waitingToken);
+        verify(waitingRepository).findByToken(testBase.waitingToken);
         verify(amountHistoryRepository).save(any(AmountHistory.class));
         assertEquals(true, result.isCharge());
     }
@@ -60,26 +62,26 @@ class PayServiceUnitTest extends TestBase {
     @Test
     public void 잔액_조회() {
         // when
-        when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
+        when(waitingRepository.findByToken(eq(testBase.waitingToken))).thenReturn(testBase.waiting);
 
         // then
-        LoadAmountDto result = payService.loadAmount(waitingToken);
+        LoadAmountDto result = payService.loadAmount(testBase.waitingToken);
 
         // 결과검증
-        assertEquals(member.getCharge(), result.amount());
+        assertEquals(testBase.member.getCharge(), result.amount());
     }
 
     @Test
     public void 결제_처리_성공() {
         // when
-        when(waitingRepository.findByToken(eq(waitingToken))).thenReturn(waiting);
-        when(paymentRepository.findByPayId(eq(1L))).thenReturn(payment);
+        when(waitingRepository.findByToken(eq(testBase.waitingToken))).thenReturn(testBase.waiting);
+        when(paymentRepository.findByPayId(eq(1L))).thenReturn(testBase.payment);
 
         // then
-        ReservationDto result = payService.processPay(waitingToken, 1L);
+        ReservationDto result = payService.processPay(testBase.waitingToken, 1L);
 
         // 결과검증
-        assertEquals(title, result.concertTitle());
+        assertEquals(testBase.title, result.concertTitle());
         assertEquals(ReserveStatus.RESERVED, result.reserveStatus());
     }
 

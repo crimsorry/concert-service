@@ -41,10 +41,12 @@ dependencies {
 	// Kotlin
 	implementation(kotlin("stdlib-jdk8"))
 
+	// Test - h2
+	testImplementation("com.h2database:h2:2.3.232")
+
 	// Test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
 
 }
 

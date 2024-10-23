@@ -57,4 +57,17 @@ public class PaymentUnitTest {
         assertEquals(ErrorCode.SUCCESS_PAY_SEAT.getMessage(), exception.getMessage());
     }
 
+    @Test
+    public void 결제_완료_확인(){
+        // given
+        Payment payment = new Payment();
+        payment.setIsPay(false);
+
+        // when & then
+        payment.done();
+
+        // 결과 검증
+        assertEquals(true, payment.getIsPay());
+    }
+
 }

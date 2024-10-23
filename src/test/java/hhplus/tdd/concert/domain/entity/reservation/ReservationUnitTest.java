@@ -1,9 +1,12 @@
-package hhplus.tdd.concert.domain.entity.concert;
+package hhplus.tdd.concert.domain.entity.reservation;
 
 import hhplus.tdd.concert.app.domain.entity.concert.*;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -28,4 +31,29 @@ public class ReservationUnitTest {
         assertEquals("드라큘라", reservation.getConcertTitle());
     }
 
+    @Test
+    public void 예약_완료_상태(){
+        // given
+        Reservation reservation = new Reservation();
+        reservation.setReserveStatus(ReserveStatus.PENDING);
+
+        // when & then
+        reservation.complete();
+
+        // 결과 검증
+        assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
+    }
+
+    @Test
+    public void 예약_취소_상태(){
+        // given
+        Reservation reservation = new Reservation();
+        reservation.setReserveStatus(ReserveStatus.PENDING);
+
+        // when & then
+        reservation.cancel();
+
+        // 결과 검증
+        assertEquals(ReserveStatus.CANCELED, reservation.getReserveStatus());
+    }
 }

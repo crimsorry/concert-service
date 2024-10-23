@@ -3,6 +3,7 @@ package hhplus.tdd.concert.app.domain.entity.reservation;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.common.types.SeatStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -73,6 +74,14 @@ public class Reservation {
                 .reserveStatus(ReserveStatus.PENDING)
                 .build();
         return reservation;
+    }
+
+    public void complete(){
+        setReserveStatus(ReserveStatus.RESERVED);
+    }
+
+    public void cancel(){
+        setReserveStatus(ReserveStatus.CANCELED);
     }
 
 }

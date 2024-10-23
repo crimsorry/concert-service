@@ -34,11 +34,12 @@ public class PayService {
         Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
+        // 예외처리
         AmountHistory.checkAmountMinusOrZero(amount);
         Member.checkMemberCharge(member, amount);
 
         // 포인트 충전
-        member.setCharge(member.getCharge() + amount);
+        member.charge(amount);
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);
 
@@ -68,17 +69,17 @@ public class PayService {
         Reservation reservation = payment.getReservation();
 
         // 예외처리
-        Payment.checkPaymentExistence(payment); // 존재여부 확인
-        Payment.checkPaymentStatue(payment); // 결제 안했는지 확인
-        ConcertSeat.checkConcertSeatReserved(concertSeat); // 임시배정 존재 X
-        Member.checkMemberChargeLess(member, payment.getAmount()); // 잔액 부족 확인
+        Payment.checkPaymentExistence(payment);
+        Payment.checkPaymentStatue(payment);
+        ConcertSeat.checkConcertSeatReserved(concertSeat);
+        Member.checkMemberChargeLess(member, payment.getAmount());
 
         // 결제 완료 처리
-        payment.setIsPay(true);
-        concertSeat.setSeatStatus(SeatStatus.ASSIGN);
-        reservation.setReserveStatus(ReserveStatus.RESERVED);
-        waiting.setStatus(WaitingStatus.EXPIRED);
-        member.setCharge(member.getCharge() - payment.getAmount());
+        payment.done();
+        concertSeat.close();
+        reservation.complete();
+        member.withdraw(member.getCharge());
+        waiting.stop();
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);
 

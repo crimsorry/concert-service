@@ -65,4 +65,16 @@ public class ConcertSeat {
         }
     }
 
+    public void open(){
+        setSeatStatus(SeatStatus.STAND_BY);
+    }
+
+    public void pending(){
+        setSeatStatus(SeatStatus.RESERVED);
+    }
+
+    public void close(){
+        setSeatStatus(SeatStatus.ASSIGN);
+    }
+
 }

@@ -50,8 +50,8 @@ public class ReservationService {
         Payment payment = Payment.generatePayment(member, reservation);
 
         // 좌석 임시배정
-        concertSeat.setSeatStatus(SeatStatus.RESERVED);
-        waiting.setExpiredAt(LocalDateTime.now().plusMinutes(10));
+        concertSeat.pending();
+        waiting.limitPayTime();
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 

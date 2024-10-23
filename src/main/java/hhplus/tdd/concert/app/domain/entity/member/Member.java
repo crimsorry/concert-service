@@ -1,11 +1,12 @@
 package hhplus.tdd.concert.app.domain.entity.member;
 
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
+import org.springframework.boot.logging.LogLevel;
 
 @Setter
 @Getter
@@ -33,19 +34,19 @@ public class Member {
 
     public static void checkMemberExistence(Member member){
         if(member == null){
-            throw new FailException(ErrorCode.NOT_FOUNT_MEMBER);
+            throw new FailException(ErrorCode.NOT_FOUNT_MEMBER, LogLevel.ERROR);
         }
     }
 
     public static void checkMemberCharge(Member member, int amount){
         if(member.getCharge() + amount > 10000000){
-            throw new FailException(ErrorCode.FULL_PAY);
+            throw new FailException(ErrorCode.FULL_PAY, LogLevel.INFO);
         }
     }
 
     public static void checkMemberChargeLess(Member member, int amount){
         if(member.getCharge() < amount){
-            throw new FailException(ErrorCode.EMPTY_PAY);
+            throw new FailException(ErrorCode.EMPTY_PAY, LogLevel.INFO);
         }
     }
 

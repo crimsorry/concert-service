@@ -2,12 +2,13 @@ package hhplus.tdd.concert.app.domain.entity.waiting;
 
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
+import org.springframework.boot.logging.LogLevel;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -53,7 +54,7 @@ public class Waiting {
 
     public static void checkWaitingExistence(Waiting waiting){
         if(waiting == null){
-            throw new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER);
+            throw new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.INFO);
         }
     }
 

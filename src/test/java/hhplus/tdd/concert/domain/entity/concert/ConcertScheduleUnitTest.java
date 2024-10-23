@@ -2,7 +2,7 @@ package hhplus.tdd.concert.domain.entity.concert;
 
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,12 +1,13 @@
 package hhplus.tdd.concert.app.domain.entity.concert;
 
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.SeatStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
+import org.springframework.boot.logging.LogLevel;
 
 @Setter
 @Getter
@@ -46,21 +47,21 @@ public class ConcertSeat {
 
     public static void checkConcertSeatExistence(ConcertSeat concertSeat){
         if(concertSeat == null){
-            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SEAT);
+            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SEAT, LogLevel.INFO);
         }
     }
 
     public static void checkConcertSeatReserved(ConcertSeat concertSeat){
         if(concertSeat.getSeatStatus() != SeatStatus.RESERVED){
-            throw new FailException(ErrorCode.NOT_FOUND_SEAT_RESERVED);
+            throw new FailException(ErrorCode.NOT_FOUND_SEAT_RESERVED, LogLevel.INFO);
         }
     }
 
     public static void checkConcertSeatStatus(ConcertSeat concertSeat){
         if(concertSeat.getSeatStatus() == SeatStatus.ASSIGN){
-            throw new FailException(ErrorCode.ASSIGN_SEAT);
+            throw new FailException(ErrorCode.ASSIGN_SEAT, LogLevel.INFO);
         }else if(concertSeat.getSeatStatus() == SeatStatus.RESERVED){
-            throw new FailException(ErrorCode.RESERVED_SEAT);
+            throw new FailException(ErrorCode.RESERVED_SEAT, LogLevel.INFO);
         }
     }
 

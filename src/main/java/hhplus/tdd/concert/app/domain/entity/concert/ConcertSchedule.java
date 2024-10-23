@@ -1,11 +1,12 @@
 package hhplus.tdd.concert.app.domain.entity.concert;
 
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
+import org.springframework.boot.logging.LogLevel;
 
 import java.time.LocalDateTime;
 
@@ -51,7 +52,7 @@ public class ConcertSchedule {
 
     public static void checkConcertScheduleExistence(ConcertSchedule concertSchedule){
         if(concertSchedule == null){
-            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SCHEDULE);
+            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SCHEDULE, LogLevel.INFO);
         }
     }
 }

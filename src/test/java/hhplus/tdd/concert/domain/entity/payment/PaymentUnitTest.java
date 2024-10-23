@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.domain.entity.payment;
 
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;

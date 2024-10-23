@@ -1,11 +1,11 @@
 package hhplus.tdd.concert.app.application.dto.payment;
 
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 
 import java.time.LocalDateTime;
 
-public record PayDto(
+public record PayCommand(
         long payId,
         long userId,
         long reserveId,
@@ -14,8 +14,8 @@ public record PayDto(
         LocalDateTime createAt
 ) {
 
-    public static PayDto from(Payment payment, Reservation reservation) {
-        return new PayDto(
+    public static PayCommand from(Payment payment, Reservation reservation) {
+        return new PayCommand(
                 payment.getPayId(),
                 reservation.getMember().getMemberId(),
                 reservation.getReserveId(),

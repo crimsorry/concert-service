@@ -1,18 +1,14 @@
 package hhplus.tdd.concert.application.service.concert;
 
-import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleDto;
-import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatDto;
-import hhplus.tdd.concert.app.application.dto.payment.PayDto;
+import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleQuery;
+import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
 import hhplus.tdd.concert.app.application.service.concert.ConcertService;
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.application.service.TestBase;
-import hhplus.tdd.concert.common.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -57,7 +53,7 @@ public class ConcertServiceUnitTest {
                 .thenReturn(testBase.concertSchedules);
 
         // then
-        List<ConcertScheduleDto> result = concertService.loadConcertDate(testBase.waitingToken);
+        List<ConcertScheduleQuery> result = concertService.loadConcertDate(testBase.waitingToken);
 
         // 결과 검증
         assertEquals(1, result.size());
@@ -72,7 +68,7 @@ public class ConcertServiceUnitTest {
         when(concertSeatRepository.findBySchedule(testBase.concertSchedule)).thenReturn(testBase.concertSeats);
 
         // then
-        List<ConcertSeatDto> result = concertService.loadConcertSeat(testBase.waitingToken, testBase.concertSchedule.getScheduleId());
+        List<ConcertSeatQuery> result = concertService.loadConcertSeat(testBase.waitingToken, testBase.concertSchedule.getScheduleId());
 
         // 결과 검증
         assertEquals(1, result.size());

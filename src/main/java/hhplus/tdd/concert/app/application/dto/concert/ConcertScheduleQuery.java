@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record ConcertScheduleDto(
+public record ConcertScheduleQuery(
         Long scheduleId,
         String concertTitle,
         LocalDateTime openDate,
@@ -14,8 +14,8 @@ public record ConcertScheduleDto(
         LocalDateTime endDate
 ) {
 
-    public static ConcertScheduleDto from(ConcertSchedule concertSchedule) {
-        return new ConcertScheduleDto(
+    public static ConcertScheduleQuery from(ConcertSchedule concertSchedule) {
+        return new ConcertScheduleQuery(
                 concertSchedule.getScheduleId(),
                 concertSchedule.getConcert().getConcertTitle(),
                 concertSchedule.getOpenDate(),
@@ -24,9 +24,9 @@ public record ConcertScheduleDto(
         );
     }
 
-    public static List<ConcertScheduleDto> from(List<ConcertSchedule> concertSchedules) {
+    public static List<ConcertScheduleQuery> from(List<ConcertSchedule> concertSchedules) {
         return concertSchedules.stream()
-                .map(ConcertScheduleDto::from)
+                .map(ConcertScheduleQuery::from)
                 .collect(Collectors.toList());
     }
 

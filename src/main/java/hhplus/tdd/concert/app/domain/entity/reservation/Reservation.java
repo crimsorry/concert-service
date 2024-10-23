@@ -1,5 +1,6 @@
-package hhplus.tdd.concert.app.domain.entity.concert;
+package hhplus.tdd.concert.app.domain.entity.reservation;
 
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import jakarta.persistence.*;

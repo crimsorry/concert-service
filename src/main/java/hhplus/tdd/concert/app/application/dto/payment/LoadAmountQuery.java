@@ -1,5 +1,5 @@
 package hhplus.tdd.concert.app.application.dto.payment;
 
-public record LoadAmountDto(
+public record LoadAmountQuery(
         int amount
 ) {}

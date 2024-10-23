@@ -3,41 +3,35 @@ package hhplus.tdd.concert.app.application.service.payment;
 import hhplus.tdd.concert.app.application.dto.concert.ReservationDto;
 import hhplus.tdd.concert.app.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeDto;
-import hhplus.tdd.concert.app.application.service.BaseService;
+import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.SeatStatus;
-import hhplus.tdd.concert.domain.entity.concert.*;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.common.types.PointType;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.common.types.PointType;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.common.types.SeatStatus;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PayService extends BaseService {
+@RequiredArgsConstructor
+public class PayService {
 
-    private final WaitingRepository waitingRepository;
     private final AmountHistoryRepository amountHistoryRepository;
     private final PaymentRepository paymentRepository;
-
-    public PayService(WaitingRepository waitingRepository, WaitingRepository waitingRepository1, AmountHistoryRepository amountHistoryRepository, PaymentRepository paymentRepository) {
-        super(waitingRepository);
-        this.waitingRepository = waitingRepository1;
-        this.amountHistoryRepository = amountHistoryRepository;
-        this.paymentRepository = paymentRepository;
-    }
+    private final WaitingWrapRepository waitingWrapRepository;
 
     /* 잔액 충전 */
     public UpdateChargeDto chargeAmount(String waitingToken, int amount){
         // 대기열 존재 여부 확인
-        Waiting waiting = findAndCheckWaiting(waitingToken);
+        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
         AmountHistory.checkAmountMinus(amount);
@@ -54,7 +48,7 @@ public class PayService extends BaseService {
     /* 잔액 조회 */
     public LoadAmountDto loadAmount(String waitingToken){
         // 대기열 존재 여부 확인
-        Waiting waiting = findAndCheckWaiting(waitingToken);
+        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
         // 잔액 조회
@@ -65,7 +59,7 @@ public class PayService extends BaseService {
     @Transactional
     public ReservationDto processPay(String waitingToken, long payId){
         // 대기열 존재 여부 확인
-        Waiting waiting = findAndCheckWaiting(waitingToken);
+        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
         // 결제 정보

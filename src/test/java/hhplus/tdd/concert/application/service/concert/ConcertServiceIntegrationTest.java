@@ -19,7 +19,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class ConcertServiceIntegrationTest extends TestBase {
+public class ConcertServiceIntegrationTest {
+
+    private final TestBase testBase = new TestBase();
 
     @Autowired
     private ConcertService concertService;
@@ -38,13 +40,13 @@ public class ConcertServiceIntegrationTest extends TestBase {
         // given
         int capacity = 1;
         AtomicInteger failCnt = new AtomicInteger();
-        List<Waiting> waitingList = List.of(waitingActive, waitingActive2); // 대기열 리스트 생성
+        List<Waiting> waitingList = List.of(testBase.waitingActive, testBase.waitingActive2); // 대기열 리스트 생성
         int totalTasks = waitingList.size();
-        memberRepository.save(member);
-        memberRepository.save(member2);
-        waitingRepository.save(waitingActive);
-        waitingRepository.save(waitingActive2);
-        concertSeatRepository.save(concertSeatStandBy);
+        memberRepository.save(testBase.member);
+        memberRepository.save(testBase.member2);
+        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.save(testBase.waitingActive2);
+        concertSeatRepository.save(testBase.concertSeatStandBy);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
@@ -53,7 +55,7 @@ public class ConcertServiceIntegrationTest extends TestBase {
         for (Waiting waiting : waitingList) {
             executorService.execute(() -> {
                 try {
-                    concertService.processReserve(waiting.getToken(), concertSeatStandBy.getSeatId());
+                    concertService.processReserve(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
                 } catch (Exception e) {
                     if (e.getMessage().equals("이미 임시배정된 좌석입니다.")) failCnt.getAndIncrement();
                 } finally {

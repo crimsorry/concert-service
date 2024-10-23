@@ -2,16 +2,16 @@ package hhplus.tdd.concert.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
 import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.common.types.WaitingStatus;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.application.service.TestBase;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +23,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class WaitingServiceIntegrationTest extends TestBase {
+public class WaitingServiceIntegrationTest {
+
+    private final TestBase testBase = new TestBase();
 
     @Autowired
     private WaitingService waitingService;
@@ -68,19 +70,19 @@ public class WaitingServiceIntegrationTest extends TestBase {
     @Test
     public void 대기열_만료_확인() {
         // given
-        memberRepository.save(member);
-        waitingRepository.save(waitingExpired);
-        concertSeatRepository.save(concertSeatReserve);
-        reservationRepository.save(reservationReserve);
-        paymentRepository.save(payment);
+        memberRepository.save(testBase.member);
+        waitingRepository.save(testBase.waitingExpired);
+        concertSeatRepository.save(testBase.concertSeatReserve);
+        reservationRepository.save(testBase.reservationReserve);
+        paymentRepository.save(testBase.payment);
 
         // when
         waitingService.expiredWaiting();
 
         // then
-        Waiting updatedWaiting = waitingRepository.findByWaitingId(waitingExpired.getWaitingId());
+        Waiting updatedWaiting = waitingRepository.findByWaitingId(testBase.waitingExpired.getWaitingId());
         assertEquals(WaitingStatus.EXPIRED, updatedWaiting.getStatus());
-        Reservation updatedReservation = reservationRepository.findByReserveId(reservationReserve.getReserveId());
+        Reservation updatedReservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
         assertEquals(ReserveStatus.CANCELED, updatedReservation.getReserveStatus());
     }
 

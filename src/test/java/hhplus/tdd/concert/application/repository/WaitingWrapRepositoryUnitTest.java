@@ -1,11 +1,12 @@
-package hhplus.tdd.concert.application.service;
+package hhplus.tdd.concert.application.repository;
 
-import hhplus.tdd.concert.app.application.service.BaseService;
+import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.common.types.WaitingStatus;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.application.service.TestBase;
+import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,17 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BaseServiceUnitTest extends TestBase {
+class WaitingWrapRepositoryUnitTest{
 
-    // 테스트용 서브 클래스 생성
-    static class TestBaseService extends BaseService {
-        public TestBaseService(WaitingRepository waitingRepository) {
-            super(waitingRepository);
-        }
-    }
+    private final TestBase testBase = new TestBase();
 
     @InjectMocks
-    private TestBaseService testBaseService;
+    private WaitingWrapRepository waitingWrapRepository;
 
     @Mock
     private WaitingRepository waitingRepository;
@@ -36,11 +32,11 @@ public class BaseServiceUnitTest extends TestBase {
     public void 대기열_토큰_존재_안함() {
         Waiting waiting = null;
         // when
-        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(waiting);
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            testBaseService.findAndCheckWaiting(waitingToken);
+            waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken);
         });
 
         // 결과 검증
@@ -50,15 +46,14 @@ public class BaseServiceUnitTest extends TestBase {
     @Test
     public void 대기열_토큰_존재() {
         // when
-        when(waitingRepository.findByToken(waitingToken)).thenReturn(waiting);
+        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
 
         // then
-        Waiting result = testBaseService.findAndCheckWaiting(waitingToken);
+        Waiting result = waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken);
 
         // 결과 검증
-        assertEquals(member, result.getMember());
+        assertEquals(testBase.member, result.getMember());
         assertEquals(WaitingStatus.STAND_BY, result.getStatus());
     }
-
 
 }

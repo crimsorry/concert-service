@@ -2,19 +2,21 @@ package hhplus.tdd.concert.app.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumDto;
 import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenDto;
-import hhplus.tdd.concert.app.application.service.BaseService;
-import hhplus.tdd.concert.app.domain.entity.concert.*;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.SeatStatus;
-import hhplus.tdd.concert.domain.entity.concert.*;
+import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
+import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.common.types.WaitingStatus;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +24,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class WaitingService extends BaseService {
+@AllArgsConstructor
+public class WaitingService {
 
     private final int maxMember = 10;
     private final MemberRepository memberRepository;
     private final WaitingRepository waitingRepository;
     private final PaymentRepository paymentRepository;
-
-    public WaitingService(MemberRepository memberRepository, WaitingRepository waitingRepository, PaymentRepository paymentRepository) {
-        super(waitingRepository);
-        this.memberRepository = memberRepository;
-        this.waitingRepository = waitingRepository;
-        this.paymentRepository = paymentRepository;
-    }
+    private final WaitingWrapRepository waitingWrapRepository;
 
     /* 유저 대기열 생성 */
     public WaitingTokenDto enqueueMember(long memberId){
@@ -49,7 +46,8 @@ public class WaitingService extends BaseService {
 
     /* 유저 대기열 순번 조회 */
     public WaitingNumDto loadWaiting(String waitingToken){
-        Waiting waiting = findAndCheckWaiting(waitingToken);
+        // 대기열 존재 여부 확인
+        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
 
         int waitings = waitingRepository.countByWaitingIdLessThanAndStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
         return new WaitingNumDto(waitings);

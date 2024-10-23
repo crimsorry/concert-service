@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.config;
+package hhplus.tdd.concert.common.config.exception;
 
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import org.springframework.http.HttpStatus;

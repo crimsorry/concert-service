@@ -2,12 +2,13 @@ package hhplus.tdd.concert.app.domain.entity.payment;
 
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.PointType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
+import org.springframework.boot.logging.LogLevel;
 
 import java.time.LocalDateTime;
 
@@ -61,7 +62,7 @@ public class AmountHistory {
 
     public static void checkAmountMinus(int amount){
         if(amount<0){
-            throw new FailException(ErrorCode.AMNIOTIC_PAY);
+            throw new FailException(ErrorCode.AMNIOTIC_PAY, LogLevel.INFO);
         }
     }
 

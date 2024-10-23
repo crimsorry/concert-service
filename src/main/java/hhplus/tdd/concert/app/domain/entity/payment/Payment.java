@@ -3,11 +3,12 @@ package hhplus.tdd.concert.app.domain.entity.payment;
 import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.FailException;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
+import org.springframework.boot.logging.LogLevel;
 
 import java.time.LocalDateTime;
 
@@ -65,13 +66,13 @@ public class Payment {
 
     public static void checkPaymentExistence(Payment payment){
         if(payment == null){
-            throw new FailException(ErrorCode.NOT_FOUNT_PAYMENT);
+            throw new FailException(ErrorCode.NOT_FOUNT_PAYMENT, LogLevel.INFO);
         }
     }
 
     public static void checkPaymentStatue(Payment payment){
         if(payment.isPay){
-            throw new FailException(ErrorCode.SUCCESS_PAY_SEAT);
+            throw new FailException(ErrorCode.SUCCESS_PAY_SEAT, LogLevel.INFO);
         }
     }
 

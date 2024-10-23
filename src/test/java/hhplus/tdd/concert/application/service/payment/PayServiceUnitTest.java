@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.service.payment;
 
-import hhplus.tdd.concert.app.application.dto.concert.ReservationDto;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;
 import hhplus.tdd.concert.app.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeDto;
 import hhplus.tdd.concert.app.application.service.payment.PayService;

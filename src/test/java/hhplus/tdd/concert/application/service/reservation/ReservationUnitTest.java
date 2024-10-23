@@ -1,0 +1,87 @@
+package hhplus.tdd.concert.application.service.concert;
+
+import hhplus.tdd.concert.app.application.dto.payment.PayDto;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;
+import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
+import hhplus.tdd.concert.app.application.service.reservation.ReservationService;
+import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
+import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.application.service.TestBase;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class ReservationUnitTest {
+
+    private final TestBase testBase = new TestBase();
+
+    @InjectMocks
+    private ReservationService reservationService;
+
+    @Mock
+    private WaitingWrapRepository waitingWrapRepository;
+
+    @Mock
+    private ConcertSeatRepository concertSeatRepository;
+
+    @Mock
+    private ReservationRepository reservationRepository;
+
+    @Mock
+    private PaymentRepository paymentRepository;
+
+    @Test
+    public void 좌석_예약() {
+        // when
+        when(concertSeatRepository.findBySeatId(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
+            Reservation reservation = invocation.getArgument(0);
+            reservation.setReserveId(1L);
+            reservation.setReserveStatus(ReserveStatus.RESERVED);
+            return reservation;
+        });
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> {
+            Payment payment = invocation.getArgument(0);
+            payment.setPayId(1L);
+            payment.setIsPay(true);
+            return payment;
+        });
+
+        // then
+        PayDto result = reservationService.processReserve(testBase.waitingToken, 1L);
+
+        // 결과검증
+        assertEquals(true, result.isPay());
+    }
+
+    @Test
+    public void 좌석_예약_리스트() {
+        // when
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(reservationRepository.findByMember(testBase.member)).thenReturn(testBase.reservations);
+
+        // then
+        List<ReservationDto> result = reservationService.loadReservation(testBase.waitingToken);
+
+        // 결과검증
+        assertEquals(1, result.size());
+        assertEquals(testBase.concert.getConcertTitle(), result.get(0).concertTitle());
+        assertEquals(testBase.reservations.get(0).getAmount(), result.get(0).amount());
+    }
+
+}

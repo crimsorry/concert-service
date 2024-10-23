@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.application.service.payment;
 
-import hhplus.tdd.concert.app.application.dto.concert.ReservationDto;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;
 import hhplus.tdd.concert.app.application.dto.payment.LoadAmountDto;
 import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeDto;
 import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
@@ -12,7 +12,6 @@ import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.common.types.PointType;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.SeatStatus;

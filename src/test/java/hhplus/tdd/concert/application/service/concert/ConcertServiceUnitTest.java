@@ -79,29 +79,4 @@ public class ConcertServiceUnitTest {
         assertEquals("A01", result.get(0).seatNum());
     }
 
-    @Test
-    public void 좌석_예약() {
-        // when
-        when(concertSeatRepository.findBySeatId(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
-        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
-        when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
-            Reservation reservation = invocation.getArgument(0);
-            reservation.setReserveId(1L);
-            reservation.setReserveStatus(ReserveStatus.RESERVED);
-            return reservation;
-        });
-        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> {
-            Payment payment = invocation.getArgument(0);
-            payment.setPayId(1L);
-            payment.setIsPay(true);
-            return payment;
-        });
-
-        // then
-        PayDto result = concertService.processReserve(testBase.waitingToken, 1L);
-
-        // 결과검증
-        assertEquals(true, result.isPay());
-    }
-
 }

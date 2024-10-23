@@ -1,11 +1,11 @@
-package hhplus.tdd.concert.application.service.concert;
+package hhplus.tdd.concert.application.service.reservation;
 
-import hhplus.tdd.concert.app.application.service.concert.ConcertService;
-import hhplus.tdd.concert.application.service.TestBase;
+import hhplus.tdd.concert.app.application.service.reservation.ReservationService;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.application.service.TestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,12 +19,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class ConcertServiceIntegrationTest {
+public class ReservationServiceIntegrationTest {
 
     private final TestBase testBase = new TestBase();
 
     @Autowired
-    private ConcertService concertService;
+    private ReservationService reservationService;
 
     @Autowired
     private ConcertSeatRepository concertSeatRepository;
@@ -55,7 +55,7 @@ public class ConcertServiceIntegrationTest {
         for (Waiting waiting : waitingList) {
             executorService.execute(() -> {
                 try {
-                    concertService.processReserve(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
+                    reservationService.processReserve(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
                 } catch (Exception e) {
                     if (e.getMessage().equals("이미 임시배정된 좌석입니다.")) failCnt.getAndIncrement();
                 } finally {

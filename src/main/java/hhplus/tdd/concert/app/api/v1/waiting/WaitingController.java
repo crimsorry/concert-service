@@ -1,11 +1,11 @@
 package hhplus.tdd.concert.app.api.v1.waiting;
 
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumDto;
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenDto;
-import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingNumRes;
 import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingTokenRes;
+import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumDto;
+import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenDto;
+import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

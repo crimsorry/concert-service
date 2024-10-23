@@ -1,13 +1,13 @@
 package hhplus.tdd.concert.app.api.v1.payment;
 
-import hhplus.tdd.concert.app.application.dto.payment.LoadAmountDto;
-import hhplus.tdd.concert.app.application.dto.concert.ReservationDto;
-import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeDto;
-import hhplus.tdd.concert.app.application.service.payment.PayService;
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
+import hhplus.tdd.concert.app.api.dto.response.reservation.ReservationRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.LoadAmountRes;
-import hhplus.tdd.concert.app.api.dto.response.concert.ReservationRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.UpdateChargeRes;
+import hhplus.tdd.concert.app.application.dto.payment.LoadAmountDto;
+import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeDto;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;
+import hhplus.tdd.concert.app.application.service.payment.PayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

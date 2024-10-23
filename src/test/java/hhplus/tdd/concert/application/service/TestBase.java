@@ -33,5 +33,6 @@ public class TestBase {
     public final Payment payment = new Payment(18L, member, reservationReserve, 140000, false, now);
     public final List<ConcertSchedule> concertSchedules = List.of(concertSchedule);
     public final List<ConcertSeat> concertSeats = List.of(concertSeatStandBy);
+    public final List<Reservation> reservations = List.of(reservationReserve);
 
 }

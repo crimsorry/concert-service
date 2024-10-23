@@ -30,8 +30,6 @@ public class ConcertService {
 
     private final ConcertScheduleRepository concertScheduleRepository;
     private final ConcertSeatRepository concertSeatRepository;
-    private final ReservationRepository reservationRepository;
-    private final PaymentRepository paymentRepository;
     private final WaitingWrapRepository waitingWrapRepository;
 
     /* 예약 가능 날짜 조회 - 스케줄러를 통해 ACTIVE 상태 토큰만 들어옴 */
@@ -54,32 +52,5 @@ public class ConcertService {
 
         List<ConcertSeat> concertSeats = concertSeatRepository.findBySchedule(concertSchedule);
         return ConcertSeatDto.from(concertSeats);
-    }
-
-    /* 좌석 예약 요청 */
-    @Transactional
-    public PayDto processReserve(String waitingToken, Long seatId){
-        // 비관적 락
-        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(seatId);
-
-        // 대기열 존재 여부 확인
-        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
-        Member member = waiting.getMember();
-
-        // 좌석 상태 확인
-        ConcertSeat.checkConcertSeatExistence(concertSeat);
-        ConcertSeat.checkConcertSeatStatus(concertSeat);
-
-        Reservation reservation = Reservation.generateReservation(member, concertSeat);
-        Payment payment = Payment.generatePayment(member, reservation);
-        ConcertSchedule concertSchedule = concertSeat.getSchedule();
-
-        // 좌석 임시배정
-        concertSeat.setSeatStatus(SeatStatus.RESERVED);
-        waiting.setExpiredAt(LocalDateTime.now().plusMinutes(10));
-        reservationRepository.save(reservation);
-        paymentRepository.save(payment);
-
-        return PayDto.from(payment, reservation);
     }
 }

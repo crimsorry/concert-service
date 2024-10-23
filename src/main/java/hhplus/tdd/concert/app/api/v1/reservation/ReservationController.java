@@ -23,14 +23,14 @@ import java.util.List;
 
 @Tag(name = "예약 API", description = "모든 API 는 대기열 토큰 값이 필요합니다.")
 @RestController
-@RequestMapping("/api/v1/reservation")
+@RequestMapping("/api/v1/reserve")
 @RequiredArgsConstructor
 @Slf4j
 public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @PostMapping("/{seatId}/reserve")
+    @PostMapping("/{seatId}")
     @Operation(summary = "좌석 예약 요청")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
@@ -52,7 +52,7 @@ public class ReservationController {
         return new ResponseEntity<>(PayRes.from(restResponse), HttpStatus.OK);
     }
 
-    @GetMapping("/reserves")
+    @GetMapping("")
     @Operation(summary = "유저 예약 내역")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",

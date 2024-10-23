@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.application.service.concert;
+package hhplus.tdd.concert.application.service.reservation;
 
 import hhplus.tdd.concert.app.application.dto.payment.PayDto;
 import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;

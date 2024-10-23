@@ -48,7 +48,7 @@ public class LoggingFilter implements Filter {
             ContentCachingResponseWrapper responseCacheWrapperObject = new ContentCachingResponseWrapper((HttpServletResponse) servletResponse);
             filterChain.doFilter(servletRequest, responseCacheWrapperObject);
 //            if(!method.equals("GET")){
-                logResponse(responseCacheWrapperObject);
+//                logResponse(responseCacheWrapperObject);
 //            }
             responseCacheWrapperObject.copyBodyToResponse();
         }catch (Exception e) {

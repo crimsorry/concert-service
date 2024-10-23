@@ -3,7 +3,7 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:~/concert;'  # 외부 접속 툴 연동을 위해 Embedded Mode 사용
+    url: 'jdbc:h2:mem:testdb;MODE=MySQL'
     username: sa
     password:
 
@@ -13,17 +13,25 @@ spring:
       path: /h2-console
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: none
-      globally_quoted_identifiers: false
       show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: false
-        show_sql: false
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false # test에서는 false
+        show_sql: false   # test에서는 false
     show-sql: false
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      username: sa
+      password:
+      schema-locations: file:./docs/ddl.sql
+      data-locations: file:./docs/data.sql
+
 
 springdoc:
   packages-to-scan: hhplus.tdd.concert.interfaces.api

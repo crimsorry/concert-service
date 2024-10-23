@@ -1,15 +1,13 @@
 package hhplus.tdd.concert.app.application.dto.reservation;
 
-import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleDto;
-import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record ReservationDto(
+public record ReservationQuery(
         long reserveId,
         String memberName,
         String concertTitle,
@@ -18,8 +16,8 @@ public record ReservationDto(
         Integer amount,
         ReserveStatus reserveStatus
 ) {
-    public static ReservationDto from(Reservation reservation) {
-        return new ReservationDto(
+    public static ReservationQuery from(Reservation reservation) {
+        return new ReservationQuery(
                 reservation.getReserveId(),
                 reservation.getMember().getMemberName(),
                 reservation.getConcertTitle(),
@@ -30,9 +28,9 @@ public record ReservationDto(
         );
     }
 
-    public static List<ReservationDto> from(List<Reservation> reservations) {
+    public static List<ReservationQuery> from(List<Reservation> reservations) {
         return reservations.stream()
-                .map(ReservationDto::from)
+                .map(ReservationQuery::from)
                 .collect(Collectors.toList());
     }
 

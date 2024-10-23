@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;

@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.service.waiting;
 
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenDto;
+import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenCommand;
 import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
@@ -51,7 +51,7 @@ public class WaitingServiceUnitTest {
         });
 
         // then
-        WaitingTokenDto result = waitingService.enqueueMember(memberId);
+        WaitingTokenCommand result = waitingService.enqueueMember(memberId);
 
         // 결과 검증
         assertNotNull(result);

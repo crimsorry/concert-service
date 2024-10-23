@@ -1,15 +1,14 @@
 package hhplus.tdd.concert.application.service.reservation;
 
-import hhplus.tdd.concert.app.application.dto.payment.PayDto;
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;
+import hhplus.tdd.concert.app.application.dto.payment.PayCommand;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationQuery;
 import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.application.service.reservation.ReservationService;
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.application.service.TestBase;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
@@ -63,7 +62,7 @@ public class ReservationUnitTest {
         });
 
         // then
-        PayDto result = reservationService.processReserve(testBase.waitingToken, 1L);
+        PayCommand result = reservationService.processReserve(testBase.waitingToken, 1L);
 
         // 결과검증
         assertEquals(true, result.isPay());
@@ -76,7 +75,7 @@ public class ReservationUnitTest {
         when(reservationRepository.findByMember(testBase.member)).thenReturn(testBase.reservations);
 
         // then
-        List<ReservationDto> result = reservationService.loadReservation(testBase.waitingToken);
+        List<ReservationQuery> result = reservationService.loadReservation(testBase.waitingToken);
 
         // 결과검증
         assertEquals(1, result.size());

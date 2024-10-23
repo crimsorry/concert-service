@@ -1,12 +1,12 @@
-package hhplus.tdd.concert.app.api.v1.payment;
+package hhplus.tdd.concert.app.api.v1;
 
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import hhplus.tdd.concert.app.api.dto.response.reservation.ReservationRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.LoadAmountRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.UpdateChargeRes;
-import hhplus.tdd.concert.app.application.dto.payment.LoadAmountDto;
-import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeDto;
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;
+import hhplus.tdd.concert.app.application.dto.payment.LoadAmountQuery;
+import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeCommand;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationCommand;
 import hhplus.tdd.concert.app.application.service.payment.PayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,7 +48,7 @@ public class PayController {
             @Schema(description = "충전 금액")
             @RequestParam(required = true, defaultValue = "1") int amount
     ){
-        UpdateChargeDto restResponse = payService.chargeAmount(waitingToken, amount);
+        UpdateChargeCommand restResponse = payService.chargeAmount(waitingToken, amount);
         return new ResponseEntity<>(UpdateChargeRes.from(restResponse), HttpStatus.OK);
     }
 
@@ -68,7 +68,7 @@ public class PayController {
     public ResponseEntity<LoadAmountRes> getAmount(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        LoadAmountDto restResponse = payService.loadAmount(waitingToken);
+        LoadAmountQuery restResponse = payService.loadAmount(waitingToken);
         return new ResponseEntity<>(LoadAmountRes.from(restResponse), HttpStatus.OK);
     }
 
@@ -90,8 +90,8 @@ public class PayController {
             @Schema(description = "결제 ID")
             @PathVariable("payId") long payId
     ){
-        ReservationDto restResponse = payService.processPay(waitingToken, payId);
-        return new ResponseEntity<>(ReservationRes.from(restResponse), HttpStatus.OK);
+        ReservationCommand restResponse = payService.processPay(waitingToken, payId);
+        return new ResponseEntity<>(ReservationRes.fromCommand(restResponse), HttpStatus.OK);
     }
 
 

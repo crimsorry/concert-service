@@ -1,13 +1,10 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
-import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleDto;
-import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatDto;
-import hhplus.tdd.concert.app.application.dto.payment.PayDto;
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationDto;
+import hhplus.tdd.concert.app.application.dto.payment.PayCommand;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationQuery;
 import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
-import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
@@ -37,7 +34,7 @@ public class ReservationService {
 
     /* 좌석 예약 요청 */
     @Transactional
-    public PayDto processReserve(String waitingToken, Long seatId){
+    public PayCommand processReserve(String waitingToken, Long seatId){
         // 비관적 락
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(seatId);
 
@@ -58,16 +55,17 @@ public class ReservationService {
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        return PayDto.from(payment, reservation);
+        return PayCommand.from(payment, reservation);
     }
 
-    public List<ReservationDto> loadReservation(String waitingToken){
+    /* 예약 조회 */
+    public List<ReservationQuery> loadReservation(String waitingToken){
         // 대기열 존재 여부 확인
         Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
         List<Reservation> reservations = reservationRepository.findByMember(member);
-        return ReservationDto.from(reservations);
+        return ReservationQuery.from(reservations);
     }
 
 }

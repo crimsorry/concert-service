@@ -1,11 +1,11 @@
-package hhplus.tdd.concert.app.api.v1.waiting;
+package hhplus.tdd.concert.app.api.v1;
 
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
-import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingNumRes;
-import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingTokenRes;
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumDto;
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenDto;
-import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
+import hhplus.tdd.concert.app.api.dto.response.concert.ConcertScheduleRes;
+import hhplus.tdd.concert.app.api.dto.response.concert.ConcertSeatRes;
+import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleQuery;
+import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
+import hhplus.tdd.concert.app.application.service.concert.ConcertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,21 +19,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "대기열 토큰 API", description = "콘서트 대기열 발급 API")
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Tag(name = "콘서트 API", description = "모든 API 는 대기열 토큰 값이 필요합니다.")
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/concert")
 @RequiredArgsConstructor
 @Slf4j
-public class WaitingController {
+public class ConcertController {
 
-    private final WaitingService waitingService;
+    private final ConcertService concertService;
 
-    @PostMapping("/{userId}/queue/token")
-    @Operation(summary = "유저 대기열 토큰 발급")
+    @GetMapping("/date")
+    @Operation(summary = "예약 가능 날짜 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = WaitingTokenRes.class))),
+                            schema = @Schema(implementation = ConcertScheduleRes.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorRes.class))),
@@ -41,33 +44,37 @@ public class WaitingController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorRes.class))),
     })
-    public ResponseEntity<WaitingTokenRes> createUserQueue(
-            @Schema(description = "유저 ID")
-            @PathVariable("userId") long userId
-    ){
-        WaitingTokenDto restResponse = waitingService.enqueueMember(userId);
-        return new ResponseEntity<>(WaitingTokenRes.from(restResponse), HttpStatus.OK);
-    }
-
-    @GetMapping("/queue/token")
-    @Operation(summary = "유저 대기번호 조회")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = WaitingNumRes.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorRes.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorRes.class))),
-    })
-    public ResponseEntity<WaitingNumRes> getUserQueueNum(
+    public ResponseEntity<List<ConcertScheduleRes>> getConcertDate(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        WaitingNumDto restResponse = waitingService.loadWaiting(waitingToken);
-        return new ResponseEntity<>(WaitingNumRes.from(restResponse), HttpStatus.OK);
+        List<ConcertScheduleQuery> restResponse = concertService.loadConcertDate(waitingToken);
+        return new ResponseEntity<>(restResponse.stream()
+                .map(ConcertScheduleRes::from)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
+    @GetMapping("/{scheduleId}/seat")
+    @Operation(summary = "예약 가능 좌석 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ConcertSeatRes.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorRes.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorRes.class))),
+    })
+    public ResponseEntity<List<ConcertSeatRes>> getConcertSeat(
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
+            @Schema(description = "콘서트 스케줄 ID")
+            @PathVariable("scheduleId") long scheduleId
+    ){
+        List<ConcertSeatQuery> restResponse = concertService.loadConcertSeat(waitingToken, scheduleId);
+        return new ResponseEntity<>(restResponse.stream()
+                .map(ConcertSeatRes::from)
+                .collect(Collectors.toList()), HttpStatus.OK);
+    }
 
 }

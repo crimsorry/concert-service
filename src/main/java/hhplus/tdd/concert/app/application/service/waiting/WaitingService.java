@@ -1,11 +1,10 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumDto;
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenDto;
+import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumQuery;
+import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenCommand;
 import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
-import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.concert.Reservation;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
@@ -34,23 +33,23 @@ public class WaitingService {
     private final WaitingWrapRepository waitingWrapRepository;
 
     /* 유저 대기열 생성 */
-    public WaitingTokenDto enqueueMember(long memberId){
+    public WaitingTokenCommand enqueueMember(long memberId){
         Member member = memberRepository.findByMemberId(memberId);
         Member.checkMemberExistence(member);
 
         Waiting existWaiting = waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED);
         Waiting waiting = Waiting.generateOrReturnWaitingToken(existWaiting, member);
         waitingRepository.save(waiting);
-        return new WaitingTokenDto(waiting.getToken());
+        return new WaitingTokenCommand(waiting.getToken());
     }
 
     /* 유저 대기열 순번 조회 */
-    public WaitingNumDto loadWaiting(String waitingToken){
+    public WaitingNumQuery loadWaiting(String waitingToken){
         // 대기열 존재 여부 확인
         Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
 
         int waitings = waitingRepository.countByWaitingIdLessThanAndStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
-        return new WaitingNumDto(waitings);
+        return new WaitingNumQuery(waitings);
     }
 
     /* 대기열 만료 */

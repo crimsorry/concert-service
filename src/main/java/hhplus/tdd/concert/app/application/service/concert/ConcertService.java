@@ -40,7 +40,7 @@ public class ConcertService {
         waitingWrapRepository.findByTokenOrThrow(waitingToken);
 
         LocalDateTime now = LocalDateTime.now();
-        List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDates(now, 0);
+        List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(now);
         return ConcertScheduleDto.from(concertSchedules);
     }
 
@@ -76,7 +76,6 @@ public class ConcertService {
 
         // 좌석 임시배정
         concertSeat.setSeatStatus(SeatStatus.RESERVED);
-        concertSchedule.setCapacity(concertSchedule.getCapacity()-1);
         waiting.setExpiredAt(LocalDateTime.now().plusMinutes(10));
         reservationRepository.save(reservation);
         paymentRepository.save(payment);

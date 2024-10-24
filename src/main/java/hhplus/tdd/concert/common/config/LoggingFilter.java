@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.common.config;
 
 import hhplus.tdd.concert.common.config.log.LogQuery;
+import hhplus.tdd.concert.common.config.log.MaskingConvertor;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.io.IOException;
 public class LoggingFilter implements Filter {
 
     private final LogQuery logQuery;
+    private final MaskingConvertor maskingConvertor;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -36,7 +38,7 @@ public class LoggingFilter implements Filter {
             filterChain.doFilter(servletRequest, responseCacheWrapperObject);
             if(responseCacheWrapperObject.getStatus() == 200){
                 if(method.equals("GET") || method.equals("POST") || method.equals("PUT") || method.equals("PATCH") || method.equals("DELETE")){
-                    logQuery.logResponse(responseCacheWrapperObject);
+                    logResponse(responseCacheWrapperObject);
                 }
             }
             responseCacheWrapperObject.copyBodyToResponse();
@@ -44,6 +46,16 @@ public class LoggingFilter implements Filter {
             log.error("Error in LoggingFilter : ", e);
         }finally {
             MDC.clear(); // MDC 값 초기화 (스레드 풀 환경에서 안전)
+        }
+    }
+
+    public void logResponse(ContentCachingResponseWrapper response) throws IOException {
+        byte[] responseArray = response.getContentAsByteArray();
+        if (responseArray.length > 0) {
+            String responseStr = new String(responseArray);
+            String truncatedResponse = maskingConvertor.truncateResponse(responseStr);
+            truncatedResponse = maskingConvertor.masking(truncatedResponse);
+            log.info("Payload : {} content-type=[{}] ", truncatedResponse, response.getContentType());
         }
     }
 

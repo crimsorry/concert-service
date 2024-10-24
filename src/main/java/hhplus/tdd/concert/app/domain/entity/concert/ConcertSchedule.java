@@ -47,7 +47,7 @@ public class ConcertSchedule {
 
     public static void checkConcertScheduleExistence(ConcertSchedule concertSchedule){
         if(concertSchedule == null){
-            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SCHEDULE, LogLevel.INFO);
+            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SCHEDULE, LogLevel.WARN);
         }
     }
 }

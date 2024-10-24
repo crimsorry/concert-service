@@ -54,7 +54,7 @@ public class Waiting {
 
     public static void checkWaitingExistence(Waiting waiting){
         if(waiting == null){
-            throw new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.INFO);
+            throw new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR);
         }
     }
 

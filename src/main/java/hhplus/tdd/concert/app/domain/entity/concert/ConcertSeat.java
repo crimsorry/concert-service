@@ -47,13 +47,13 @@ public class ConcertSeat {
 
     public static void checkConcertSeatExistence(ConcertSeat concertSeat){
         if(concertSeat == null){
-            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SEAT, LogLevel.INFO);
+            throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SEAT, LogLevel.WARN);
         }
     }
 
     public static void checkConcertSeatReserved(ConcertSeat concertSeat){
         if(concertSeat.getSeatStatus() != SeatStatus.RESERVED){
-            throw new FailException(ErrorCode.NOT_FOUND_SEAT_RESERVED, LogLevel.INFO);
+            throw new FailException(ErrorCode.NOT_FOUND_SEAT_RESERVED, LogLevel.WARN);
         }
     }
 

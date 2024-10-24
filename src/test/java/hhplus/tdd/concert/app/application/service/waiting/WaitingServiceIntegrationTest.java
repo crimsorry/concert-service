@@ -1,5 +1,6 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
@@ -11,6 +12,7 @@ import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.common.types.SeatStatus;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,6 +82,7 @@ public class WaitingServiceIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void 대기열_만료_확인() {
         // given
         memberRepository.save(testBase.member);
@@ -92,10 +95,12 @@ public class WaitingServiceIntegrationTest {
         waitingService.expiredWaiting();
 
         // then
-        Waiting updatedWaiting = waitingRepository.findByWaitingId(testBase.waitingExpired.getWaitingId());
-        assertEquals(WaitingStatus.EXPIRED, updatedWaiting.getStatus());
         Reservation updatedReservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
         assertEquals(ReserveStatus.CANCELED, updatedReservation.getReserveStatus());
+        ConcertSeat updateConcertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
+        assertEquals(SeatStatus.STAND_BY, updateConcertSeat.getSeatStatus());
+        Waiting updatedWaiting = waitingRepository.findByWaitingId(testBase.waitingExpired.getWaitingId());
+        assertEquals(WaitingStatus.EXPIRED, updatedWaiting.getStatus());
     }
 
 }

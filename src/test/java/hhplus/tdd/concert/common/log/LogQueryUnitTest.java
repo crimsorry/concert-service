@@ -18,9 +18,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class LogQueryUnitTest {
 
-    @Mock
-    private MaskingConvertor maskingConverter;
-
     @InjectMocks
     private LogQuery logQuery;
 

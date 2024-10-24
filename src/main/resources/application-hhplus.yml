@@ -1,0 +1,37 @@
+profile-name: hhplus
+
+spring:
+  application.name: concert
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: 'jdbc:h2:mem:hhplusDB;MODE=MySQL'
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+      show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false # test에서는 false
+        show_sql: false   # test에서는 false
+    show-sql: false
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      username: sa
+      password:
+      schema-locations: file:./docs/ddl.sql
+      data-locations: file:./docs/data.sql
+
+

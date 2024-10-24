@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.util.UUID;
 
@@ -13,8 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Component
 public class LogQuery {
-
-    private final MaskingConvertor maskingConverter;
 
     public String loadClientIP(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
@@ -42,16 +39,6 @@ public class LogQuery {
         String requestId = UUID.randomUUID().toString();
         MDC.put("requestId", requestId);
         return requestId;
-    }
-
-    public void logResponse(ContentCachingResponseWrapper response) {
-        byte[] responseArray = response.getContentAsByteArray();
-        if (responseArray.length > 0) {
-            String responseStr = new String(responseArray);
-            String truncatedResponse = maskingConverter.truncateResponse(responseStr);
-            truncatedResponse = maskingConverter.masking(truncatedResponse);
-            log.info("Payload : {} content-type=[{}] ", truncatedResponse, response.getContentType());
-        }
     }
 
 }

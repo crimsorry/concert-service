@@ -5,6 +5,7 @@ import ch.qos.logback.core.read.ListAppender;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.common.config.LoggingFilter;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -37,9 +38,9 @@ public class LoggingFilterIntegrationTest {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
-    @BeforeEach
+    @AfterEach
     public void setUp() {
-        databaseCleaner.execute();
+        databaseCleaner.clear();
     }
 
     @BeforeEach

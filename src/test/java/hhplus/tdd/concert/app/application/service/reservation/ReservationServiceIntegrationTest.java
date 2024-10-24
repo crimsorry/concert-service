@@ -6,6 +6,8 @@ import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +41,9 @@ public class ReservationServiceIntegrationTest {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
-    @BeforeEach
+    @AfterEach
     public void setUp() {
-        databaseCleaner.execute();
+        databaseCleaner.clear();
     }
 
     @Test

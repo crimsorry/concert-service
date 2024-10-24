@@ -9,8 +9,11 @@ import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.app.application.service.TestBase;
+import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.WaitingStatus;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,10 +43,20 @@ public class WaitingServiceIntegrationTest {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    public void setUp() {
+        databaseCleaner.execute();
+    }
+
     @Test
+    @Transactional
     public void 대기열_11명_active_10명까지_active() {
         // given
         int totalMembers = 11;

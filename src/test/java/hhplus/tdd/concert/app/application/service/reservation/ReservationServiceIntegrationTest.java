@@ -5,6 +5,8 @@ import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.app.application.service.TestBase;
+import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +35,14 @@ public class ReservationServiceIntegrationTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    public void setUp() {
+        databaseCleaner.execute();
+    }
 
     @Test
     public void 동시성_2명이_1개_좌석_예약() throws InterruptedException {

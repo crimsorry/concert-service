@@ -25,7 +25,7 @@ public class TestBase {
     public final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, now, now.plusMinutes(30));
     public final Waiting waitingActive = new Waiting(1L, member, waitingToken, WaitingStatus.ACTIVE, now, now.plusMinutes(30));
     public final Waiting waitingActive2 = new Waiting(2L, member2, waitingToken2, WaitingStatus.ACTIVE, now, now.plusMinutes(30));
-    public final Waiting waitingExpired = new Waiting(3L, member, waitingToken, WaitingStatus.ACTIVE, now.minusMinutes(30), now.minusMinutes(10));
+    public final Waiting waitingExpired = new Waiting(1L, member, waitingToken, WaitingStatus.EXPIRED, now.minusMinutes(30), now.minusMinutes(10));
     public final Concert concert = new Concert(1L, title, "부산문화회관 대극장");
     public final ConcertSchedule concertSchedule = new ConcertSchedule(1L, concert, now, now.minusDays(1), now.plusDays(1));
     public final ConcertSeat concertSeatReserve = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.RESERVED);

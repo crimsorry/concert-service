@@ -15,12 +15,4 @@ public class ConcertApplication {
 		SpringApplication.run(ConcertApplication.class, args);
 	}
 
-	@Bean
-	public FilterRegistrationBean<LoggingFilter> loggingFilterRegistration() {
-		FilterRegistrationBean<LoggingFilter> registrationBean = new FilterRegistrationBean<>();
-		registrationBean.setFilter(new LoggingFilter());
-		registrationBean.addUrlPatterns("/*");
-		return registrationBean;
-	}
-
 }

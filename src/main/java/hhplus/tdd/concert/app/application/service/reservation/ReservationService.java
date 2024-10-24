@@ -40,6 +40,7 @@ public class ReservationService {
 
         // 대기열 존재 여부 확인
         Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
 
         // 좌석 상태 확인

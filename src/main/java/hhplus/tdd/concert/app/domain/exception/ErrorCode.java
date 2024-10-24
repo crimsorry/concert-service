@@ -8,6 +8,7 @@ public enum ErrorCode {
     NOT_FOUNT_MEMBER("존재하지 않는 사용자입니다."),
     NOT_FOUND_WAITING_MEMBER("사용자 확인 불가. 대기열 토큰을 발급받아 주세요."),
     EXPIRED_WAITING_TOKEN("만료된 토큰. 대기열 토큰을 반급받아 주세요."),
+    WAITING_MEMBER("대기 중인 사용자입니다."),
 
     ASSIGN_SEAT("이미 선택된 좌석입니다."),
     RESERVED_SEAT( "이미 임시배정된 좌석입니다."),

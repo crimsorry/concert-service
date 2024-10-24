@@ -29,6 +29,21 @@ public class WaitingUnitTest {
     }
 
     @Test
+    public void 대기순번_안왔는데_들어옴(){
+        // given
+        Waiting waiting = new Waiting();
+        waiting.setStatus(WaitingStatus.STAND_BY);
+
+        // when & then
+        Exception exception = assertThrows(FailException.class, () -> {
+            Waiting.checkWaitingStatusActive(waiting);
+        });
+
+        // 결과 검증
+        assertEquals(ErrorCode.WAITING_MEMBER.getMessage(), exception.getMessage());
+    }
+
+    @Test
     public void 토큰_발급_로직(){
         // given
         long memberId = 1L;

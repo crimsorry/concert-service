@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.application.repository;
 
-import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;

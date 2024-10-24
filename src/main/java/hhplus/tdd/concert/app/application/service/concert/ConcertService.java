@@ -2,7 +2,7 @@ package hhplus.tdd.concert.app.application.service.concert;
 
 import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleQuery;
 import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
-import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;

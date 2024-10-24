@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.application.repository;
+package hhplus.tdd.concert.app.domain.repository.waiting.wrapper;
 
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;

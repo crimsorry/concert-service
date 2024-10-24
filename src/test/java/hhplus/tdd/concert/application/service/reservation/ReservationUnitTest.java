@@ -2,7 +2,7 @@ package hhplus.tdd.concert.application.service.reservation;
 
 import hhplus.tdd.concert.app.application.dto.payment.PayCommand;
 import hhplus.tdd.concert.app.application.dto.reservation.ReservationQuery;
-import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.application.service.reservation.ReservationService;
 import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;

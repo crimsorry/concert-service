@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenCommand;
-import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;

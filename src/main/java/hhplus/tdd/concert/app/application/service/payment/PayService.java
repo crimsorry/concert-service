@@ -65,14 +65,13 @@ public class PayService {
 
         // 결제 정보
         Payment payment = paymentRepository.findByPayId(payId);
-        ConcertSeat concertSeat = payment.getReservation().getSeat();
-        Reservation reservation = payment.getReservation();
-
-        // 예외처리
         Payment.checkPaymentExistence(payment);
         Payment.checkPaymentStatue(payment);
+
+        ConcertSeat concertSeat = payment.getReservation().getSeat();
         ConcertSeat.checkConcertSeatReserved(concertSeat);
         Member.checkMemberChargeLess(member, payment.getAmount());
+        Reservation reservation = payment.getReservation();
 
         // 결제 완료 처리
         payment.done();

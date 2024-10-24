@@ -1,7 +1,10 @@
 package hhplus.tdd.concert.domain.entity.concert;
 
-import hhplus.tdd.concert.domain.exception.ErrorCode;
-import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
+import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,5 +69,44 @@ public class ConcertSeatUnitTest {
 
         // 결과 검증
         assertEquals(ErrorCode.RESERVED_SEAT.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void 좌석_선택_가능_상태(){
+        // given
+        ConcertSeat concertSeat = new ConcertSeat();
+        concertSeat.setSeatStatus(SeatStatus.RESERVED);
+
+        // when & then
+        concertSeat.open();
+
+        // 결과 검증
+        assertEquals(SeatStatus.STAND_BY, concertSeat.getSeatStatus());
+    }
+
+    @Test
+    public void 좌석_임시_배정_상태(){
+        // given
+        ConcertSeat concertSeat = new ConcertSeat();
+        concertSeat.setSeatStatus(SeatStatus.STAND_BY);
+
+        // when & then
+        concertSeat.pending();
+
+        // 결과 검증
+        assertEquals(SeatStatus.RESERVED, concertSeat.getSeatStatus());
+    }
+
+    @Test
+    public void 좌석_할당된_상태(){
+        // given
+        ConcertSeat concertSeat = new ConcertSeat();
+        concertSeat.setSeatStatus(SeatStatus.RESERVED);
+
+        // when & then
+        concertSeat.close();
+
+        // 결과 검증
+        assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
     }
 }

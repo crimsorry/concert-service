@@ -26,7 +26,6 @@ erDiagram
         datetime open_date "콘서트 개최 일"
         datetime start_date "티켓 예매 시작 시간"
         datetime end_date "티켓 예매 종료 시간"
-        int capacity "남은 좌석 수"
     }
     CONCERT_SEAT {
         bigint seat_id PK

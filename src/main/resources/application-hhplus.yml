@@ -1,11 +1,11 @@
-profile-name: test
+profile-name: hhplus
 
 spring:
   application.name: concert
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:testdb;MODE=MySQL'
+    url: 'jdbc:h2:mem:hhplusDB;MODE=MySQL'
     username: sa
     password:
 
@@ -33,3 +33,5 @@ spring:
       password:
       schema-locations: file:./docs/ddl.sql
       data-locations: file:./docs/data.sql
+
+

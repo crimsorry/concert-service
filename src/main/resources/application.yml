@@ -1,3 +1,15 @@
 spring:
   profiles:
-    active: test
+    active:              # local: 내 pc 실 사용
+                         # hhplus: 코치님 실 사용
+                         # test: 통합테스트용.
+
+springdoc:
+  packages-to-scan: hhplus.tdd.concert.app.api
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha

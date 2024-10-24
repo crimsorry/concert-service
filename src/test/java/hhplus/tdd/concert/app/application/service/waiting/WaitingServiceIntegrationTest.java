@@ -1,21 +1,21 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
+import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
-import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.SeatStatus;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,9 +52,9 @@ public class WaitingServiceIntegrationTest {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
-    @BeforeEach
+    @AfterEach
     public void setUp() {
-        databaseCleaner.execute();
+        databaseCleaner.clear();
     }
 
     @Test
@@ -73,7 +73,7 @@ public class WaitingServiceIntegrationTest {
         waitingService.activeWaiting();
 
         // then
-        List<Waiting> activeWaitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.ACTIVE, PageRequest.of(0, maxMember));
+        List<Waiting> activeWaitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.ACTIVE, PageRequest.of(0, totalMembers));
         List<Waiting> standByWaitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.STAND_BY, PageRequest.of(0, totalMembers));
 
         // 결과 검증

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.application.service;
+package hhplus.tdd.concert.app.application.service;
 
 import hhplus.tdd.concert.app.domain.entity.concert.*;
 import hhplus.tdd.concert.app.domain.entity.member.Member;

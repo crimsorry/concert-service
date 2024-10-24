@@ -1,10 +1,10 @@
-package hhplus.tdd.concert.application.repository;
+package hhplus.tdd.concert.app.application.repository;
 
 import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
-import hhplus.tdd.concert.application.service.TestBase;
+import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.domain.entity.concert;
+package hhplus.tdd.concert.app.domain.entity.concert;
 
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;

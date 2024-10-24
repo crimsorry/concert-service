@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.domain.entity.payment;
+package hhplus.tdd.concert.app.domain.entity.payment;
 
 import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.common.types.ReserveStatus;

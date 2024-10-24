@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.domain.entity.member;
+package hhplus.tdd.concert.app.domain.entity.member;
 
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;

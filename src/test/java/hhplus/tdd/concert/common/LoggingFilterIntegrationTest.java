@@ -2,6 +2,7 @@ package hhplus.tdd.concert.common;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.common.config.LoggingFilter;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,14 @@ public class LoggingFilterIntegrationTest {
     private MockMvc mockMvc;
 
     private ListAppender<ILoggingEvent> listAppender;
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    public void setUp() {
+        databaseCleaner.execute();
+    }
 
     @BeforeEach
     void setup() {

@@ -1,15 +1,14 @@
-package hhplus.tdd.concert.application.service.reservation;
+package hhplus.tdd.concert.app.application.service.reservation;
 
 import hhplus.tdd.concert.app.application.dto.payment.PayCommand;
 import hhplus.tdd.concert.app.application.dto.reservation.ReservationQuery;
 import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
-import hhplus.tdd.concert.app.application.service.reservation.ReservationService;
 import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.application.service.TestBase;
+import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

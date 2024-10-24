@@ -66,7 +66,7 @@ public class Payment {
 
     public static void checkPaymentExistence(Payment payment){
         if(payment == null){
-            throw new FailException(ErrorCode.NOT_FOUNT_PAYMENT, LogLevel.INFO);
+            throw new FailException(ErrorCode.NOT_FOUNT_PAYMENT, LogLevel.WARN);
         }
     }
 

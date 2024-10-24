@@ -2,6 +2,7 @@ package hhplus.tdd.concert.application.service.concert;
 
 import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleQuery;
 import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
+import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.application.service.concert.ConcertService;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
@@ -31,7 +32,7 @@ public class ConcertServiceUnitTest {
     private ConcertService concertService;
 
     @Mock
-    private WaitingRepository waitingRepository;
+    private WaitingWrapRepository waitingWrapRepository;
 
     @Mock
     private ConcertScheduleRepository concertScheduleRepository;
@@ -42,7 +43,7 @@ public class ConcertServiceUnitTest {
     @Test
     public void 예약_가능_날짜_조회() {
         // when
-        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(any(LocalDateTime.class)))
                 .thenReturn(testBase.concertSchedules);
 
@@ -57,7 +58,7 @@ public class ConcertServiceUnitTest {
     @Test
     public void 예약_가능_좌석_조회() {
         // when
-        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(concertScheduleRepository.findByScheduleId(testBase.concertSchedule.getScheduleId())).thenReturn(testBase.concertSchedule);
         when(concertSeatRepository.findBySchedule(testBase.concertSchedule)).thenReturn(testBase.concertSeats);
 

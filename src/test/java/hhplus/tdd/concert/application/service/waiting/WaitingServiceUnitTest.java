@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenCommand;
+import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.application.service.waiting.WaitingService;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
@@ -27,6 +28,10 @@ public class WaitingServiceUnitTest {
 
     @InjectMocks
     private WaitingService waitingService;
+
+    @Mock
+    private WaitingWrapRepository waitingWrapRepository;
+
 
     @Mock
     private MemberRepository memberRepository;
@@ -64,7 +69,7 @@ public class WaitingServiceUnitTest {
     @Test
     public void 유저_대기열_순서_조회() {
         // when
-        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(waitingRepository.countByWaitingIdLessThanAndStatus(testBase.member.getMemberId(), WaitingStatus.STAND_BY)).thenReturn(0);
 
         // then

@@ -1,8 +1,9 @@
 package hhplus.tdd.concert.application.service.payment;
 
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationCommand;
 import hhplus.tdd.concert.app.application.dto.payment.LoadAmountQuery;
 import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeCommand;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationCommand;
+import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.application.service.payment.PayService;
 import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
 import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
@@ -32,7 +33,7 @@ class PayServiceUnitTest {
     private PayService payService;
 
     @Mock
-    private WaitingRepository waitingRepository;
+    private WaitingWrapRepository waitingWrapRepository;
 
     @Mock
     private AmountHistoryRepository amountHistoryRepository;
@@ -43,10 +44,10 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_충전_성공() {
         // when
-        when(waitingRepository.findByToken(eq(testBase.waitingToken))).thenReturn(testBase.waiting);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(amountHistoryRepository.save(any(AmountHistory.class))).thenAnswer(invocation -> {
             AmountHistory amountHistory = invocation.getArgument(0);
-            amountHistory.setPointId(1L); // save 후에 ID가 생성됨을 가정
+            amountHistory.setPointId(1L);
             return amountHistory;
         });
         // then
@@ -54,7 +55,7 @@ class PayServiceUnitTest {
 
         // 결과검증
         assertNotNull(result);
-        verify(waitingRepository).findByToken(testBase.waitingToken);
+        verify(waitingWrapRepository).findByTokenOrThrow(testBase.waitingToken);
         verify(amountHistoryRepository).save(any(AmountHistory.class));
         assertEquals(true, result.isCharge());
     }
@@ -62,7 +63,7 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_조회() {
         // when
-        when(waitingRepository.findByToken(eq(testBase.waitingToken))).thenReturn(testBase.waiting);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
 
         // then
         LoadAmountQuery result = payService.loadAmount(testBase.waitingToken);
@@ -74,7 +75,7 @@ class PayServiceUnitTest {
     @Test
     public void 결제_처리_성공() {
         // when
-        when(waitingRepository.findByToken(eq(testBase.waitingToken))).thenReturn(testBase.waiting);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(paymentRepository.findByPayId(eq(1L))).thenReturn(testBase.payment);
 
         // then

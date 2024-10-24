@@ -61,6 +61,7 @@ public class PayService {
     public ReservationCommand processPay(String waitingToken, long payId){
         // 대기열 존재 여부 확인
         Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
 
         // 결제 정보

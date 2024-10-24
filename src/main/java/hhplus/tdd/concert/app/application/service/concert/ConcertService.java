@@ -5,6 +5,7 @@ import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
 import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import lombok.AllArgsConstructor;
@@ -23,10 +24,11 @@ public class ConcertService {
     private final ConcertSeatRepository concertSeatRepository;
     private final WaitingWrapRepository waitingWrapRepository;
 
-    /* 예약 가능 날짜 조회 - 스케줄러를 통해 ACTIVE 상태 토큰만 들어옴 */
+    /* 예약 가능 날짜 조회 */
     public List<ConcertScheduleQuery> loadConcertDate(String waitingToken){
         // 대기열 존재 여부 확인
-        waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting.checkWaitingStatusActive(waiting);
 
         LocalDateTime now = LocalDateTime.now();
         List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(now);
@@ -36,7 +38,8 @@ public class ConcertService {
     /* 예약 가능 좌석 조회 */
     public List<ConcertSeatQuery> loadConcertSeat(String waitingToken, long scheduleId){
         // 대기열 존재 여부 확인
-        waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting.checkWaitingStatusActive(waiting);
 
         ConcertSchedule concertSchedule = concertScheduleRepository.findByScheduleId(scheduleId);
         ConcertSchedule.checkConcertScheduleExistence(concertSchedule);

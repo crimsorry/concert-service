@@ -28,6 +28,10 @@
     {
       "name": "콘서트 API",
       "description": "모든 API 는 대기열 토큰 값이 필요합니다."
+    },
+    {
+      "name": "예약 API",
+      "description": "모든 API 는 대기열 토큰 값이 필요합니다."
     }
   ],
   "paths": {
@@ -84,10 +88,10 @@
         }
       }
     },
-    "/api/v1/concert/{seatId}/reserve": {
+    "/api/v1/reserve/{seatId}": {
       "post": {
         "tags": [
-          "콘서트 API"
+          "예약 API"
         ],
         "summary": "좌석 예약 요청",
         "operationId": "createConcertReserve",
@@ -296,6 +300,47 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/WaitingNumRes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "서버 오류",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reserve": {
+      "get": {
+        "tags": [
+          "예약 API"
+        ],
+        "summary": "유저 예약 내역",
+        "operationId": "getReservation",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayRes"
                 }
               }
             }

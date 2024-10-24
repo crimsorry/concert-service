@@ -2,13 +2,10 @@ package hhplus.tdd.concert.application.service.concert;
 
 import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleQuery;
 import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
-import hhplus.tdd.concert.app.application.repository.WaitingWrapRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.application.service.concert.ConcertService;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
-import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.application.service.TestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

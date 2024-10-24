@@ -34,7 +34,7 @@ spring:
 
 
 springdoc:
-  packages-to-scan: hhplus.tdd.concert.interfaces.api
+  packages-to-scan: hhplus.tdd.concert.app.api
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:

@@ -1,10 +1,7 @@
 package hhplus.tdd.concert.common.config;
 
 import hhplus.tdd.concert.common.config.log.LogQuery;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -12,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingResponseWrapper;
+
+import java.io.IOException;
 
 @Slf4j
 @Component
@@ -21,7 +20,7 @@ public class LoggingFilter implements Filter {
     private final LogQuery logQuery;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
         try{
             String requestId = logQuery.loadGenerateRequestId();
             MDC.put("requestId", requestId);

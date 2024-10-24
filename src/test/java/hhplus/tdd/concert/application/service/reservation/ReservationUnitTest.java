@@ -47,7 +47,7 @@ public class ReservationUnitTest {
     public void 좌석_예약() {
         // when
         when(concertSeatRepository.findBySeatId(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
-        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
             Reservation reservation = invocation.getArgument(0);
             reservation.setReserveId(1L);
@@ -62,7 +62,7 @@ public class ReservationUnitTest {
         });
 
         // then
-        PayCommand result = reservationService.processReserve(testBase.waitingToken, 1L);
+        PayCommand result = reservationService.processReserve(testBase.waitingToken, testBase.concertSeatStandBy.getSeatId());
 
         // 결과검증
         assertEquals(true, result.isPay());

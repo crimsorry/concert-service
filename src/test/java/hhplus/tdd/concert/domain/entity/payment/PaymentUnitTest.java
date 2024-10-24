@@ -1,10 +1,11 @@
 package hhplus.tdd.concert.domain.entity.payment;
 
-import hhplus.tdd.concert.domain.entity.concert.Reservation;
-import hhplus.tdd.concert.domain.entity.concert.ReserveStatus;
-import hhplus.tdd.concert.domain.entity.member.Member;
-import hhplus.tdd.concert.domain.exception.ErrorCode;
-import hhplus.tdd.concert.domain.exception.FailException;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -54,6 +55,19 @@ public class PaymentUnitTest {
 
         // 결과 검증
         assertEquals(ErrorCode.SUCCESS_PAY_SEAT.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void 결제_완료_확인(){
+        // given
+        Payment payment = new Payment();
+        payment.setIsPay(false);
+
+        // when & then
+        payment.done();
+
+        // 결과 검증
+        assertEquals(true, payment.getIsPay());
     }
 
 }

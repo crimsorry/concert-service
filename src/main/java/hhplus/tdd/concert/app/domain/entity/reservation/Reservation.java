@@ -50,7 +50,7 @@ public class Reservation {
     @NotNull
     @Comment("좌석 번호")
     @Column(length = 3)
-    private String seatNum;
+    private String seatCode;
 
     @NotNull
     @Comment("좌석 금액")
@@ -69,7 +69,7 @@ public class Reservation {
                 .seat(seat)
                 .concertTitle(seat.getSchedule().getConcert().getConcertTitle())
                 .openDate(seat.getSchedule().getOpenDate())
-                .seatNum(seat.getSeatNum())
+                .seatCode(seat.getSeatCode())
                 .amount(seat.getAmount())
                 .reserveStatus(ReserveStatus.PENDING)
                 .build();

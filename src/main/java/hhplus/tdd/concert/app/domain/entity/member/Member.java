@@ -3,12 +3,14 @@ package hhplus.tdd.concert.app.domain.entity.member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
 import org.springframework.boot.logging.LogLevel;
 
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -51,11 +53,11 @@ public class Member {
     }
 
     public void charge(Integer amount){
-        setCharge(getCharge() + amount);
+        this.charge = getCharge() + amount;
     }
 
     public void withdraw(Integer amount){
-        setCharge(getCharge() - amount);
+        this.charge = getCharge() - amount;
     }
 
 }

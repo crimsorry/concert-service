@@ -49,7 +49,7 @@ public class WaitingController {
         return new ResponseEntity<>(WaitingTokenRes.from(restResponse), HttpStatus.OK);
     }
 
-    @GetMapping("/queue/token/issue/query")
+    @GetMapping("/queue/token/query")
     @Operation(summary = "유저 대기번호 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",

@@ -5,7 +5,10 @@ import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
 import org.springframework.boot.logging.LogLevel;
@@ -13,7 +16,6 @@ import org.springframework.boot.logging.LogLevel;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -86,15 +88,15 @@ public class Waiting {
     }
 
     public void stop(){
-        setStatus(WaitingStatus.EXPIRED);
+        this.status = WaitingStatus.EXPIRED;
     }
 
     public void in(){
-        setStatus(WaitingStatus.ACTIVE);
+        this.status = WaitingStatus.ACTIVE;
     }
 
     public void limitPayTime(){
-        setExpiredAt(LocalDateTime.now().plusMinutes(10));
+        this.expiredAt = LocalDateTime.now().plusMinutes(10);
     }
 
 

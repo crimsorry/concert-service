@@ -54,7 +54,7 @@ public class ReservationController {
         return new ResponseEntity<>(PayRes.from(restResponse), HttpStatus.OK);
     }
 
-    @GetMapping("/seat/query")
+    @GetMapping("/concerts/reserve/query")
     @Operation(summary = "유저 예약 내역")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",

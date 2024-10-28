@@ -4,12 +4,14 @@ import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.SeatStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
 import org.springframework.boot.logging.LogLevel;
 
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -66,15 +68,15 @@ public class ConcertSeat {
     }
 
     public void open(){
-        setSeatStatus(SeatStatus.STAND_BY);
+        this.seatStatus = SeatStatus.STAND_BY;
     }
 
     public void pending(){
-        setSeatStatus(SeatStatus.RESERVED);
+        this.seatStatus = SeatStatus.RESERVED;
     }
 
     public void close(){
-        setSeatStatus(SeatStatus.ASSIGN);
+        this.seatStatus = SeatStatus.ASSIGN;
     }
 
 }

@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "결제 API", description = "모든 API 는 대기열 토큰 값이 필요합니다.")
 @RestController
-@RequestMapping("/api/v1/pay")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class PayController {
 
     private final PayService payService;
 
-    @PatchMapping("")
+    @PatchMapping("/pay/charge")
     @Operation(summary = "잔액 충전")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
@@ -52,7 +52,7 @@ public class PayController {
         return new ResponseEntity<>(UpdateChargeRes.from(restResponse), HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/pay/query")
     @Operation(summary = "잔액 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
@@ -72,7 +72,7 @@ public class PayController {
         return new ResponseEntity<>(LoadAmountRes.from(restResponse), HttpStatus.OK);
     }
 
-    @PatchMapping("/seat/{payId}")
+    @PatchMapping("/concerts/{concertId}/seats/{seatId}/pay/{payId}")
     @Operation(summary = "결제 처리")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
@@ -87,6 +87,10 @@ public class PayController {
     })
     public ResponseEntity<ReservationRes> updateConcertPay(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
+            @Schema(description = "콘서트 ID")
+            @PathVariable("concertId") long concertId,
+            @Schema(description = "좌석 ID")
+            @PathVariable("seatId") long seatId,
             @Schema(description = "결제 ID")
             @PathVariable("payId") long payId
     ){

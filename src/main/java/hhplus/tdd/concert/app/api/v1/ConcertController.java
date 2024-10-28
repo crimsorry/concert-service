@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "콘서트 API", description = "모든 API 는 대기열 토큰 값이 필요합니다.")
 @RestController
-@RequestMapping("/api/v1/concert")
+@RequestMapping("/api/v1/concerts")
 @RequiredArgsConstructor
 @Slf4j
 public class ConcertController {

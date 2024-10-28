@@ -32,7 +32,7 @@ public class ConcertSeat {
     @NotNull
     @Comment("좌석 번호")
     @Column(length = 3)
-    private String seatNum;
+    private String seatCode;
 
     @NotNull
     @Comment("좌석 금액")

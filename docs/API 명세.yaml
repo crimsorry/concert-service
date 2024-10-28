@@ -537,7 +537,7 @@
             "type": "string",
             "format": "date-time"
           },
-          "seatNum": {
+          "seatCode": {
             "type": "string"
           },
           "amount": {
@@ -579,7 +579,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "seatNum": {
+          "": {
             "type": "string"
           },
           "amount": {

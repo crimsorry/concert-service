@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public record ConcertSeatQuery(
         Long seatId,
-        String seatNum,
+        String seatCode,
         Integer amount,
         SeatStatus seatStatus
 ) {
@@ -16,7 +16,7 @@ public record ConcertSeatQuery(
     public static ConcertSeatQuery from(ConcertSeat concertSeat) {
         return new ConcertSeatQuery(
                 concertSeat.getSeatId(),
-                concertSeat.getSeatNum(),
+                concertSeat.getSeatCode(),
                 concertSeat.getAmount(),
                 concertSeat.getSeatStatus()
         );

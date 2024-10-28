@@ -41,7 +41,7 @@ CREATE TABLE concert_schedule (
 CREATE TABLE concert_seat (
     seat_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     schedule_id BIGINT NOT NULL,
-    seat_num VARCHAR(3) NOT NULL COMMENT '좌석 번호',
+    seat_code VARCHAR(3) NOT NULL COMMENT '좌석 번호',
     amount INT NOT NULL COMMENT '좌석 금액',
     seat_status VARCHAR(10) NOT NULL COMMENT '좌석 점유 여부',  
     INDEX seat_idx_schedule_id (schedule_id),
@@ -54,7 +54,7 @@ CREATE TABLE reservation (
     seat_id BIGINT NOT NULL,
     concert_title VARCHAR(255) NOT NULL COMMENT '콘서트 명',
     open_date DATETIME NOT NULL COMMENT '콘서트 개최 일',
-    seat_num VARCHAR(3) NOT NULL COMMENT '좌석 번호',
+    seat_code VARCHAR(3) NOT NULL COMMENT '좌석 번호',
     amount INT NOT NULL COMMENT '좌석 금액',
     reserve_status VARCHAR(10) NOT NULL COMMENT '예약 상태',  
     INDEX resrvation_idx_member_id (member_id),

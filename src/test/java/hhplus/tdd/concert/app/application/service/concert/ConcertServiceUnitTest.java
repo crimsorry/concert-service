@@ -63,7 +63,7 @@ public class ConcertServiceUnitTest {
 
         // 결과 검증
         assertEquals(1, result.size());
-        assertEquals("A01", result.get(0).seatNum());
+        assertEquals("A01", result.get(0).seatCode());
     }
 
 }

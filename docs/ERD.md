@@ -30,7 +30,7 @@ erDiagram
     CONCERT_SEAT {
         bigint seat_id PK
         bigint schedule_id FK
-        varchar seat_num "좌석 번호"
+        varchar seat_code "좌석 번호"
         int amount "좌석 금액"
         enum sear_status "좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)"
     }
@@ -48,7 +48,7 @@ erDiagram
         bigint seat_id FK
         varchar concert_title "콘서트 명"
         datetime open_date "콘서트 개최 일"
-        varchar seat_num "좌석 번호"
+        varchar seat_code "좌석 번호"
         int amount "좌석 금액"
         enum reserve_statue "예약 상태 (PENDING, RESERVED, CANCELED)"
     }

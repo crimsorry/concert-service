@@ -3,7 +3,7 @@ INSERT INTO member(member_name, charge)VALUES('김소리_테스트_2', 0);
 INSERT INTO concert (concert_title, concert_place) VALUES('드라큘라', '부산문화회관 대극장');
 INSERT INTO concert_schedule (concert_id, open_date, start_date, end_date)
 VALUES (1, '2024-11-01 14:30:00', DATEADD('DAY', -5, CURRENT_DATE), DATEADD('DAY', 10, CURRENT_DATE));
-INSERT INTO concert_seat (schedule_id, seat_num, amount, seat_status) VALUES
+INSERT INTO concert_seat (schedule_id, seat_code, amount, seat_status) VALUES
 (1, 'A01', 140000, 'STAND_BY'),
 (1, 'A02', 140000, 'STAND_BY'),
 (1, 'A03', 140000, 'STAND_BY'),

@@ -5,14 +5,14 @@ import hhplus.tdd.concert.common.types.SeatStatus;
 
 public record ConcertSeatRes(
         Long seatId,
-        String seatNum,
+        String seatCode,
         Integer amount,
         SeatStatus seatStatus
 ) {
     public static ConcertSeatRes from(ConcertSeatQuery concertSeatQuery) {
         return new ConcertSeatRes(
                 concertSeatQuery.seatId(),
-                concertSeatQuery.seatNum(),
+                concertSeatQuery.seatCode(),
                 concertSeatQuery.amount(),
                 concertSeatQuery.seatStatus()
         );

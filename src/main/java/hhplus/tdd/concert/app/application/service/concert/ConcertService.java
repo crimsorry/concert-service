@@ -2,13 +2,13 @@ package hhplus.tdd.concert.app.application.service.concert;
 
 import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleQuery;
 import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
-import lombok.AllArgsConstructor;
+import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ConcertService {
 
     private final ConcertScheduleRepository concertScheduleRepository;

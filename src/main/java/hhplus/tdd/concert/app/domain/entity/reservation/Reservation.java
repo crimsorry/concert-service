@@ -3,15 +3,16 @@ package hhplus.tdd.concert.app.domain.entity.reservation;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.SeatStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -50,7 +51,7 @@ public class Reservation {
     @NotNull
     @Comment("좌석 번호")
     @Column(length = 3)
-    private String seatNum;
+    private String seatCode;
 
     @NotNull
     @Comment("좌석 금액")
@@ -69,7 +70,7 @@ public class Reservation {
                 .seat(seat)
                 .concertTitle(seat.getSchedule().getConcert().getConcertTitle())
                 .openDate(seat.getSchedule().getOpenDate())
-                .seatNum(seat.getSeatNum())
+                .seatCode(seat.getSeatCode())
                 .amount(seat.getAmount())
                 .reserveStatus(ReserveStatus.PENDING)
                 .build();
@@ -77,11 +78,11 @@ public class Reservation {
     }
 
     public void complete(){
-        setReserveStatus(ReserveStatus.RESERVED);
+        this.reserveStatus = ReserveStatus.RESERVED;
     }
 
     public void cancel(){
-        setReserveStatus(ReserveStatus.CANCELED);
+        this.reserveStatus = ReserveStatus.CANCELED;
     }
 
 }

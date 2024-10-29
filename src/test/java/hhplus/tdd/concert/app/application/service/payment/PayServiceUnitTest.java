@@ -45,8 +45,9 @@ class PayServiceUnitTest {
         when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(amountHistoryRepository.save(any(AmountHistory.class))).thenAnswer(invocation -> {
             AmountHistory amountHistory = invocation.getArgument(0);
-            amountHistory.setPointId(1L);
-            return amountHistory;
+            return amountHistory.builder()
+                    .pointId(1L)
+                    .build();
         });
         // then
         UpdateChargeCommand result = payService.chargeAmount(testBase.waitingToken, testBase.amount);

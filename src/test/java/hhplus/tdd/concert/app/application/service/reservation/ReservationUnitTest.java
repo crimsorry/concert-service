@@ -49,15 +49,17 @@ public class ReservationUnitTest {
         when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
             Reservation reservation = invocation.getArgument(0);
-            reservation.setReserveId(1L);
-            reservation.setReserveStatus(ReserveStatus.RESERVED);
-            return reservation;
+            return reservation.builder()
+                    .reserveId(1L)
+                    .reserveStatus(ReserveStatus.RESERVED)
+                    .build();
         });
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> {
             Payment payment = invocation.getArgument(0);
-            payment.setPayId(1L);
-            payment.setIsPay(true);
-            return payment;
+            return payment.builder()
+                    .payId(1L)
+                    .isPay(true)
+                    .build();
         });
 
         // then

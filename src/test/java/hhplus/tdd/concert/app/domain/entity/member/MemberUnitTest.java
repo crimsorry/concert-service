@@ -1,7 +1,5 @@
 package hhplus.tdd.concert.app.domain.entity.member;
 
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import org.junit.jupiter.api.Test;
@@ -58,8 +56,9 @@ public class MemberUnitTest {
     @Test
     public void 유저_잔액_충전(){
         // given
-        Member member = new Member();
-        member.setCharge(500);
+        Member member = Member.builder()
+                .charge(500)
+                .build();
 
         // when & then
         member.charge(20);
@@ -71,8 +70,9 @@ public class MemberUnitTest {
     @Test
     public void 유저_잔액_차감(){
         // given
-        Member member = new Member();
-        member.setCharge(500);
+        Member member = Member.builder()
+                .charge(500)
+                .build();
 
         // when & then
         member.withdraw(20);

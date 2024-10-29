@@ -45,8 +45,9 @@ public class PaymentUnitTest {
     @Test
     public void 결제_완료_상태(){
         // given
-        Payment payment = new Payment();
-        payment.setIsPay(true);
+        Payment payment = Payment.builder()
+                .isPay(true)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -60,8 +61,9 @@ public class PaymentUnitTest {
     @Test
     public void 결제_완료_확인(){
         // given
-        Payment payment = new Payment();
-        payment.setIsPay(false);
+        Payment payment = Payment.builder()
+                .isPay(false)
+                .build();
 
         // when & then
         payment.done();

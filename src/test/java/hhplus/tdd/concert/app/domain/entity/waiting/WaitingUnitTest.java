@@ -1,11 +1,9 @@
 package hhplus.tdd.concert.app.domain.entity.waiting;
 
 import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.common.types.WaitingStatus;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -31,8 +29,9 @@ public class WaitingUnitTest {
     @Test
     public void 대기순번_안왔는데_들어옴(){
         // given
-        Waiting waiting = new Waiting();
-        waiting.setStatus(WaitingStatus.STAND_BY);
+        Waiting waiting = Waiting.builder()
+                .status(WaitingStatus.STAND_BY)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -93,8 +92,9 @@ public class WaitingUnitTest {
     @Test
     public void 대기열_만료_상태(){
         // given
-        Waiting waiting = new Waiting();
-        waiting.setStatus(WaitingStatus.ACTIVE);
+        Waiting waiting = Waiting.builder()
+                .status(WaitingStatus.ACTIVE)
+                .build();
 
         // when & then
         waiting.stop();
@@ -106,8 +106,9 @@ public class WaitingUnitTest {
     @Test
     public void 대기열_순번_온_상태(){
         // given
-        Waiting waiting = new Waiting();
-        waiting.setStatus(WaitingStatus.STAND_BY);
+        Waiting waiting = Waiting.builder()
+                .status(WaitingStatus.STAND_BY)
+                .build();
 
         // when & then
         waiting.in();

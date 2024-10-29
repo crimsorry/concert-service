@@ -1,12 +1,11 @@
 package hhplus.tdd.concert.app.domain.entity.reservation;
 
-import hhplus.tdd.concert.app.domain.entity.concert.*;
+import hhplus.tdd.concert.app.domain.entity.concert.Concert;
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSchedule;
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.SeatStatus;
-import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -34,8 +33,9 @@ public class ReservationUnitTest {
     @Test
     public void 예약_완료_상태(){
         // given
-        Reservation reservation = new Reservation();
-        reservation.setReserveStatus(ReserveStatus.PENDING);
+        Reservation reservation = Reservation.builder()
+                .reserveStatus(ReserveStatus.PENDING)
+                .build();
 
         // when & then
         reservation.complete();
@@ -47,8 +47,9 @@ public class ReservationUnitTest {
     @Test
     public void 예약_취소_상태(){
         // given
-        Reservation reservation = new Reservation();
-        reservation.setReserveStatus(ReserveStatus.PENDING);
+        Reservation reservation = Reservation.builder()
+                .reserveStatus(ReserveStatus.PENDING)
+                .build();
 
         // when & then
         reservation.cancel();

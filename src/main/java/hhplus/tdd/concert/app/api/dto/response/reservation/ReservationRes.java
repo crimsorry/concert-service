@@ -13,7 +13,7 @@ public record ReservationRes(
         String memberName,
         String concertTitle,
         LocalDateTime openDate,
-        String seatNum,
+        String seatCode,
         Integer amount,
         ReserveStatus reserveStatus
 ) {
@@ -24,7 +24,7 @@ public record ReservationRes(
                 dto.memberName(),
                 dto.concertTitle(),
                 dto.openDate(),
-                dto.seatNum(),
+                dto.seatCode(),
                 dto.amount(),
                 dto.reserveStatus()
         );
@@ -42,7 +42,7 @@ public record ReservationRes(
                 dto.memberName(),
                 dto.concertTitle(),
                 dto.openDate(),
-                dto.seatNum(),
+                dto.seatCode(),
                 dto.amount(),
                 dto.reserveStatus()
         );

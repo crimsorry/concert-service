@@ -2,7 +2,6 @@ package hhplus.tdd.concert.app.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.dto.waiting.WaitingNumQuery;
 import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenCommand;
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
@@ -11,9 +10,10 @@ import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WaitingService {
 
     private final int maxMember = 10;

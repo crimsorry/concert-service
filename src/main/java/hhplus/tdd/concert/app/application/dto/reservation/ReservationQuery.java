@@ -12,7 +12,7 @@ public record ReservationQuery(
         String memberName,
         String concertTitle,
         LocalDateTime openDate,
-        String seatNum,
+        String seatCode,
         Integer amount,
         ReserveStatus reserveStatus
 ) {
@@ -22,7 +22,7 @@ public record ReservationQuery(
                 reservation.getMember().getMemberName(),
                 reservation.getConcertTitle(),
                 reservation.getOpenDate(),
-                reservation.getSeatNum(),
+                reservation.getSeatCode(),
                 reservation.getAmount(),
                 reservation.getReserveStatus()
         );

@@ -10,7 +10,7 @@ import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class ReservationService {
     private final ConcertSeatRepository concertSeatRepository;
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
-    private final WaitingWrapRepository waitingWrapRepository;
+    private final WaitingRepository waitingRepository;
 
     /* 좌석 예약 요청 */
     @Transactional
@@ -39,7 +39,7 @@ public class ReservationService {
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
 
@@ -58,7 +58,7 @@ public class ReservationService {
     /* 예약 조회 */
     public List<ReservationQuery> loadReservation(String waitingToken){
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
         List<Reservation> reservations = reservationRepository.findByMember(member);

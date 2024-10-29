@@ -1,17 +1,17 @@
 package hhplus.tdd.concert.app.application.service.payment;
 
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationCommand;
 import hhplus.tdd.concert.app.application.dto.payment.LoadAmountQuery;
 import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeCommand;
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
+import hhplus.tdd.concert.app.application.dto.reservation.ReservationCommand;
 import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.member.Member;
 import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
 import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import hhplus.tdd.concert.common.types.PointType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +23,12 @@ public class PayService {
 
     private final AmountHistoryRepository amountHistoryRepository;
     private final PaymentRepository paymentRepository;
-    private final WaitingWrapRepository waitingWrapRepository;
+    private final WaitingRepository waitingRepository;
 
     /* 잔액 충전 */
     public UpdateChargeCommand chargeAmount(String waitingToken, int amount){
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
         // 예외처리
@@ -46,7 +46,7 @@ public class PayService {
     /* 잔액 조회 */
     public LoadAmountQuery loadAmount(String waitingToken){
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
         // 잔액 조회
@@ -57,7 +57,7 @@ public class PayService {
     @Transactional
     public ReservationCommand processPay(String waitingToken, long payId){
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
 

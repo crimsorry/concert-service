@@ -21,4 +21,9 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     int countByWaitingIdLessThanAndStatus(long waitingId, WaitingStatus statue);
     List<Waiting> findByStatusOrderByWaitingId(WaitingStatus statue, Pageable pageable);
     Waiting findByToken(String waitingToken);
+    default Waiting findByTokenOrThrow(String waitingToken) {
+        Waiting waiting = findByToken(waitingToken);
+        Waiting.checkWaitingExistence(waiting);
+        return waiting;
+    }
 }

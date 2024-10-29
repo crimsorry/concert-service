@@ -1,10 +1,9 @@
 package hhplus.tdd.concert.app.application.repository;
 
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
+import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
-import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
@@ -23,9 +22,6 @@ class WaitingWrapRepositoryUnitTest{
     private final TestBase testBase = new TestBase();
 
     @InjectMocks
-    private WaitingWrapRepository waitingWrapRepository;
-
-    @Mock
     private WaitingRepository waitingRepository;
 
     @Test
@@ -36,7 +32,7 @@ class WaitingWrapRepositoryUnitTest{
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken);
+            waitingRepository.findByTokenOrThrow(testBase.waitingToken);
         });
 
         // 결과 검증
@@ -49,7 +45,7 @@ class WaitingWrapRepositoryUnitTest{
         when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
 
         // then
-        Waiting result = waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken);
+        Waiting result = waitingRepository.findByTokenOrThrow(testBase.waitingToken);
 
         // 결과 검증
         assertEquals(testBase.member, result.getMember());

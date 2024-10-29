@@ -10,7 +10,6 @@ import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
 import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
 import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
 import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ public class WaitingService {
     private final MemberRepository memberRepository;
     private final WaitingRepository waitingRepository;
     private final PaymentRepository paymentRepository;
-    private final WaitingWrapRepository waitingWrapRepository;
 
     /* 유저 대기열 생성 */
     public WaitingTokenCommand enqueueMember(long memberId){
@@ -44,7 +42,7 @@ public class WaitingService {
     /* 유저 대기열 순번 조회 */
     public WaitingNumQuery loadWaiting(String waitingToken){
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingWrapRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
 
         int waitings = waitingRepository.countByWaitingIdLessThanAndStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);
         return new WaitingNumQuery(waitings);

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PaymentUnitTest {
 
-    private final Member member = new Member(1L, "김소리", 0);
+    private final Member member = Member.builder().memberId(1L).memberName("김소리").charge(0).build();
     private final Reservation reservation = new Reservation(1L, member, null, "드라큘라", LocalDateTime.now(), "A01", 140000, ReserveStatus.PENDING);
 
     @Test

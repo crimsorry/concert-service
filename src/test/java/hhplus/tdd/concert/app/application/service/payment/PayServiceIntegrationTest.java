@@ -1,0 +1,107 @@
+package hhplus.tdd.concert.app.application.service.payment;
+
+import hhplus.tdd.concert.app.application.service.TestBase;
+import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
+import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
+import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
+import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
+import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
+import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
+import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
+import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
+import hhplus.tdd.concert.common.types.PointType;
+import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.common.types.WaitingStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@Slf4j
+@SpringBootTest
+public class PayServiceIntegrationTest {
+
+    private final TestBase testBase = new TestBase();
+
+    @Autowired
+    private PayService payService;
+
+    @Autowired
+    private WaitingRepository waitingRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+    @Autowired
+    private PaymentRepository paymentRepository;
+    @Autowired
+    private ConcertSeatRepository concertSeatRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    @Autowired
+    private AmountHistoryRepository amountHistoryRepository;
+
+    @AfterEach
+    public void setUp() {
+        databaseCleaner.clear();
+    }
+
+    @Test
+    public void 비관적락_한_유저가_1원_2원_3원_충전시_총_6원_반영() throws InterruptedException {
+        long beforeTime = System.currentTimeMillis();
+
+        int totalTasks = 3;
+        AtomicInteger chargeAmount = new AtomicInteger(1);
+        int totalCharge = testBase.member.getCharge() + chargeAmount.get() + chargeAmount.get()*2 + chargeAmount.get()*3;
+        AtomicInteger failCnt = new AtomicInteger();
+        memberRepository.save(testBase.member);
+        waitingRepository.save(testBase.waitingActive);
+
+        CountDownLatch latch = new CountDownLatch(totalTasks);
+        ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
+
+        IntStream.range(0, totalTasks).forEach(i ->
+                executorService.execute(() -> {
+                    try {
+                        payService.chargeAmount(testBase.waitingActive.getToken(), chargeAmount.getAndIncrement());
+                    } catch (ObjectOptimisticLockingFailureException e) {
+                        failCnt.getAndIncrement();
+                    } finally {
+                        latch.countDown();
+                    }
+                })
+        );
+
+        latch.await();
+
+        Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
+
+        assertEquals(totalCharge, member.getCharge());
+
+        long afterTime = System.currentTimeMillis();
+        double  secDiffTime = (afterTime - beforeTime)/1000.0;
+        log.info("[비관적락_한_유저가_1원_2원_3원_충전시_총_6원_반영] 소요시간: {}s", secDiffTime);
+    }
+
+
+
+}

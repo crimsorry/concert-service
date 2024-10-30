@@ -20,8 +20,8 @@ public class TestBase {
     public final String waitingToken = "testToken";
     public final String waitingToken2 = "testToken2";
     public final LocalDateTime now = LocalDateTime.now();
-    public final Member member = new Member(1L, "김소리", 150000);
-    public final Member member2 = new Member(2L, "김소리2", 160000);
+    public final Member member = Member.builder().memberId(1L).memberName("김소리").charge(9000000).build();
+    public final Member member2 = Member.builder().memberId(2L).memberName("김소리").charge(16000).build();
     public final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, now, now.plusMinutes(30));
     public final Waiting waitingActive = new Waiting(1L, member, waitingToken, WaitingStatus.ACTIVE, now, now.plusMinutes(30));
     public final Waiting waitingActive2 = new Waiting(2L, member2, waitingToken2, WaitingStatus.ACTIVE, now, now.plusMinutes(30));
@@ -31,7 +31,7 @@ public class TestBase {
     public final ConcertSeat concertSeatReserve = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.RESERVED);
     public final ConcertSeat concertSeatStandBy = new ConcertSeat(2L, concertSchedule, "A01", 140000, SeatStatus.STAND_BY);
     public final Reservation reservationReserve = new Reservation(1L, member, concertSeatReserve, "드라큘라", now, "A01", 140000, ReserveStatus.PENDING);
-    public final Payment payment = new Payment(1L, member, reservationReserve, 140000, false, now);
+    public final Payment payment = new Payment(1L, member, reservationReserve, 140000, false, now, 0);
     public final List<ConcertSchedule> concertSchedules = List.of(concertSchedule);
     public final List<ConcertSeat> concertSeats = List.of(concertSeatStandBy);
     public final List<Reservation> reservations = List.of(reservationReserve);

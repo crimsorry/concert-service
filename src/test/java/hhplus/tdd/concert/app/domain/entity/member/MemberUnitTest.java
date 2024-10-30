@@ -27,7 +27,9 @@ public class MemberUnitTest {
     public void 한도_초과(){
         // given
         int amount = 6000000;
-        Member member = new Member(1L, "김소리", 5000000);
+        Member member = Member.builder()
+                .charge(5000000)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -42,7 +44,9 @@ public class MemberUnitTest {
     public void 잔액_부족(){
         // given
         int amount = 4000;
-        Member member = new Member(1L, "김소리", 300);
+        Member member = Member.builder()
+                .charge(300)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {

@@ -49,6 +49,7 @@ public class PayController {
             @RequestParam(required = true, defaultValue = "1") int amount
     ){
         UpdateChargeCommand restResponse = payService.chargeAmount(waitingToken, amount);
+//        UpdateChargeCommand restResponse = payService.chargeAmountOptimisticLock(waitingToken, amount);
         return new ResponseEntity<>(UpdateChargeRes.from(restResponse), HttpStatus.OK);
     }
 

@@ -16,11 +16,17 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     List<Waiting> findAll();
 
     Waiting findByWaitingId(Long waitingId);
+
     Waiting findByMemberAndStatusNot(Member member, WaitingStatus status);
+
     List<Waiting> findByExpiredAtLessThan(LocalDateTime localDateTime);
+
     int countByWaitingIdLessThanAndStatus(long waitingId, WaitingStatus statue);
+
     List<Waiting> findByStatusOrderByWaitingId(WaitingStatus statue, Pageable pageable);
+
     Waiting findByToken(String waitingToken);
+
     default Waiting findByTokenOrThrow(String waitingToken) {
         Waiting waiting = findByToken(waitingToken);
         Waiting.checkWaitingExistence(waiting);

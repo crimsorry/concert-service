@@ -45,7 +45,7 @@ public class ReservationUnitTest {
     @Test
     public void 좌석_예약() {
         // when
-        when(concertSeatRepository.findBySeatId(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
+        when(concertSeatRepository.findBySeatIdWithPessimisticLock(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
         when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
             Reservation reservation = invocation.getArgument(0);

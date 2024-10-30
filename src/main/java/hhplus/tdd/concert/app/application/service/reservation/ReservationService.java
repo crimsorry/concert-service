@@ -14,6 +14,9 @@ import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +35,7 @@ public class ReservationService {
     @Transactional
     public PayCommand processReserve(String waitingToken, Long seatId){
         // 비관적 락
-        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(seatId);
+        ConcertSeat concertSeat = concertSeatRepository.findBySeatIdWithPessimisticLock(seatId);
 
         // 좌석 상태 확인
         ConcertSeat.checkConcertSeatExistence(concertSeat);

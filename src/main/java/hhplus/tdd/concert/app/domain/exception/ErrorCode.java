@@ -20,7 +20,12 @@ public enum ErrorCode {
     AMNIOTIC_PAY( "양수 값만 충전 가능합니다."),
     FULL_PAY( "충전 한도 조과. (한도: 1000만원)"),
     EMPTY_PAY( "잔액이 부족합니다."),
-    NOT_FOUNT_PAYMENT( "존재하지 않는 결제 입니다.");
+    NOT_FOUNT_PAYMENT( "존재하지 않는 결제 입니다."),
+
+    DATABASE_CHANGE_OPTIMISTIC_LOCK("다른 사용자가 먼저 데이터를 변경했습니다."),
+
+    REDIS_LOCK_NOT_AVAILABLE("REDIS - 락을 획득하지 못했습니다. (대기시간 초가 등)"),
+    REDIS_LOCK_INTERRUPTED("REDIS - 인터럽트 에러가 발생했습니다.");
 
     private final String message;
 

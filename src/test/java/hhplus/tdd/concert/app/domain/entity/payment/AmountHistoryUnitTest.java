@@ -12,7 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AmountHistoryUnitTest {
 
-    private final Member member = new Member(1L, "김소리", 0);
+    private final Member member = Member.builder()
+            .memberName("김소리")
+            .charge(0)
+            .build();
 
     @Test
     public void 포인트_내역_빌더() {
@@ -33,7 +36,6 @@ public class AmountHistoryUnitTest {
         // given
         int amount = 200;
         PointType pointType = PointType.CHARGE;
-        Member member = new Member(1L, "김소리", 0);
 
         // when & then
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, pointType, member);

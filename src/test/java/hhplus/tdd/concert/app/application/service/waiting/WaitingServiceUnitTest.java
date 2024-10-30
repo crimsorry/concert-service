@@ -38,12 +38,11 @@ public class WaitingServiceUnitTest {
     public void 유저_대기열_생성_성공() {
         // given
         long memberId = 1L;
-        Member member = new Member(memberId, "김소리", 0);
         Waiting waiting = null; // 대기열이 없는 상태를 가정
 
         // when
-        when(memberRepository.findByMemberId(memberId)).thenReturn(member);
-        when(waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED)).thenReturn(waiting);
+        when(memberRepository.findByMemberId(memberId)).thenReturn(testBase.member);
+        when(waitingRepository.findByMemberAndStatusNot(testBase.member, WaitingStatus.EXPIRED)).thenReturn(waiting);
         when(waitingRepository.save(any(Waiting.class))).thenAnswer(invocation -> {
             Waiting savedQueue = invocation.getArgument(0);
             return savedQueue.builder()
@@ -58,7 +57,7 @@ public class WaitingServiceUnitTest {
         assertNotNull(result);
         assertNotNull(result.waitingToken());
         verify(memberRepository).findByMemberId(memberId);
-        verify(waitingRepository).findByMemberAndStatusNot(member, WaitingStatus.EXPIRED);
+        verify(waitingRepository).findByMemberAndStatusNot(testBase.member, WaitingStatus.EXPIRED);
         verify(waitingRepository).save(any(Waiting.class));
     }
 

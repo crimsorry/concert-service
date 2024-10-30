@@ -53,11 +53,11 @@ public class Member {
     }
 
     public void charge(Integer amount){
-        this.charge = getCharge() + amount;
+        this.charge = this.charge + amount;
     }
 
     public void withdraw(Integer amount){
-        this.charge = getCharge() - amount;
+        this.charge = this.charge - amount;
     }
 
 }

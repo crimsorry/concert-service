@@ -45,8 +45,9 @@ public class WaitingUnitTest {
     @Test
     public void 토큰_발급_로직(){
         // given
-        long memberId = 1L;
-        Member member = new Member(memberId, "김소리", 0);
+        Member member = Member.builder()
+                .memberName("김소리")
+                .build();
         Waiting waiting = null; // 대기열 없는 상태
 
         // when & then
@@ -63,7 +64,9 @@ public class WaitingUnitTest {
     public void 만료되지_않은_대기열_반환_로직(){
         // given
         long memberId = 1L;
-        Member member = new Member(memberId, "김소리", 0);
+        Member member = Member.builder()
+                .memberName("김소리")
+                .build();
         Waiting waiting = Waiting.builder()
                 .member(member)
                 .token("existing-token")

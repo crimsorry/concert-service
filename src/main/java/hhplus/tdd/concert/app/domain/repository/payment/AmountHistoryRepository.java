@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AmountHistoryRepository extends JpaRepository<AmountHistory, Long> {
 
+    AmountHistory findByPointId(Long amountHistoryId);
 
 
 }

@@ -65,7 +65,7 @@ public class WaitingServiceIntegrationTest {
         int maxMember = 10;
 
         for (int i = 0; i < totalMembers; i++) {
-            Waiting waiting = new Waiting(1L + i, new Member(1L + i, "김소리" + i, 0), "waitingTokenTest" + i , WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
+            Waiting waiting = new Waiting(1L + i, Member.builder().memberId(1L + i).memberName("김소리" + i).build(), "waitingTokenTest" + i , WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
             waitingRepository.save(waiting);
         }
 

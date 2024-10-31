@@ -14,6 +14,9 @@ import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -82,6 +85,36 @@ public class ReservationService {
         return PayCommand.from(payment, reservation);
     }
 
+    @Transactional
+    @Retryable(
+            retryFor = ObjectOptimisticLockingFailureException.class,
+            maxAttempts = 100,
+            backoff = @Backoff(100)
+    )
+    public PayCommand processReserveOptimisticLockRetry(String waitingToken, Long seatId){
+        // 비관적 락
+        ConcertSeat concertSeat = concertSeatRepository.findBySeatIdWithOptimisticLock(seatId);
+
+        // 좌석 상태 확인
+        ConcertSeat.checkConcertSeatExistence(concertSeat);
+        ConcertSeat.checkConcertSeatStatus(concertSeat);
+
+        // 대기열 존재 여부 확인
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+        Waiting.checkWaitingStatusActive(waiting);
+        Member member = waiting.getMember();
+
+        Reservation reservation = Reservation.generateReservation(member, concertSeat);
+        Payment payment = Payment.generatePayment(member, reservation);
+
+        // 좌석 임시배정
+        concertSeat.pending();
+        waiting.limitPayTime();
+        reservationRepository.save(reservation);
+        paymentRepository.save(payment);
+
+        return PayCommand.from(payment, reservation);
+    }
 
     /* 예약 조회 */
     public List<ReservationQuery> loadReservation(String waitingToken){

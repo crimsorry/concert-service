@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -235,5 +236,59 @@ public class PayServiceIntegrationTest {
         double  secDiffTime = (afterTime - beforeTime)/1000.0;
         log.info("[비관적락_한_유저가_1건예약_100번결제시_1건결제성공] 소요시간: {}s", secDiffTime);
     }
+
+    @Test
+    public void 낙관락_throw_한_유저가_1건예약_100번결제시_1건결제성공() throws InterruptedException {
+        long beforeTime = System.currentTimeMillis();
+
+        int totalTasks = 100;
+        AtomicInteger failCnt = new AtomicInteger();
+        memberRepository.save(testBase.member);
+        waitingRepository.save(testBase.waitingActive);
+        paymentRepository.save(testBase.payment);
+        concertSeatRepository.save(testBase.concertSeatReserve);
+        reservationRepository.save(testBase.reservationReserve);
+
+        CountDownLatch latch = new CountDownLatch(totalTasks);
+        ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
+
+        IntStream.range(0, totalTasks).forEach(i ->
+                executorService.execute(() -> {
+                    try {
+                        payService.processPayOptimisticLock(testBase.waitingActive.getToken(), testBase.payment.getPayId());
+                    } catch (RuntimeException e) {
+                        failCnt.getAndIncrement();
+                    } finally {
+                        latch.countDown();
+                    }
+                })
+        );
+
+        latch.await();
+
+        Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
+        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
+        Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
+        Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
+        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
+        List<AmountHistory> amountHistorys = amountHistoryRepository.findAll();
+
+        log.error("에러다~~ {}", amountHistorys.get(0).getPointId());
+
+        assertEquals(totalTasks - 1, failCnt.get());
+        assertEquals(true, payment.getIsPay());
+        assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
+        assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
+        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
+        assertEquals(1, amountHistorys.size());
+        assertEquals(testBase.payment.getAmount(), amountHistorys.get(0).getAmount());
+        assertEquals(PointType.USE, amountHistorys.get(0).getPointType());
+        assertEquals(testBase.member.getCharge() - testBase.payment.getAmount(), member.getCharge());
+
+        long afterTime = System.currentTimeMillis();
+        double  secDiffTime = (afterTime - beforeTime)/1000.0;
+        log.info("[낙관락_throw_한_유저가_1건예약_100번결제시_1건결제성공] 소요시간: {}s", secDiffTime);
+    }
+
 
 }

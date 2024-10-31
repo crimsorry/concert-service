@@ -155,6 +155,34 @@ public class PayService {
         return ReservationCommand.from(reservation);
     }
 
+    @Transactional
+    public ReservationCommand processPayOptimisticLock(String waitingToken, long payId){
+        // 대기열 존재 여부 확인
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+        Waiting.checkWaitingStatusActive(waiting);
+        Member member = waiting.getMember();
+
+        // 결제 정보
+        Payment payment = paymentRepository.findByPayIdOptimisticLock(payId);
+        Payment.checkPaymentExistence(payment);
+        Payment.checkPaymentStatue(payment);
+
+        ConcertSeat concertSeat = payment.getReservation().getSeat();
+        ConcertSeat.checkConcertSeatReserved(concertSeat);
+        Member.checkMemberChargeLess(member, payment.getAmount());
+        Reservation reservation = payment.getReservation();
+
+        // 결제 완료 처리
+        payment.done();
+        concertSeat.close();
+        reservation.complete();
+        member.withdraw(payment.getAmount());
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
+        amountHistoryRepository.save(amountHistory);
+        waiting.stop();
+        return ReservationCommand.from(reservation);
+    }
+
 
 
 }

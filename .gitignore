@@ -27,6 +27,7 @@ out/
 !**/src/test/**/out/
 gradle/
 **/application-local.yml
+**/application-test.yml
 
 ### NetBeans ###
 /nbproject/private/

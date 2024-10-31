@@ -16,6 +16,9 @@ import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.common.types.PointType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +71,29 @@ public class PayService {
 
         return new UpdateChargeCommand(true);
     }
+
+    @Transactional
+    @Retryable(
+            retryFor = {ObjectOptimisticLockingFailureException.class},
+            maxAttempts = 20,
+            backoff = @Backoff(100) // delay 0.1초
+    )
+    public UpdateChargeCommand chargeAmountOptimisticLockRetry(String waitingToken, int amount){
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+        long memberId = waiting.getMember().getMemberId();
+        Member member = memberRepository.findByMemberId(memberId);
+
+        AmountHistory.checkAmountMinusOrZero(amount);
+        Member.checkMemberCharge(member, amount);
+
+        member.charge(amount);
+
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
+        amountHistoryRepository.save(amountHistory);
+
+        return new UpdateChargeCommand(true);
+    }
+
 
 
     @Transactional

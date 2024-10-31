@@ -183,6 +183,34 @@ public class PayService {
         return ReservationCommand.from(reservation);
     }
 
+    @Transactional
+    @Retryable(
+            retryFor = ObjectOptimisticLockingFailureException.class,
+            maxAttempts = 20, // 최대 재시도 횟수
+            backoff = @Backoff(100) // 재시작 간격
+    )
+    public ReservationCommand processPayOptimisticLockRetry(String waitingToken, long payId){
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+        Waiting.checkWaitingStatusActive(waiting);
+        Member member = waiting.getMember();
 
+        Payment payment = paymentRepository.findByPayIdOptimisticLock(payId);
+        Payment.checkPaymentExistence(payment);
+        Payment.checkPaymentStatue(payment);
+
+        ConcertSeat concertSeat = payment.getReservation().getSeat();
+        ConcertSeat.checkConcertSeatReserved(concertSeat);
+        Member.checkMemberChargeLess(member, payment.getAmount());
+        Reservation reservation = payment.getReservation();
+
+        payment.done();
+        concertSeat.close();
+        reservation.complete();
+        member.withdraw(payment.getAmount());
+        waiting.stop();
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
+        amountHistoryRepository.save(amountHistory);
+        return ReservationCommand.from(reservation);
+    }
 
 }

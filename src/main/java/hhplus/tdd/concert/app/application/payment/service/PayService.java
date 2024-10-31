@@ -1,11 +1,10 @@
 package hhplus.tdd.concert.app.application.payment.service;
 
+import hhplus.tdd.concert.app.application.reservation.aop.ReserveAopForTransaction;
 import hhplus.tdd.concert.app.application.payment.dto.LoadAmountQuery;
-import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
 import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
@@ -15,23 +14,16 @@ import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.PointType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.boot.logging.LogLevel;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -44,6 +36,7 @@ public class PayService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
     private final TransactionTemplate transactionTemplate;
+    private final ReserveAopForTransaction payAopForTransaction;
 
     /* 잔액 충전 */
     @Transactional
@@ -105,52 +98,6 @@ public class PayService {
         amountHistoryRepository.save(amountHistory);
 
         return new UpdateChargeCommand(true);
-    }
-
-    public UpdateChargeCommand chargeAmountRedisPubSub(String waitingToken, int amount){
-        String lockName = "lock:user_id:" + waitingToken;
-        RLock lock = redissonClient.getLock(lockName);
-
-        boolean isOK = false;
-
-        try{
-            isOK = lock.tryLock(10, 1, TimeUnit.SECONDS);
-            if(!isOK){
-                throw new FailException(ErrorCode.REDIS_LOCK_NOT_AVAILABLE, LogLevel.WARN);
-            }
-            return transactionTemplate.execute(status -> {
-                Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-                long memberId = waiting.getMember().getMemberId();
-                Member member = memberRepository.findByMemberId(memberId);
-
-                AmountHistory.checkAmountMinusOrZero(amount);
-                Member.checkMemberCharge(member, amount);
-
-                member.charge(amount);
-                AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
-                amountHistoryRepository.save(amountHistory);
-                return new UpdateChargeCommand(true); // 트랜잭션 내 반환값
-            });
-        }catch (InterruptedException e){ // 에러
-            throw new FailException(ErrorCode.REDIS_LOCK_INTERRUPTED, LogLevel.WARN);
-        }finally {
-            if (isOK) {
-                lock.unlock();
-            }
-        }
-    }
-
-    @Transactional
-    public void testOptimisticLock(Long memberId, int amount){
-        Member member = memberRepository.findByMemberId(memberId);
-
-        AmountHistory.checkAmountMinusOrZero(amount);
-        Member.checkMemberCharge(member, amount);
-
-        member.charge(amount);
-
-        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
-        amountHistoryRepository.save(amountHistory);
     }
 
     /* 잔액 조회 */
@@ -248,52 +195,6 @@ public class PayService {
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);
         return ReservationCommand.from(reservation);
-    }
-
-    public ReservationCommand processPayRedisPubSub(String waitingToken, long payId){
-        String lockName = "lock:user_id:" + waitingToken;
-        RLock lock = redissonClient.getLock(lockName);
-
-        boolean isOK = false;
-
-        try{
-            isOK = lock.tryLock(10, 1, TimeUnit.SECONDS);
-            if(!isOK){
-                throw new FailException(ErrorCode.REDIS_LOCK_NOT_AVAILABLE, LogLevel.WARN);
-            }
-            return transactionTemplate.execute(status -> {
-                // 대기열 존재 여부 확인
-                Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-                Waiting.checkWaitingStatusActive(waiting);
-                Member member = waiting.getMember();
-
-                // 결제 정보
-                Payment payment = paymentRepository.findByPayIdWithPessimisticLock(payId);
-                Payment.checkPaymentExistence(payment);
-                Payment.checkPaymentStatue(payment);
-
-                ConcertSeat concertSeat = payment.getReservation().getSeat();
-                ConcertSeat.checkConcertSeatReserved(concertSeat);
-                Member.checkMemberChargeLess(member, payment.getAmount());
-                Reservation reservation = payment.getReservation();
-
-                // 결제 완료 처리
-                payment.done();
-                concertSeat.close();
-                reservation.complete();
-                member.withdraw(payment.getAmount());
-                waiting.stop();
-                AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
-                amountHistoryRepository.save(amountHistory);
-                return ReservationCommand.from(reservation);
-            });
-        }catch (InterruptedException e){ // 에러
-            throw new FailException(ErrorCode.REDIS_LOCK_INTERRUPTED, LogLevel.WARN);
-        }finally {
-            if (isOK) {
-                lock.unlock();
-            }
-        }
     }
 
 }

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.domain.reservation;
+package hhplus.tdd.concert.common.aop;
 
 
 import java.lang.annotation.ElementType;

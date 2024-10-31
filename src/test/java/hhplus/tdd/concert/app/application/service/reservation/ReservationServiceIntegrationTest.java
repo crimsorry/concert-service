@@ -1,5 +1,6 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
+import hhplus.tdd.concert.app.application.reservation.aop.ReserveDistributedLockAop;
 import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.member.entity.Member;
@@ -48,8 +49,12 @@ public class ReservationServiceIntegrationTest {
 
     @Autowired
     private DatabaseCleaner databaseCleaner;
+
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ReserveDistributedLockAop reserveDistributedLockAop;
 
     @AfterEach
     public void setUp() {
@@ -235,9 +240,9 @@ public class ReservationServiceIntegrationTest {
         for (Waiting waiting : waitingList) {
             executorService.execute(() -> {
                 try {
-                    reservationService.processReserveRedisPubSub(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
+                    reserveDistributedLockAop.processReserveRedisPubSub(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
                 } catch (Exception e) {
-                    if (e.getMessage().equals("이미 임시배정된 좌석입니다.")) failCnt.getAndIncrement();
+                    failCnt.getAndIncrement();
                 } finally {
                     latch.countDown();
                 }

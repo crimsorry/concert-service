@@ -1,10 +1,10 @@
 package hhplus.tdd.concert.app.application.service.payment;
 
+import hhplus.tdd.concert.app.application.payment.aop.PayDistributedLockAop;
 import hhplus.tdd.concert.app.application.payment.service.PayService;
+import hhplus.tdd.concert.app.application.reservation.aop.ReserveDistributedLockAop;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
-import hhplus.tdd.concert.app.domain.concert.repository.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -58,15 +57,13 @@ public class PayServiceIntegrationTest {
     @Autowired
     private PaymentRepository paymentRepository;
     @Autowired
-    private ConcertRepository concertRepository;
-    @Autowired
-    private ConcertScheduleRepository concertScheduleRepository;
-    @Autowired
     private ConcertSeatRepository concertSeatRepository;
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
     private AmountHistoryRepository amountHistoryRepository;
+    @Autowired
+    private PayDistributedLockAop payDistributedLockAop;
 
     @AfterEach
     public void setUp() {
@@ -205,7 +202,8 @@ public class PayServiceIntegrationTest {
         IntStream.range(0, totalTasks).forEach(i ->
                 executorService.execute(() -> {
                     try {
-                        payService.chargeAmountRedisPubSub(testBase.waitingActive.getToken(), chargeAmount.getAndIncrement());
+                        payDistributedLockAop.chargeAmountRedisPubSub(testBase.waitingActive.getToken(), chargeAmount.getAndIncrement());
+//                        payService.chargeAmountRedisPubSub(testBase.waitingActive.getToken(), chargeAmount.getAndIncrement());
                     } catch (Exception e) {
                         log.error("에러: {}", e.getMessage());
                         failCnt.getAndIncrement();
@@ -398,7 +396,7 @@ public class PayServiceIntegrationTest {
         IntStream.range(0, totalTasks).forEach(i ->
                 executorService.execute(() -> {
                     try {
-                        payService.processPayRedisPubSub(testBase.waitingActive.getToken(), testBase.payment.getPayId());
+                        payDistributedLockAop.processPayRedisPubSub(testBase.waitingActive.getToken(), testBase.payment.getPayId());
                     } catch (Exception e) {
                         failCnt.getAndIncrement();
                     }finally {

@@ -48,6 +48,36 @@ public class PayService {
     }
 
     @Transactional
+    public UpdateChargeCommand chargeAmountOptimisticLock(String waitingToken, int amount){
+        // 대기열 존재 여부 확인
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+
+        long memberId = waiting.getMember().getMemberId();
+        Member member = memberRepository.findByMemberIdWithOptimisticLock(memberId);
+
+        log.error("memberid: {}", member.getMemberId());
+
+        // 예외처리
+        AmountHistory.checkAmountMinusOrZero(amount);
+        Member.checkMemberCharge(member, amount);
+
+        // 포인트 충전
+        member.charge(amount);
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, waiting.getMember());
+        amountHistoryRepository.save(amountHistory);
+
+        return new UpdateChargeCommand(true);
+    }
+
+
+    @Transactional
+    public void chargeMemberAmount(Member member, int amount){
+        member.charge(amount);
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
+        amountHistoryRepository.save(amountHistory);
+    }
+
+    @Transactional
     public void testOptimisticLock(Long memberId, int amount){
         Member member = memberRepository.findByMemberId(memberId);
 

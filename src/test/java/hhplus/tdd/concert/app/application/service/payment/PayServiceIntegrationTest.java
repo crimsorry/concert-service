@@ -108,6 +108,45 @@ public class PayServiceIntegrationTest {
         log.info("[비관적락_한_유저가_1원_2원_3원_충전시_총_6원_반영] 소요시간: {}s", secDiffTime);
     }
 
+    @Test
+    public void 낙관적락_throw_한_유저가_1원_2원_3원_충전시_총_1원_반영() throws InterruptedException {
+        long beforeTime = System.currentTimeMillis();
+
+        int totalTasks = 3;
+        int chargeAmount = 1;
+        int totalCharge = testBase.member.getCharge() + chargeAmount;
+        AtomicInteger failCnt = new AtomicInteger();
+        memberRepository.save(testBase.member);
+        waitingRepository.save(testBase.waitingActive);
+
+        CountDownLatch latch = new CountDownLatch(totalTasks);
+        ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
+
+        IntStream.range(0, totalTasks).forEach(i ->
+                executorService.execute(() -> {
+                    try {
+                        payService.chargeAmountOptimisticLock(testBase.waitingActive.getToken(), chargeAmount);
+                    } catch (RuntimeException e) {
+                        failCnt.getAndIncrement();
+                    } finally {
+                        latch.countDown();
+                    }
+                })
+        );
+
+        latch.await();
+
+        Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
+
+        assertEquals(totalTasks-1, failCnt.get());
+        assertEquals(totalCharge, member.getCharge());
+
+        long afterTime = System.currentTimeMillis();
+        double secDiffTime = (afterTime - beforeTime)/1000.0;
+
+        log.info("[낙관적락_throw_한_유저가_1원_2원_3원_충전시_총_1원_반영] 소요시간: {}s", secDiffTime);
+    }
+
 
 
 

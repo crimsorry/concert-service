@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.app.application.payment.service;
 
 import hhplus.tdd.concert.app.application.payment.dto.LoadAmountQuery;
+import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
 import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
@@ -247,6 +248,52 @@ public class PayService {
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
         amountHistoryRepository.save(amountHistory);
         return ReservationCommand.from(reservation);
+    }
+
+    public ReservationCommand processPayRedisPubSub(String waitingToken, long payId){
+        String lockName = "lock:user_id:" + waitingToken;
+        RLock lock = redissonClient.getLock(lockName);
+
+        boolean isOK = false;
+
+        try{
+            isOK = lock.tryLock(10, 1, TimeUnit.SECONDS);
+            if(!isOK){
+                throw new FailException(ErrorCode.REDIS_LOCK_NOT_AVAILABLE, LogLevel.WARN);
+            }
+            return transactionTemplate.execute(status -> {
+                // 대기열 존재 여부 확인
+                Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+                Waiting.checkWaitingStatusActive(waiting);
+                Member member = waiting.getMember();
+
+                // 결제 정보
+                Payment payment = paymentRepository.findByPayIdWithPessimisticLock(payId);
+                Payment.checkPaymentExistence(payment);
+                Payment.checkPaymentStatue(payment);
+
+                ConcertSeat concertSeat = payment.getReservation().getSeat();
+                ConcertSeat.checkConcertSeatReserved(concertSeat);
+                Member.checkMemberChargeLess(member, payment.getAmount());
+                Reservation reservation = payment.getReservation();
+
+                // 결제 완료 처리
+                payment.done();
+                concertSeat.close();
+                reservation.complete();
+                member.withdraw(payment.getAmount());
+                waiting.stop();
+                AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
+                amountHistoryRepository.save(amountHistory);
+                return ReservationCommand.from(reservation);
+            });
+        }catch (InterruptedException e){ // 에러
+            throw new FailException(ErrorCode.REDIS_LOCK_INTERRUPTED, LogLevel.WARN);
+        }finally {
+            if (isOK) {
+                lock.unlock();
+            }
+        }
     }
 
 }

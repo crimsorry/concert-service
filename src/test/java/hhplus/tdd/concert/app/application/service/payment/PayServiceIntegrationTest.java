@@ -380,4 +380,55 @@ public class PayServiceIntegrationTest {
         log.info("[낙관락_retry_한_유저가_1건예약_100번결제시_1건결제성공] 소요시간: {}s", secDiffTime);
     }
 
+    @Test
+    public void 레디스_PUB_SUB_한_유저가_1건예약_100번결제시_1건결제성공() throws InterruptedException {
+        long beforeTime = System.currentTimeMillis();
+
+        int totalTasks = 100;
+        AtomicInteger failCnt = new AtomicInteger();
+        memberRepository.save(testBase.member);
+        waitingRepository.save(testBase.waitingActive);
+        paymentRepository.save(testBase.payment);
+        concertSeatRepository.save(testBase.concertSeatReserve);
+        reservationRepository.save(testBase.reservationReserve);
+
+        CountDownLatch latch = new CountDownLatch(totalTasks);
+        ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
+
+        IntStream.range(0, totalTasks).forEach(i ->
+                executorService.execute(() -> {
+                    try {
+                        payService.processPayRedisPubSub(testBase.waitingActive.getToken(), testBase.payment.getPayId());
+                    } catch (Exception e) {
+                        failCnt.getAndIncrement();
+                    }finally {
+                        latch.countDown();
+                    }
+                })
+        );
+
+        latch.await();
+
+        Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
+        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
+        Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
+        Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
+        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
+        AmountHistory amountHistory = amountHistoryRepository.findByPointId(1L);
+
+        assertEquals(totalTasks - 1, failCnt.get());
+        assertEquals(true, payment.getIsPay());
+        assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
+        assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
+        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
+        assertEquals(testBase.payment.getAmount(), amountHistory.getAmount());
+        assertEquals(PointType.USE, amountHistory.getPointType());
+        assertEquals(testBase.member.getCharge() - testBase.payment.getAmount(), member.getCharge());
+
+        long afterTime = System.currentTimeMillis();
+        double  secDiffTime = (afterTime - beforeTime)/1000.0;
+
+        log.info("[레디스_PUB_SUB_한_유저가_1건예약_100번결제시_1건결제성공] 소요시간: {}s", secDiffTime);
+    }
+
 }

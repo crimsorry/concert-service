@@ -183,7 +183,7 @@ public class PayServiceIntegrationTest {
         long afterTime = System.currentTimeMillis();
         double secDiffTime = (afterTime - beforeTime)/1000.0;
 
-        log.info("[낙관적락_retry_한_유저가_1원_2원_3원_충전시_총_6원_반영] 소요시간: {}s", secDiffTime);
+        log.info("[낙관적락_retry_한_유저가_1원_3건_충전시_총_3원_반영] 소요시간: {}s", secDiffTime);
     }
 
 

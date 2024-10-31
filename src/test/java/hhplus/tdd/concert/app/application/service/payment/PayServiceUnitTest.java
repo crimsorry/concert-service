@@ -1,13 +1,14 @@
 package hhplus.tdd.concert.app.application.service.payment;
 
-import hhplus.tdd.concert.app.application.dto.payment.LoadAmountQuery;
-import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeCommand;
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationCommand;
+import hhplus.tdd.concert.app.application.payment.dto.LoadAmountQuery;
+import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
+import hhplus.tdd.concert.app.application.payment.service.PayService;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
-import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
-import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
+import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
+import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

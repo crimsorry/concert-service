@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.payment;
 
-import hhplus.tdd.concert.app.application.dto.payment.PayCommand;
+import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
 
 import java.time.LocalDateTime;
 

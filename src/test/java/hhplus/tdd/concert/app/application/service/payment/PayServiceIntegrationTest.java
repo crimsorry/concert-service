@@ -1,18 +1,21 @@
 package hhplus.tdd.concert.app.application.service.payment;
 
+import hhplus.tdd.concert.app.application.payment.service.PayService;
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.AmountHistory;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
-import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
-import hhplus.tdd.concert.app.domain.repository.payment.AmountHistoryRepository;
-import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertScheduleRepository;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
+import hhplus.tdd.concert.app.domain.payment.entity.Payment;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
+import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.common.types.PointType;
 import hhplus.tdd.concert.common.types.ReserveStatus;
@@ -25,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,6 +55,10 @@ public class PayServiceIntegrationTest {
     private DatabaseCleaner databaseCleaner;
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private ConcertRepository concertRepository;
+    @Autowired
+    private ConcertScheduleRepository concertScheduleRepository;
     @Autowired
     private ConcertSeatRepository concertSeatRepository;
     @Autowired
@@ -101,6 +107,10 @@ public class PayServiceIntegrationTest {
         double  secDiffTime = (afterTime - beforeTime)/1000.0;
         log.info("[비관적락_한_유저가_1원_2원_3원_충전시_총_6원_반영] 소요시간: {}s", secDiffTime);
     }
+
+
+
+
 
 
 

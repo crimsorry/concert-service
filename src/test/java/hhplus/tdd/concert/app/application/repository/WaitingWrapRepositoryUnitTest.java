@@ -1,15 +1,14 @@
 package hhplus.tdd.concert.app.application.repository;
 
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

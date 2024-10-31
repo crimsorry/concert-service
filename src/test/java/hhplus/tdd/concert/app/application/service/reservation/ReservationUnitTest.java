@@ -1,14 +1,15 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
-import hhplus.tdd.concert.app.application.dto.payment.PayCommand;
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationQuery;
+import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
+import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
-import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
-import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.payment.entity.Payment;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

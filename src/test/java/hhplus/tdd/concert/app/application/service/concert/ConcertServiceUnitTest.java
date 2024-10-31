@@ -1,11 +1,12 @@
 package hhplus.tdd.concert.app.application.service.concert;
 
-import hhplus.tdd.concert.app.application.dto.concert.ConcertScheduleQuery;
-import hhplus.tdd.concert.app.application.dto.concert.ConcertSeatQuery;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
+import hhplus.tdd.concert.app.application.concert.service.ConcertService;
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.domain.repository.concert.ConcertScheduleRepository;
-import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertScheduleRepository;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

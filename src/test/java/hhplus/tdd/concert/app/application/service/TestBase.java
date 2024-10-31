@@ -1,10 +1,12 @@
 package hhplus.tdd.concert.app.application.service;
 
-import hhplus.tdd.concert.app.domain.entity.concert.*;
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
+import hhplus.tdd.concert.app.domain.concert.entity.Concert;
+import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
+import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.payment.entity.Payment;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.SeatStatus;
 import hhplus.tdd.concert.common.types.WaitingStatus;
@@ -20,7 +22,7 @@ public class TestBase {
     public final String waitingToken = "testToken";
     public final String waitingToken2 = "testToken2";
     public final LocalDateTime now = LocalDateTime.now();
-    public final Member member = Member.builder().memberId(1L).memberName("김소리").charge(9000000).build();
+    public final Member member = Member.builder().memberId(1L).memberName("김소리").charge(9000000).version(0).build();
     public final Member member2 = Member.builder().memberId(2L).memberName("김소리").charge(16000).build();
     public final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, now, now.plusMinutes(30));
     public final Waiting waitingActive = new Waiting(1L, member, waitingToken, WaitingStatus.ACTIVE, now, now.plusMinutes(30));

@@ -1,5 +1,6 @@
 package hhplus.tdd.concert.app.domain.entity.concert;
 
+import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.SeatStatus;

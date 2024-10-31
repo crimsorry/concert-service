@@ -1,7 +1,8 @@
 package hhplus.tdd.concert.app.domain.entity.waiting;
 
-import hhplus.tdd.concert.app.domain.entity.member.Member;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;

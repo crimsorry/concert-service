@@ -1,9 +1,9 @@
 package hhplus.tdd.concert.app.domain.entity.payment;
 
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import org.junit.jupiter.api.Test;

@@ -15,6 +15,10 @@ public interface ConcertSeatRepository extends JpaRepository<ConcertSeat, Long> 
 
     ConcertSeat findBySeatId(Long seatId);
 
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("select cs from ConcertSeat cs where cs.seatId = :seatId")
+    ConcertSeat findBySeatIdWithOptimisticLock(Long seatId);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select cs from ConcertSeat cs where cs.seatId = :seatId")
     ConcertSeat findBySeatIdWithPessimisticLock(Long seatId);

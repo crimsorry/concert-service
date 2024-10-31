@@ -47,6 +47,9 @@ public class ConcertSeat {
     @Enumerated(EnumType.STRING)
     private SeatStatus seatStatus;
 
+    @Version
+    private Integer version;
+
     public static void checkConcertSeatExistence(ConcertSeat concertSeat){
         if(concertSeat == null){
             throw new FailException(ErrorCode.NOT_FOUND_CONCERT_SEAT, LogLevel.WARN);

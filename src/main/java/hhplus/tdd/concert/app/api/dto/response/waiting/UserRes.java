@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.waiting;
 
-import hhplus.tdd.concert.app.application.dto.waiting.MemberQuery;
+import hhplus.tdd.concert.app.application.waiting.dto.MemberQuery;
 
 public record UserRes(
         long memberId,

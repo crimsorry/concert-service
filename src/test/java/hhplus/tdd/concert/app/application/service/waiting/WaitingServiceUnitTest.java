@@ -1,12 +1,11 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
-import hhplus.tdd.concert.app.application.dto.waiting.WaitingTokenCommand;
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenCommand;
 import hhplus.tdd.concert.app.application.service.TestBase;
+import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
+import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,9 +27,6 @@ public class WaitingServiceUnitTest {
     @InjectMocks
     private WaitingService waitingService;
 
-    @Mock
-    private WaitingWrapRepository waitingWrapRepository;
-
 
     @Mock
     private MemberRepository memberRepository;
@@ -42,16 +38,16 @@ public class WaitingServiceUnitTest {
     public void 유저_대기열_생성_성공() {
         // given
         long memberId = 1L;
-        Member member = new Member(memberId, "김소리", 0);
         Waiting waiting = null; // 대기열이 없는 상태를 가정
 
         // when
-        when(memberRepository.findByMemberId(memberId)).thenReturn(member);
-        when(waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED)).thenReturn(waiting);
+        when(memberRepository.findByMemberId(memberId)).thenReturn(testBase.member);
+        when(waitingRepository.findByMemberAndStatusNot(testBase.member, WaitingStatus.EXPIRED)).thenReturn(waiting);
         when(waitingRepository.save(any(Waiting.class))).thenAnswer(invocation -> {
             Waiting savedQueue = invocation.getArgument(0);
-            savedQueue.setWaitingId(1L); // save 후에 ID가 생성됨 가정
-            return savedQueue;
+            return savedQueue.builder()
+                    .waitingId(1L)
+                    .build();
         });
 
         // then
@@ -61,14 +57,14 @@ public class WaitingServiceUnitTest {
         assertNotNull(result);
         assertNotNull(result.waitingToken());
         verify(memberRepository).findByMemberId(memberId);
-        verify(waitingRepository).findByMemberAndStatusNot(member, WaitingStatus.EXPIRED);
+        verify(waitingRepository).findByMemberAndStatusNot(testBase.member, WaitingStatus.EXPIRED);
         verify(waitingRepository).save(any(Waiting.class));
     }
 
     @Test
     public void 유저_대기열_순서_조회() {
         // when
-        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(waitingRepository.countByWaitingIdLessThanAndStatus(testBase.member.getMemberId(), WaitingStatus.STAND_BY)).thenReturn(0);
 
         // then

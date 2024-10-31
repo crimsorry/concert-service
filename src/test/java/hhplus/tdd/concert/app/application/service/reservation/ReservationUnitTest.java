@@ -1,14 +1,15 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
-import hhplus.tdd.concert.app.application.dto.payment.PayCommand;
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationQuery;
-import hhplus.tdd.concert.app.domain.repository.waiting.wrapper.WaitingWrapRepository;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
-import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
+import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
+import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import hhplus.tdd.concert.app.application.service.TestBase;
+import hhplus.tdd.concert.app.domain.payment.entity.Payment;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ public class ReservationUnitTest {
     private ReservationService reservationService;
 
     @Mock
-    private WaitingWrapRepository waitingWrapRepository;
+    private WaitingRepository waitingRepository;
 
     @Mock
     private ConcertSeatRepository concertSeatRepository;
@@ -45,19 +46,21 @@ public class ReservationUnitTest {
     @Test
     public void 좌석_예약() {
         // when
-        when(concertSeatRepository.findBySeatId(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
-        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(concertSeatRepository.findBySeatIdWithPessimisticLock(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
         when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
             Reservation reservation = invocation.getArgument(0);
-            reservation.setReserveId(1L);
-            reservation.setReserveStatus(ReserveStatus.RESERVED);
-            return reservation;
+            return reservation.builder()
+                    .reserveId(1L)
+                    .reserveStatus(ReserveStatus.RESERVED)
+                    .build();
         });
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> {
             Payment payment = invocation.getArgument(0);
-            payment.setPayId(1L);
-            payment.setIsPay(true);
-            return payment;
+            return payment.builder()
+                    .payId(1L)
+                    .isPay(true)
+                    .build();
         });
 
         // then
@@ -70,7 +73,7 @@ public class ReservationUnitTest {
     @Test
     public void 좌석_예약_리스트() {
         // when
-        when(waitingWrapRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waiting);
         when(reservationRepository.findByMember(testBase.member)).thenReturn(testBase.reservations);
 
         // then

@@ -1,10 +1,9 @@
 package hhplus.tdd.concert.app.domain.entity.concert;
 
-import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
+import hhplus.tdd.concert.common.types.SeatStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,8 +28,9 @@ public class ConcertSeatUnitTest {
     @Test
     public void 예약_아닌_콘서트_좌석(){
         // given
-        ConcertSeat concertSeat = new ConcertSeat();
-        concertSeat.setSeatStatus(SeatStatus.ASSIGN);
+        ConcertSeat concertSeat = ConcertSeat.builder()
+                .seatStatus(SeatStatus.ASSIGN)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -44,8 +44,9 @@ public class ConcertSeatUnitTest {
     @Test
     public void 콘서트_좌석_상태_예약_완료(){
         // given
-        ConcertSeat concertSeat = new ConcertSeat();
-        concertSeat.setSeatStatus(SeatStatus.ASSIGN);
+        ConcertSeat concertSeat = ConcertSeat.builder()
+                .seatStatus(SeatStatus.ASSIGN)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -59,8 +60,9 @@ public class ConcertSeatUnitTest {
     @Test
     public void 콘서트_좌석_상태_임시배정(){
         // given
-        ConcertSeat concertSeat = new ConcertSeat();
-        concertSeat.setSeatStatus(SeatStatus.RESERVED);
+        ConcertSeat concertSeat = ConcertSeat.builder()
+                .seatStatus(SeatStatus.RESERVED)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -74,8 +76,9 @@ public class ConcertSeatUnitTest {
     @Test
     public void 좌석_선택_가능_상태(){
         // given
-        ConcertSeat concertSeat = new ConcertSeat();
-        concertSeat.setSeatStatus(SeatStatus.RESERVED);
+        ConcertSeat concertSeat = ConcertSeat.builder()
+                .seatStatus(SeatStatus.RESERVED)
+                .build();
 
         // when & then
         concertSeat.open();
@@ -87,8 +90,9 @@ public class ConcertSeatUnitTest {
     @Test
     public void 좌석_임시_배정_상태(){
         // given
-        ConcertSeat concertSeat = new ConcertSeat();
-        concertSeat.setSeatStatus(SeatStatus.STAND_BY);
+        ConcertSeat concertSeat = ConcertSeat.builder()
+                .seatStatus(SeatStatus.STAND_BY)
+                .build();
 
         // when & then
         concertSeat.pending();
@@ -100,8 +104,9 @@ public class ConcertSeatUnitTest {
     @Test
     public void 좌석_할당된_상태(){
         // given
-        ConcertSeat concertSeat = new ConcertSeat();
-        concertSeat.setSeatStatus(SeatStatus.RESERVED);
+        ConcertSeat concertSeat = ConcertSeat.builder()
+                .seatStatus(SeatStatus.RESERVED)
+                .build();
 
         // when & then
         concertSeat.close();

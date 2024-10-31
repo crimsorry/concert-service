@@ -1,11 +1,10 @@
 package hhplus.tdd.concert.app.domain.entity.waiting;
 
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.common.config.exception.FailException;
+import hhplus.tdd.concert.common.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -31,8 +30,9 @@ public class WaitingUnitTest {
     @Test
     public void 대기순번_안왔는데_들어옴(){
         // given
-        Waiting waiting = new Waiting();
-        waiting.setStatus(WaitingStatus.STAND_BY);
+        Waiting waiting = Waiting.builder()
+                .status(WaitingStatus.STAND_BY)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -46,8 +46,9 @@ public class WaitingUnitTest {
     @Test
     public void 토큰_발급_로직(){
         // given
-        long memberId = 1L;
-        Member member = new Member(memberId, "김소리", 0);
+        Member member = Member.builder()
+                .memberName("김소리")
+                .build();
         Waiting waiting = null; // 대기열 없는 상태
 
         // when & then
@@ -64,7 +65,9 @@ public class WaitingUnitTest {
     public void 만료되지_않은_대기열_반환_로직(){
         // given
         long memberId = 1L;
-        Member member = new Member(memberId, "김소리", 0);
+        Member member = Member.builder()
+                .memberName("김소리")
+                .build();
         Waiting waiting = Waiting.builder()
                 .member(member)
                 .token("existing-token")
@@ -93,8 +96,9 @@ public class WaitingUnitTest {
     @Test
     public void 대기열_만료_상태(){
         // given
-        Waiting waiting = new Waiting();
-        waiting.setStatus(WaitingStatus.ACTIVE);
+        Waiting waiting = Waiting.builder()
+                .status(WaitingStatus.ACTIVE)
+                .build();
 
         // when & then
         waiting.stop();
@@ -106,8 +110,9 @@ public class WaitingUnitTest {
     @Test
     public void 대기열_순번_온_상태(){
         // given
-        Waiting waiting = new Waiting();
-        waiting.setStatus(WaitingStatus.STAND_BY);
+        Waiting waiting = Waiting.builder()
+                .status(WaitingStatus.STAND_BY)
+                .build();
 
         // when & then
         waiting.in();

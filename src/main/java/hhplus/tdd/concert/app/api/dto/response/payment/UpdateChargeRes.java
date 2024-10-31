@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.payment;
 
-import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeCommand;
+import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
 
 public record UpdateChargeRes(
         boolean isCharge

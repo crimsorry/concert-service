@@ -1,15 +1,16 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.domain.entity.concert.ConcertSeat;
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
-import hhplus.tdd.concert.app.domain.entity.waiting.Waiting;
-import hhplus.tdd.concert.app.domain.repository.concert.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.repository.concert.ReservationRepository;
-import hhplus.tdd.concert.app.domain.repository.member.MemberRepository;
-import hhplus.tdd.concert.app.domain.repository.payment.PaymentRepository;
-import hhplus.tdd.concert.app.domain.repository.waiting.WaitingRepository;
+import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
+import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.common.types.ReserveStatus;
 import hhplus.tdd.concert.common.types.SeatStatus;
@@ -65,7 +66,7 @@ public class WaitingServiceIntegrationTest {
         int maxMember = 10;
 
         for (int i = 0; i < totalMembers; i++) {
-            Waiting waiting = new Waiting(1L + i, new Member(1L + i, "김소리" + i, 0), "waitingTokenTest" + i , WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
+            Waiting waiting = new Waiting(1L + i, Member.builder().memberId(1L + i).memberName("김소리" + i).build(), "waitingTokenTest" + i , WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
             waitingRepository.save(waiting);
         }
 

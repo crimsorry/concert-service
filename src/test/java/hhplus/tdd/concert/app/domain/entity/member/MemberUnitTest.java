@@ -1,8 +1,7 @@
 package hhplus.tdd.concert.app.domain.entity.member;
 
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,9 @@ public class MemberUnitTest {
     public void 한도_초과(){
         // given
         int amount = 6000000;
-        Member member = new Member(1L, "김소리", 5000000);
+        Member member = Member.builder()
+                .charge(5000000)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -44,7 +45,9 @@ public class MemberUnitTest {
     public void 잔액_부족(){
         // given
         int amount = 4000;
-        Member member = new Member(1L, "김소리", 300);
+        Member member = Member.builder()
+                .charge(300)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -58,8 +61,9 @@ public class MemberUnitTest {
     @Test
     public void 유저_잔액_충전(){
         // given
-        Member member = new Member();
-        member.setCharge(500);
+        Member member = Member.builder()
+                .charge(500)
+                .build();
 
         // when & then
         member.charge(20);
@@ -71,8 +75,9 @@ public class MemberUnitTest {
     @Test
     public void 유저_잔액_차감(){
         // given
-        Member member = new Member();
-        member.setCharge(500);
+        Member member = Member.builder()
+                .charge(500)
+                .build();
 
         // when & then
         member.withdraw(20);

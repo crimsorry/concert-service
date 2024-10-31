@@ -1,9 +1,9 @@
 package hhplus.tdd.concert.app.domain.entity.payment;
 
-import hhplus.tdd.concert.app.domain.entity.reservation.Reservation;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.app.domain.entity.member.Member;
-import hhplus.tdd.concert.app.domain.entity.payment.Payment;
+import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.common.config.exception.FailException;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PaymentUnitTest {
 
-    private final Member member = new Member(1L, "김소리", 0);
+    private final Member member = Member.builder().memberId(1L).memberName("김소리").charge(0).build();
     private final Reservation reservation = new Reservation(1L, member, null, "드라큘라", LocalDateTime.now(), "A01", 140000, ReserveStatus.PENDING);
 
     @Test
@@ -45,8 +45,9 @@ public class PaymentUnitTest {
     @Test
     public void 결제_완료_상태(){
         // given
-        Payment payment = new Payment();
-        payment.setIsPay(true);
+        Payment payment = Payment.builder()
+                .isPay(true)
+                .build();
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
@@ -60,8 +61,9 @@ public class PaymentUnitTest {
     @Test
     public void 결제_완료_확인(){
         // given
-        Payment payment = new Payment();
-        payment.setIsPay(false);
+        Payment payment = Payment.builder()
+                .isPay(false)
+                .build();
 
         // when & then
         payment.done();

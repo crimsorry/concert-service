@@ -29,6 +29,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+	implementation("org.springframework.retry:spring-retry")
+	implementation("org.springframework:spring-aspects")
 
 	// Lombok
 	compileOnly("org.projectlombok:lombok")
@@ -41,12 +43,20 @@ dependencies {
 	// Kotlin
 	implementation(kotlin("stdlib-jdk8"))
 
+	// Redisson
+	implementation("org.redisson:redisson-spring-boot-starter:3.18.0")
+
 	// Test - h2
 	testImplementation("com.h2database:h2:2.3.232")
 
 	// Test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testCompileOnly("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
+	testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+	testImplementation("org.testcontainers:testcontainers:1.17.6")
+	testImplementation("org.testcontainers:junit-jupiter:1.17.6")
 
 }
 

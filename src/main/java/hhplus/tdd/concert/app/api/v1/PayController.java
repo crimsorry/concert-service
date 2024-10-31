@@ -4,10 +4,10 @@ import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import hhplus.tdd.concert.app.api.dto.response.reservation.ReservationRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.LoadAmountRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.UpdateChargeRes;
-import hhplus.tdd.concert.app.application.dto.payment.LoadAmountQuery;
-import hhplus.tdd.concert.app.application.dto.payment.UpdateChargeCommand;
-import hhplus.tdd.concert.app.application.dto.reservation.ReservationCommand;
-import hhplus.tdd.concert.app.application.service.payment.PayService;
+import hhplus.tdd.concert.app.application.payment.dto.LoadAmountQuery;
+import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
+import hhplus.tdd.concert.app.application.payment.service.PayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -49,6 +49,7 @@ public class PayController {
             @RequestParam(required = true, defaultValue = "1") int amount
     ){
         UpdateChargeCommand restResponse = payService.chargeAmount(waitingToken, amount);
+//        UpdateChargeCommand restResponse = payService.chargeAmountOptimisticLock(waitingToken, amount);
         return new ResponseEntity<>(UpdateChargeRes.from(restResponse), HttpStatus.OK);
     }
 

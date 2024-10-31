@@ -35,8 +35,8 @@ public class Member {
     @Column(columnDefinition = "INT DEFAULT 0")
     private Integer charge;
 
-    @Version
-    private Integer version;
+//    @Version
+//    private Integer version;
 
     public static void checkMemberExistence(Member member){
         if(member == null){

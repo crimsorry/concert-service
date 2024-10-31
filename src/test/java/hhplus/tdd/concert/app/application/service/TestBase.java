@@ -22,7 +22,7 @@ public class TestBase {
     public final String waitingToken = "testToken";
     public final String waitingToken2 = "testToken2";
     public final LocalDateTime now = LocalDateTime.now();
-    public final Member member = Member.builder().memberId(1L).memberName("김소리").charge(9000000).version(0).build();
+    public final Member member = Member.builder().memberId(1L).memberName("김소리").charge(9000000).build();
     public final Member member2 = Member.builder().memberId(2L).memberName("김소리").charge(16000).build();
     public final Waiting waiting = new Waiting(1L, member, waitingToken, WaitingStatus.STAND_BY, now, now.plusMinutes(30));
     public final Waiting waitingActive = new Waiting(1L, member, waitingToken, WaitingStatus.ACTIVE, now, now.plusMinutes(30));

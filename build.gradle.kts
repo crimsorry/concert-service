@@ -43,6 +43,9 @@ dependencies {
 	// Kotlin
 	implementation(kotlin("stdlib-jdk8"))
 
+	// Redisson
+	implementation("org.redisson:redisson-spring-boot-starter:3.18.0")
+
 	// Test - h2
 	testImplementation("com.h2database:h2:2.3.232")
 

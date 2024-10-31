@@ -4,6 +4,7 @@ import hhplus.tdd.concert.app.application.payment.dto.LoadAmountQuery;
 import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
@@ -13,24 +14,35 @@ import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
+import hhplus.tdd.concert.common.config.exception.FailException;
 import hhplus.tdd.concert.common.types.PointType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PayService {
 
+    private final RedissonClient redissonClient;
     private final AmountHistoryRepository amountHistoryRepository;
     private final PaymentRepository paymentRepository;
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
+    private final TransactionTemplate transactionTemplate;
 
     /* 잔액 충전 */
     @Transactional
@@ -94,13 +106,37 @@ public class PayService {
         return new UpdateChargeCommand(true);
     }
 
+    public UpdateChargeCommand chargeAmountRedisPubSub(String waitingToken, int amount){
+        String lockName = "lock:user_id:" + waitingToken;
+        RLock lock = redissonClient.getLock(lockName);
 
+        boolean isOK = false;
 
-    @Transactional
-    public void chargeMemberAmount(Member member, int amount){
-        member.charge(amount);
-        AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
-        amountHistoryRepository.save(amountHistory);
+        try{
+            isOK = lock.tryLock(10, 1, TimeUnit.SECONDS);
+            if(!isOK){
+                throw new FailException(ErrorCode.REDIS_LOCK_NOT_AVAILABLE, LogLevel.WARN);
+            }
+            return transactionTemplate.execute(status -> {
+                Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+                long memberId = waiting.getMember().getMemberId();
+                Member member = memberRepository.findByMemberId(memberId);
+
+                AmountHistory.checkAmountMinusOrZero(amount);
+                Member.checkMemberCharge(member, amount);
+
+                member.charge(amount);
+                AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
+                amountHistoryRepository.save(amountHistory);
+                return new UpdateChargeCommand(true); // 트랜잭션 내 반환값
+            });
+        }catch (InterruptedException e){ // 에러
+            throw new FailException(ErrorCode.REDIS_LOCK_INTERRUPTED, LogLevel.WARN);
+        }finally {
+            if (isOK) {
+                lock.unlock();
+            }
+        }
     }
 
     @Transactional

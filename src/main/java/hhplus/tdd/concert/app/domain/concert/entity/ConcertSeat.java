@@ -47,8 +47,8 @@ public class ConcertSeat {
     @Enumerated(EnumType.STRING)
     private SeatStatus seatStatus;
 
-    @Version
-    private Integer version;
+//    @Version
+//    private Integer version;
 
     public static void checkConcertSeatExistence(ConcertSeat concertSeat){
         if(concertSeat == null){

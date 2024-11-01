@@ -28,6 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -144,15 +145,16 @@ public class PayRedisIntegrationTest {
         Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
         Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
-        AmountHistory amountHistory = amountHistoryRepository.findByPointId(1L);
+        List<AmountHistory> amountHistorys = amountHistoryRepository.findAll();
 
         assertEquals(totalTasks - 1, failCnt.get());
         assertEquals(true, payment.getIsPay());
         assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
         assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
         assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
-        assertEquals(testBase.payment.getAmount(), amountHistory.getAmount());
-        assertEquals(PointType.USE, amountHistory.getPointType());
+        assertEquals(1, amountHistorys.size());
+        assertEquals(testBase.payment.getAmount(), amountHistorys.get(0).getAmount());
+        assertEquals(PointType.USE, amountHistorys.get(0).getPointType());
         assertEquals(testBase.member.getCharge() - testBase.payment.getAmount(), member.getCharge());
 
         long afterTime = System.currentTimeMillis();

@@ -34,4 +34,15 @@ spring:
       schema-locations: file:./docs/ddl.sql
       data-locations: file:./docs/data.sql
 
+  # redis
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+redis:
+  stock:
+    prefix: stocks
+
 

@@ -30,10 +30,10 @@ public class TestBase {
     public final Waiting waitingExpired = new Waiting(1L, member, waitingToken, WaitingStatus.ACTIVE, now.minusMinutes(30), now.minusMinutes(10));
     public final Concert concert = new Concert(1L, title, "부산문화회관 대극장");
     public final ConcertSchedule concertSchedule = new ConcertSchedule(1L, concert, now, now.minusDays(1), now.plusDays(1));
-    public final ConcertSeat concertSeatReserve = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.RESERVED, 0);
-    public final ConcertSeat concertSeatStandBy = new ConcertSeat(2L, concertSchedule, "A01", 140000, SeatStatus.STAND_BY, 0);
+    public final ConcertSeat concertSeatReserve = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.RESERVED);
+    public final ConcertSeat concertSeatStandBy = new ConcertSeat(2L, concertSchedule, "A01", 140000, SeatStatus.STAND_BY);
     public final Reservation reservationReserve = new Reservation(1L, member, concertSeatReserve, "드라큘라", now, "A01", 140000, ReserveStatus.PENDING);
-    public final Payment payment = new Payment(1L, member, reservationReserve, 140000, false, now, 0);
+    public final Payment payment = new Payment(1L, member, reservationReserve, 140000, false, now);
     public final List<ConcertSchedule> concertSchedules = List.of(concertSchedule);
     public final List<ConcertSeat> concertSeats = List.of(concertSeatStandBy);
     public final List<Reservation> reservations = List.of(reservationReserve);

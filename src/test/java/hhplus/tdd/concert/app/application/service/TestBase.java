@@ -34,6 +34,7 @@ public class TestBase {
     public final ConcertSeat concertSeatStandBy = new ConcertSeat(2L, concertSchedule, "A01", 140000, SeatStatus.STAND_BY);
     public final Reservation reservationReserve = new Reservation(1L, member, concertSeatReserve, "드라큘라", now, "A01", 140000, ReserveStatus.PENDING);
     public final Payment payment = new Payment(1L, member, reservationReserve, 140000, false, now);
+    public final List<Concert> concerts = List.of(concert);
     public final List<ConcertSchedule> concertSchedules = List.of(concertSchedule);
     public final List<ConcertSeat> concertSeats = List.of(concertSeatStandBy);
     public final List<Reservation> reservations = List.of(reservationReserve);

@@ -1,9 +1,12 @@
 package hhplus.tdd.concert.app.application.service.concert;
 
+import hhplus.tdd.concert.app.application.concert.dto.ConcertQuery;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
 import hhplus.tdd.concert.app.application.concert.service.ConcertService;
 import hhplus.tdd.concert.app.application.service.TestBase;
+import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
@@ -32,10 +35,26 @@ public class ConcertServiceUnitTest {
     private WaitingRepository waitingRepository;
 
     @Mock
+    private ConcertRepository concertRepository;
+
+    @Mock
     private ConcertScheduleRepository concertScheduleRepository;
 
     @Mock
     private ConcertSeatRepository concertSeatRepository;
+
+    @Test
+    public void 전체_콘서트_조회() {
+        // when
+        when(concertRepository.findAll()).thenReturn(testBase.concerts);
+
+        // then
+        List<ConcertQuery> result = concertService.loadConcert();
+
+        // 결과 검증
+        assertEquals(1, result.size());
+        assertEquals(testBase.title, result.get(0).concertTitle());
+    }
 
     @Test
     public void 예약_가능_날짜_조회() {

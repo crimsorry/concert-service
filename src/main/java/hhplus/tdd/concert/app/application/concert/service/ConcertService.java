@@ -1,9 +1,12 @@
 package hhplus.tdd.concert.app.application.concert.service;
 
+import hhplus.tdd.concert.app.application.concert.dto.ConcertQuery;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
+import hhplus.tdd.concert.app.domain.concert.entity.Concert;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
+import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
@@ -20,9 +23,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConcertService {
 
+    private final ConcertRepository concertRepository;
     private final ConcertScheduleRepository concertScheduleRepository;
     private final ConcertSeatRepository concertSeatRepository;
     private final WaitingRepository waitingRepository;
+
+    /* 전체 콘서트 리스트 조회 */
+    public List<ConcertQuery> loadConcert(){
+        List<Concert> concerts = concertRepository.findAll();
+        return ConcertQuery.from(concerts);
+    }
 
     /* 예약 가능 날짜 조회 */
     public List<ConcertScheduleQuery> loadConcertDate(String waitingToken){

@@ -1,8 +1,10 @@
 package hhplus.tdd.concert.app.api.v1;
 
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
+import hhplus.tdd.concert.app.api.dto.response.concert.ConcertRes;
 import hhplus.tdd.concert.app.api.dto.response.concert.ConcertScheduleRes;
 import hhplus.tdd.concert.app.api.dto.response.concert.ConcertSeatRes;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertQuery;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
 import hhplus.tdd.concert.app.application.concert.service.ConcertService;
@@ -30,6 +32,26 @@ import java.util.stream.Collectors;
 public class ConcertController {
 
     private final ConcertService concertService;
+
+    @GetMapping("/query")
+    @Operation(summary = "전체 콘서트 리스트")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ConcertScheduleRes.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorRes.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorRes.class))),
+    })
+    public ResponseEntity<List<ConcertRes>> getConcert(){
+        List<ConcertQuery> restResponse = concertService.loadConcert();
+        return new ResponseEntity<>(restResponse.stream()
+                .map(ConcertRes::from)
+                .collect(Collectors.toList()), HttpStatus.OK);
+    }
 
     @GetMapping("/date")
     @Operation(summary = "예약 가능 날짜 조회")

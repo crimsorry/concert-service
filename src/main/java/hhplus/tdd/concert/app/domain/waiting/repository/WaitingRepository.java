@@ -2,7 +2,7 @@ package hhplus.tdd.concert.app.domain.waiting.repository;
 
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.types.WaitingStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

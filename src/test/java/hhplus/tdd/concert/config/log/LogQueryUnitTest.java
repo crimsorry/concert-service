@@ -1,12 +1,9 @@
-package hhplus.tdd.concert.common.log;
+package hhplus.tdd.concert.config.log;
 
-import hhplus.tdd.concert.common.config.log.LogQuery;
-import hhplus.tdd.concert.common.config.log.MaskingConvertor;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 

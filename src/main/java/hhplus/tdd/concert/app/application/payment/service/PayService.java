@@ -14,7 +14,7 @@ import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.common.types.PointType;
+import hhplus.tdd.concert.config.types.PointType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;

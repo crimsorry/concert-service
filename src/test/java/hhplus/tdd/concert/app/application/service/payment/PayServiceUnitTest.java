@@ -9,7 +9,7 @@ import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

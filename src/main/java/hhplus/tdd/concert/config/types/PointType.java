@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.types;
+package hhplus.tdd.concert.config.types;
 
 public enum PointType {
     CHARGE, USE;

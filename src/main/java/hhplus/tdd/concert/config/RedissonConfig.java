@@ -1,6 +1,6 @@
-package hhplus.tdd.concert.common.config;
+package hhplus.tdd.concert.config;
 
-import hhplus.tdd.concert.common.property.RedisProperty;
+import hhplus.tdd.concert.config.property.RedisProperty;
 import lombok.RequiredArgsConstructor;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

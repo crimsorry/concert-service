@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.config.log;
+package hhplus.tdd.concert.config.log;
 
 import org.springframework.stereotype.Component;
 

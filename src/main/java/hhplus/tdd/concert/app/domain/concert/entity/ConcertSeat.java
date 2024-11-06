@@ -1,8 +1,8 @@
 package hhplus.tdd.concert.app.domain.concert.entity;
 
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.exception.FailException;
-import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.config.exception.FailException;
+import hhplus.tdd.concert.config.types.SeatStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

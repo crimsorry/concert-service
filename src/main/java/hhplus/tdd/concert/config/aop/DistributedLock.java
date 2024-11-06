@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.aop;
+package hhplus.tdd.concert.config.aop;
 
 
 import java.lang.annotation.ElementType;

@@ -41,6 +41,3 @@ spring:
       host: localhost
       port: 6379
 
-redis:
-  stock:
-    prefix: stocks

@@ -1,7 +1,7 @@
-package hhplus.tdd.concert.common.config;
+package hhplus.tdd.concert.config.filter;
 
-import hhplus.tdd.concert.common.config.log.LogQuery;
-import hhplus.tdd.concert.common.config.log.MaskingConvertor;
+import hhplus.tdd.concert.config.log.LogQuery;
+import hhplus.tdd.concert.config.log.MaskingConvertor;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -13,6 +13,8 @@ import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,7 +31,8 @@ public class ConcertService {
     private final WaitingRepository waitingRepository;
 
     /* 전체 콘서트 리스트 조회 */
-    public List<ConcertQuery> loadConcert(){
+    @Cacheable(value = "List<ConcertQuery>", key = "'concertList'", cacheManager = "cacheManager", unless = "#result == null || #result.isEmpty()")
+    public List<ConcertQuery> loadConcert() {
         List<Concert> concerts = concertRepository.findAll();
         return ConcertQuery.from(concerts);
     }

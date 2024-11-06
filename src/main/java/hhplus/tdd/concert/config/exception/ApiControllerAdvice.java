@@ -1,8 +1,7 @@
-package hhplus.tdd.concert.common.config.exception;
+package hhplus.tdd.concert.config.exception;
 
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

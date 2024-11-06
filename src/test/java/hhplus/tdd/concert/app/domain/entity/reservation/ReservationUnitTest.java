@@ -5,8 +5,8 @@ import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.config.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.SeatStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

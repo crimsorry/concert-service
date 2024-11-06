@@ -1,7 +1,6 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
 import hhplus.tdd.concert.app.application.reservation.aop.ReserveDistributedLockAop;
-import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.member.entity.Member;
@@ -12,8 +11,8 @@ import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.app.infrastructure.TestContainerConfig;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.WaitingStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

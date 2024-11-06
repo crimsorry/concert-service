@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.config.exception;
+package hhplus.tdd.concert.config.exception;
 
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.config;
+package hhplus.tdd.concert.config;
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;

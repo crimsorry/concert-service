@@ -16,7 +16,7 @@ public interface ConcertScheduleRepository extends JpaRepository<ConcertSchedule
             "JOIN ConcertSeat seat ON seat.schedule = cs " +
             "WHERE cs.startDate <= :now " +
             "AND cs.endDate >= :now " +
-            "AND seat.seatStatus = hhplus.tdd.concert.common.types.SeatStatus.STAND_BY")
+            "AND seat.seatStatus = hhplus.tdd.concert.config.types.SeatStatus.STAND_BY")
     List<ConcertSchedule> findByConcertScheduleDatesWithStandBySeats(LocalDateTime now);
 
 }

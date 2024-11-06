@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.types;
+package hhplus.tdd.concert.config.types;
 
 public enum WaitingStatus {
     STAND_BY, ACTIVE, EXPIRED;

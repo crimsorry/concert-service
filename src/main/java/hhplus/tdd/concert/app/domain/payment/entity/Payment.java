@@ -3,7 +3,7 @@ package hhplus.tdd.concert.app.domain.payment.entity;
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.exception.FailException;
+import hhplus.tdd.concert.config.exception.FailException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

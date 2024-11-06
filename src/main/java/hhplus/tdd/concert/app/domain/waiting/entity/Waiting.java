@@ -2,8 +2,8 @@ package hhplus.tdd.concert.app.domain.waiting.entity;
 
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.exception.FailException;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.exception.FailException;
+import hhplus.tdd.concert.config.types.WaitingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

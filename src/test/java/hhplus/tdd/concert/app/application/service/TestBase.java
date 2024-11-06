@@ -7,9 +7,9 @@ import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.SeatStatus;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.SeatStatus;
+import hhplus.tdd.concert.config.types.WaitingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

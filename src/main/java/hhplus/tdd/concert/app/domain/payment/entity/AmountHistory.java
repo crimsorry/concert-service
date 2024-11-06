@@ -2,8 +2,8 @@ package hhplus.tdd.concert.app.domain.payment.entity;
 
 import hhplus.tdd.concert.app.domain.member.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.exception.FailException;
-import hhplus.tdd.concert.common.types.PointType;
+import hhplus.tdd.concert.config.exception.FailException;
+import hhplus.tdd.concert.config.types.PointType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

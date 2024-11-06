@@ -1,7 +1,6 @@
-package hhplus.tdd.concert.common.config.log;
+package hhplus.tdd.concert.config.log;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;

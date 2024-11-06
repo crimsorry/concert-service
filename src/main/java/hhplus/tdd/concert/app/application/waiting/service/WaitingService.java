@@ -10,7 +10,7 @@ import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.types.WaitingStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.common.property;
+package hhplus.tdd.concert.config.property;
 
 import lombok.Getter;
 import lombok.Setter;

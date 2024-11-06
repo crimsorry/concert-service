@@ -6,7 +6,7 @@ import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

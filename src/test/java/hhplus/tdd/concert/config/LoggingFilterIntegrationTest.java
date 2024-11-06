@@ -1,9 +1,9 @@
-package hhplus.tdd.concert.common;
+package hhplus.tdd.concert.config;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
-import hhplus.tdd.concert.common.config.LoggingFilter;
+import hhplus.tdd.concert.config.filter.LoggingFilter;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

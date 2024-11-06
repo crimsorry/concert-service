@@ -1,6 +1,5 @@
-package hhplus.tdd.concert.common.log;
+package hhplus.tdd.concert.config.log;
 
-import hhplus.tdd.concert.common.config.log.MaskingConvertor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.app.application.concert.dto;
 
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.config.types.SeatStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;

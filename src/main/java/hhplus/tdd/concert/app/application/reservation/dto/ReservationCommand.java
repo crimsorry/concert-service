@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.app.application.reservation.dto;
 
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
-import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.ReserveStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

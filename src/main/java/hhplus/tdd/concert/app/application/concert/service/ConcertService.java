@@ -31,7 +31,7 @@ public class ConcertService {
     private final WaitingRepository waitingRepository;
 
     /* 전체 콘서트 리스트 조회 */
-    @Cacheable(value = "List<ConcertQuery>", key = "'concertList'", cacheManager = "cacheManager", unless = "#result == null || #result.isEmpty()")
+    @Cacheable(value = "concertList", key = "'concertList'", cacheManager = "cacheManager", unless = "#result == null || #result.isEmpty()")
     public List<ConcertQuery> loadConcert() {
         List<Concert> concerts = concertRepository.findAll();
         return ConcertQuery.from(concerts);

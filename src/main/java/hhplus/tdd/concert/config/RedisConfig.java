@@ -13,10 +13,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
-
 @Configuration
 @EnableCaching
 @RequiredArgsConstructor
@@ -29,7 +25,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory(this.redisProperty.getHost(), this.redisProperty.getPort());
     }
 
-    @Bean
+    @Bean(name = "cacheManager")
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))

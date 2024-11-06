@@ -41,7 +41,6 @@ public class ReservationService {
         ConcertSeat.checkConcertSeatExistence(concertSeat);
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
@@ -67,7 +66,6 @@ public class ReservationService {
         ConcertSeat.checkConcertSeatExistence(concertSeat);
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
@@ -97,7 +95,6 @@ public class ReservationService {
         ConcertSeat.checkConcertSeatExistence(concertSeat);
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
@@ -116,7 +113,6 @@ public class ReservationService {
 
     /* 예약 조회 */
     public List<ReservationQuery> loadReservation(String waitingToken){
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 

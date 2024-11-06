@@ -39,7 +39,6 @@ public class ConcertService {
 
     /* 예약 가능 날짜 조회 */
     public List<ConcertScheduleQuery> loadConcertDate(String waitingToken){
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
 
@@ -50,7 +49,6 @@ public class ConcertService {
 
     /* 예약 가능 좌석 조회 */
     public List<ConcertSeatQuery> loadConcertSeat(String waitingToken, long scheduleId){
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
 

@@ -16,17 +16,26 @@ import hhplus.tdd.concert.config.types.ReserveStatus;
 import hhplus.tdd.concert.config.types.SeatStatus;
 import hhplus.tdd.concert.config.types.WaitingStatus;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
+@Slf4j
 @SpringBootTest
 public class WaitingServiceIntegrationTest {
 
@@ -52,6 +61,9 @@ public class WaitingServiceIntegrationTest {
 
     @Autowired
     private DatabaseCleaner databaseCleaner;
+
+    private static final int TOTAL_REQUESTS = 50000; // 총 요청 수
+    private static final int CONCURRENT_THREADS = 100; // 동시 실행 스레드 수
 
     @AfterEach
     public void setUp() {
@@ -103,5 +115,35 @@ public class WaitingServiceIntegrationTest {
         Waiting updatedWaiting = waitingRepository.findByWaitingId(testBase.waitingExpired.getWaitingId());
         assertEquals(WaitingStatus.EXPIRED, updatedWaiting.getStatus());
     }
+
+    @Test
+    public void 대기열_순번_동시접속_5만건시_초당_트래픽() {
+        memberRepository.save(testBase.member);
+        waitingRepository.save(testBase.waiting);
+
+        ExecutorService executor = Executors.newFixedThreadPool(CONCURRENT_THREADS);
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+        Instant start = Instant.now();
+
+        for (int i = 0; i < TOTAL_REQUESTS; i++) {
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                waitingService.loadWaiting(testBase.waitingToken);
+            }, executor);
+            futures.add(future);
+        }
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+        Instant end = Instant.now();
+        Duration duration = Duration.between(start, end);
+
+        double tps = (TOTAL_REQUESTS * 1000.0) / duration.toMillis(); // 밀리초 기준으로 TPS 계산
+        log.info("[대기열_순번_동시접속_5만건시_초당_트래픽] : {}", tps);
+
+        executor.shutdown();
+    }
+
+
 
 }

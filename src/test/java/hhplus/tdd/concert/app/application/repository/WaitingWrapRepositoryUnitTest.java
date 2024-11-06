@@ -9,6 +9,7 @@ import hhplus.tdd.concert.config.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,7 @@ class WaitingWrapRepositoryUnitTest{
 
     private final TestBase testBase = new TestBase();
 
-    @InjectMocks
+    @Mock
     private WaitingRepository waitingRepository;
 
     @Test
@@ -31,7 +32,7 @@ class WaitingWrapRepositoryUnitTest{
 
         // when & then
         Exception exception = assertThrows(FailException.class, () -> {
-            waitingRepository.findByTokenOrThrow(testBase.waitingToken);
+            waitingRepository.findByToken(testBase.waitingToken);
         });
 
         // 결과 검증
@@ -41,10 +42,10 @@ class WaitingWrapRepositoryUnitTest{
     @Test
     public void 대기열_토큰_존재() {
         // when
-        when(waitingRepository.findByToken(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waiting);
 
         // then
-        Waiting result = waitingRepository.findByTokenOrThrow(testBase.waitingToken);
+        Waiting result = waitingRepository.findByToken(testBase.waitingToken);
 
         // 결과 검증
         assertEquals(testBase.member, result.getMember());

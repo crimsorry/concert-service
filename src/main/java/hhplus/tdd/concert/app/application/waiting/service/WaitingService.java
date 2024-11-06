@@ -13,6 +13,7 @@ import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.config.types.WaitingStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,20 @@ public class WaitingService {
     private final WaitingRepository waitingRepository;
     private final PaymentRepository paymentRepository;
 
+    private final String WAITING_TOKEN_KEY = "waitingToken";
+    private final String ACTIVE_TOKEN_KEY = "activeToken";
+
     /* 유저 대기열 생성 */
+//    public WaitingTokenCommand enqueueMember(long memberId){
+//        Member member = memberRepository.findByMemberId(memberId);
+//        Member.checkMemberExistence(member);
+//
+//        Waiting existWaiting = waitingRepository.findByMemberAndStatusNot(member, WaitingStatus.EXPIRED);
+//        Waiting waiting = Waiting.generateOrReturnWaitingToken(existWaiting, member);
+//        waitingRepository.save(waiting);
+//        return new WaitingTokenCommand(waiting.getToken());
+//    }
+
     public WaitingTokenCommand enqueueMember(long memberId){
         Member member = memberRepository.findByMemberId(memberId);
         Member.checkMemberExistence(member);
@@ -41,7 +55,6 @@ public class WaitingService {
 
     /* 유저 대기열 순번 조회 */
     public WaitingNumQuery loadWaiting(String waitingToken){
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
 
         int waitings = waitingRepository.countByWaitingIdLessThanAndStatus(waiting.getWaitingId(), WaitingStatus.STAND_BY);

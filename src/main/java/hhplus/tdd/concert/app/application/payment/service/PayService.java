@@ -41,7 +41,8 @@ public class PayService {
     /* 잔액 충전 */
     @Transactional
     public UpdateChargeCommand chargeAmount(String waitingToken, int amount){
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByToken(waitingToken);
+        Waiting.checkWaitingExistence(waiting);
 
         long memberId = waiting.getMember().getMemberId();
         Member member = memberRepository.findByMemberIdWithPessimisticLock(memberId);
@@ -58,8 +59,8 @@ public class PayService {
 
     @Transactional
     public UpdateChargeCommand chargeAmountOptimisticLock(String waitingToken, int amount){
-        // 대기열 존재 여부 확인
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByToken(waitingToken);
+        Waiting.checkWaitingExistence(waiting);
 
         long memberId = waiting.getMember().getMemberId();
         Member member = memberRepository.findByMemberIdWithOptimisticLock(memberId);
@@ -85,7 +86,8 @@ public class PayService {
             backoff = @Backoff(100) // delay 0.1초
     )
     public UpdateChargeCommand chargeAmountOptimisticLockRetry(String waitingToken, int amount){
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+        Waiting waiting = waitingRepository.findByToken(waitingToken);
+        Waiting.checkWaitingExistence(waiting);
         long memberId = waiting.getMember().getMemberId();
         Member member = memberRepository.findByMemberId(memberId);
 
@@ -102,7 +104,6 @@ public class PayService {
 
     /* 잔액 조회 */
     public LoadAmountQuery loadAmount(String waitingToken){
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Member member = waiting.getMember();
 
@@ -113,7 +114,6 @@ public class PayService {
     /* 결제 처리 */
     @Transactional
     public ReservationCommand processPay(String waitingToken, long payId){
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();
@@ -141,7 +141,6 @@ public class PayService {
 
     @Transactional
     public ReservationCommand processPayOptimisticLock(String waitingToken, long payId){
-        // 대기열 존재 여부 확인
         Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
         Waiting.checkWaitingStatusActive(waiting);
         Member member = waiting.getMember();

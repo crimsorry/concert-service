@@ -76,7 +76,6 @@ public class WaitingService {
         return new WaitingNumQuery(userNum);
     }
 
-
     /* 대기열 만료 */
     @Transactional
     public void expiredWaiting(){
@@ -98,13 +97,13 @@ public class WaitingService {
     @Transactional
     public void activeWaiting(){
         // 현재 active 갯수 세기
-        int activeWaiting = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.ACTIVE, PageRequest.of(0, maxMember)).size();
+        Set<Object> waitingTokenList = waitingRepository.getWaitingTokenRange(WAITING_TOKEN_KEY, 0, maxMember-1);
         // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
-        if(activeWaiting < maxMember){
-            List<Waiting> waitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.STAND_BY, PageRequest.of(0, maxMember-activeWaiting));
-            for(Waiting waiting : waitings){
-                waiting.in();
-            }
+        for (Object token : waitingTokenList) {
+            // waiting 삭제
+            waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, token);
+            // active insert
+            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, token);
         }
     }
 

@@ -31,11 +31,11 @@ public class WaitingRedisRepository {
         return redisTemplate.opsForZSet().range(key, start, end);
     }
 
-    public void deleteWaitingToken(String key, String value) {
+    public void deleteWaitingToken(String key, Object value) {
         redisTemplate.opsForZSet().remove(key, value);
     }
 
-    public void addActiveToken(String key, String value) {
+    public void addActiveToken(String key, Object value) {
         redisTemplate.opsForSet().add(key, value);
     }
 

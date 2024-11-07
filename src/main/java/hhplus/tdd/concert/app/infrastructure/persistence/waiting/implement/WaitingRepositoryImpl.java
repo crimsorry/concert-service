@@ -1,70 +1,51 @@
 package hhplus.tdd.concert.app.infrastructure.persistence.waiting.implement;
 
-import hhplus.tdd.concert.app.domain.member.entity.Member;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.jpa.WaitingJpaRepository;
-import hhplus.tdd.concert.config.types.WaitingStatus;
+import hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.redis.WaitingRedisRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
 public class WaitingRepositoryImpl implements WaitingRepository {
 
-    private final WaitingJpaRepository waitingJpaRepository;
+    private final WaitingRedisRepository waitingRedisRepository;
 
     @Override
-    public Waiting save(Waiting waiting) {
-        return waitingJpaRepository.save(waiting);
+    public void addWaitingToken(String key, String value, Long currentTime) {
+        waitingRedisRepository.addWaitingToken(key, value, currentTime);
     }
 
     @Override
-    public List<Waiting> saveAll(List<Waiting> waiting) {
-        return waitingJpaRepository.saveAll(waiting);
+    public Long getWaitingTokenScore(String key, String value) {
+        return waitingRedisRepository.getWaitingTokenScore(key, value);
     }
 
     @Override
-    public List<Waiting> findAll() {
-        return waitingJpaRepository.findAll();
+    public Set<String> getWaitingTokenRange(String key, int start, int end) {
+        return waitingRedisRepository.getWaitingTokenRange(key, start, end);
     }
 
     @Override
-    public Waiting findByWaitingId(Long waitingId) {
-        return waitingJpaRepository.findByWaitingId(waitingId);
+    public void deleteWaitingToken(String key, String value) {
+        waitingRedisRepository.deleteWaitingToken(key, value);
     }
 
     @Override
-    public Waiting findByMemberAndStatusNot(Member member, WaitingStatus status) {
-        return waitingJpaRepository.findByMemberAndStatusNot(member, status);
+    public void addActiveToken(String key, String value) {
+        waitingRedisRepository.addActiveToken(key, value);
     }
 
     @Override
-    public List<Waiting> findByExpiredAtLessThan(LocalDateTime localDateTime) {
-        return waitingJpaRepository.findByExpiredAtLessThan(localDateTime);
+    public Boolean isActiveToken(String key, String value) {
+        return waitingRedisRepository.isActiveToken(key, value);
     }
 
     @Override
-    public int countByWaitingIdLessThanAndStatus(long waitingId, WaitingStatus statue) {
-        return waitingJpaRepository.countByWaitingIdLessThanAndStatus(waitingId, statue);
+    public void deleteActiveToken(String key, String value) {
+        waitingRedisRepository.deleteActiveToken(key, value);
     }
 
-    @Override
-    public List<Waiting> findByStatusOrderByWaitingId(WaitingStatus statue, Pageable pageable) {
-        return waitingJpaRepository.findByStatusOrderByWaitingId(statue, pageable);
-    }
-
-    @Override
-    public Waiting findByToken(String waitingToken) {
-        return waitingJpaRepository.findByToken(waitingToken);
-    }
-
-    @Override
-    public Waiting findByTokenOrThrow(String waitingToken) {
-        return waitingJpaRepository.findByTokenOrThrow(waitingToken);
-    }
 }

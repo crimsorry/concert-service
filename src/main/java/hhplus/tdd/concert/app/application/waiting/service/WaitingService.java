@@ -34,7 +34,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class WaitingService {
 
-    private final int maxMember = 10;
+    private final int maxMember = 6000;
     private final MemberRepository memberRepository;
     private final WaitingRepository waitingRepository;
     private final PaymentRepository paymentRepository;
@@ -64,8 +64,7 @@ public class WaitingService {
         }
 
         String matchedValue = tokenSet.stream()
-                .filter(obj -> obj instanceof String && ((String) obj).startsWith(waitingToken + ":"))
-                .map(Object::toString)
+                .filter(obj -> obj.startsWith(waitingToken + ":"))
                 .findFirst()
                 .orElse(null);
 
@@ -87,7 +86,7 @@ public class WaitingService {
         for(ActiveToken activeToken : activeTokenList){
             String[] sp = activeToken.token().split(":");
             Long expireTime = Long.parseLong(sp[2]);
-            if(System.currentTimeMillis() < expireTime){
+            if(System.currentTimeMillis() > expireTime){
                 Member member = memberRepository.findByMemberId(Long.parseLong(sp[1]));
                 Payment payment = paymentRepository.findByMember(member);
                 ConcertSeat concertSeat = payment.getReservation().getSeat();
@@ -107,11 +106,10 @@ public class WaitingService {
         // 현재 active 갯수 세기
         List<ActiveToken> waitingTokenList = waitingRepository.getWaitingTokenRange(WAITING_TOKEN_KEY, 0, maxMember-1);
         // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
-        Collection<?> tokenCollection = (Collection<?>) waitingTokenList;
         for (ActiveToken activeToken : waitingTokenList) {
             String token = activeToken.token();
             waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, token);
-            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, token + ":" + System.currentTimeMillis());
+            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, token + ":" + System.currentTimeMillis() + (5 * 60 * 1000));
         }
     }
 

@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.service.TestBase;
+import hhplus.tdd.concert.app.application.waiting.schedule.WaitingSchedule;
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
@@ -19,19 +20,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @Slf4j
 @SpringBootTest
+@ActiveProfiles("test")
 public class WaitingServiceIntegrationTest {
 
     private final TestBase testBase = new TestBase();
@@ -91,7 +95,7 @@ public class WaitingServiceIntegrationTest {
     public void 대기열_만료_확인() {
         // given
         memberRepository.save(testBase.member);
-//        waitingRepository.save(testBase.waitingExpired);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken + ":" + testBase.member.getMemberId() + ":" + (System.currentTimeMillis() - (5 * 60 * 1000)));
         concertSeatRepository.save(testBase.concertSeatReserve);
         reservationRepository.save(testBase.reservationReserve);
         paymentRepository.save(testBase.payment);
@@ -104,14 +108,14 @@ public class WaitingServiceIntegrationTest {
         assertEquals(ReserveStatus.CANCELED, updatedReservation.getReserveStatus());
         ConcertSeat updateConcertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
         assertEquals(SeatStatus.STAND_BY, updateConcertSeat.getSeatStatus());
-//        Waiting updatedWaiting = waitingRepository.findByWaitingId(testBase.waitingExpired.getWaitingId());
-//        assertEquals(WaitingStatus.EXPIRED, updatedWaiting.getStatus());
+        List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(testBase.ACTIVE_TOKEN_KEY);
+        assertEquals(0, activeTokenList.size());
     }
 
     @Test
     public void 대기열_순번_동시접속_5만건시_초당_트래픽() {
         memberRepository.save(testBase.member);
-//        waitingRepository.save(testBase.waiting);
+        waitingRepository.addWaitingToken(testBase.WAITING_TOKEN_KEY, testBase.waitingToken + ":" + testBase.member.getMemberId(), System.currentTimeMillis());
 
         ExecutorService executor = Executors.newFixedThreadPool(CONCURRENT_THREADS);
         List<CompletableFuture<Void>> futures = new ArrayList<>();
@@ -136,6 +140,36 @@ public class WaitingServiceIntegrationTest {
         executor.shutdown();
     }
 
+    @Test
+    public void 대기열_10초에_한번씩_6000명_active_전환_6번_반복후_36000명_전환완료() throws InterruptedException {
+        int totalMembers = 36000;
+
+        for (int i = 0; i < totalMembers; i++) {
+            waitingRepository.addWaitingToken(testBase.WAITING_TOKEN_KEY, testBase.waitingToken + i + ":" + i, System.currentTimeMillis());
+        }
+
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        CountDownLatch latch = new CountDownLatch(6);
+
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                waitingService.activeWaiting();
+            } finally {
+                latch.countDown();
+                if (latch.getCount() == 0) {
+                    scheduler.shutdown();
+                }
+            }
+        }, 0, 10, TimeUnit.SECONDS);
+
+        // 1분 동안 실행 대기
+        latch.await(1, TimeUnit.MINUTES);
+        scheduler.awaitTermination(1, TimeUnit.MINUTES);
+
+        List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(testBase.ACTIVE_TOKEN_KEY);
+
+        assertEquals(totalMembers, activeTokenList.size());
+    }
 
 
 }

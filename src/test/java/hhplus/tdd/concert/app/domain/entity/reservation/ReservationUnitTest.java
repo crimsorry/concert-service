@@ -3,7 +3,7 @@ package hhplus.tdd.concert.app.domain.entity.reservation;
 import hhplus.tdd.concert.app.domain.concert.entity.Concert;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import hhplus.tdd.concert.config.types.SeatStatus;

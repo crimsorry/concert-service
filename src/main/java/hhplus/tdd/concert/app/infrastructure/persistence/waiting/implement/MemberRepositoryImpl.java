@@ -1,0 +1,46 @@
+package hhplus.tdd.concert.app.infrastructure.persistence.waiting.implement;
+
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
+import hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.jpa.MemberJpaRepository;
+import hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.redis.WaitingRedisRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+@Repository
+@RequiredArgsConstructor
+public class MemberRepositoryImpl implements MemberRepository {
+
+    private final MemberJpaRepository repository;
+
+    @Override
+    public Member save(Member member) {
+        return repository.save(member);
+    }
+
+    @Override
+    public List<Member> saveAll(List<Member> memberList) {
+        return repository.saveAll(memberList);
+    }
+
+    @Override
+    public Member findByMemberId(Long memberId) {
+        return repository.findByMemberId(memberId);
+    }
+
+    @Override
+    public Member findByMemberIdWithOptimisticLock(Long memberId) {
+        return repository.findByMemberIdWithOptimisticLock(memberId);
+    }
+
+    @Override
+    public Member findByMemberIdWithPessimisticLock(long memberId) {
+        return repository.findByMemberIdWithPessimisticLock(memberId);
+    }
+}

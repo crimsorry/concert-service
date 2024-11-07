@@ -12,10 +12,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConcertRepositoryImpl implements ConcertRepository {
 
-    private final ConcertJpaRepository concertJpaRepository;
+    private final ConcertJpaRepository repository;
+
+    @Override
+    public Concert save(Concert concert) {
+        return repository.save(concert);
+    }
 
     @Override
     public List<Concert> findAll() {
-        return concertJpaRepository.findAll();
+        return repository.findAll();
     }
 }

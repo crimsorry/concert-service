@@ -12,8 +12,6 @@ public interface WaitingRepository {
 
     Long getWaitingTokenScore(String key, String value);
 
-    Boolean isWaitingTokenKey(String key);
-
     List<ActiveToken> getWaitingTokenRange(String key, int start, int end);
 
     void deleteWaitingToken(String key, String value);
@@ -23,8 +21,6 @@ public interface WaitingRepository {
     List<ActiveToken> getWaitingToken(String key);
 
     Set<String> getAllTokens(String tokenKey);
-
-    Boolean isActiveToken(String key, long memberId);
 
     void deleteActiveToken(String key, String value);
 

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.domain.member.entity;
+package hhplus.tdd.concert.app.domain.waiting.entity;
 
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.config.exception.FailException;

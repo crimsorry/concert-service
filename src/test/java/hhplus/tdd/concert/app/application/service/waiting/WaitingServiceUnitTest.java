@@ -3,11 +3,8 @@ package hhplus.tdd.concert.app.application.service.waiting;
 import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenCommand;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
-import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.config.types.WaitingStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +17,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

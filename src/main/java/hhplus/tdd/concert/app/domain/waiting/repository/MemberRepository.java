@@ -1,23 +1,24 @@
-package hhplus.tdd.concert.app.domain.member.repository;
+package hhplus.tdd.concert.app.domain.waiting.repository;
 
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+import java.util.List;
+
+public interface MemberRepository {
+
+    Member save(Member member);
+
+    List<Member> saveAll(List<Member> memberList);
 
     Member findByMemberId(Long memberId);
 
-//    @Lock(LockModeType.OPTIMISTIC)
-    @Query("select m from Member m where m.memberId = :memberId")
     Member findByMemberIdWithOptimisticLock(Long memberId);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select m from Member m where m.memberId = :memberId")
     Member findByMemberIdWithPessimisticLock(long memberId);
 
 }

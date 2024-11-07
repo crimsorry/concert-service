@@ -4,11 +4,9 @@ import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.redis.WaitingRedisRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -26,11 +24,6 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     @Override
     public Long getWaitingTokenScore(String key, String value) {
         return waitingRedisRepository.getWaitingTokenScore(key, value);
-    }
-
-    @Override
-    public Boolean isWaitingTokenKey(String key) {
-        return waitingRedisRepository.isWaitingTokenKey(key);
     }
 
     @Override
@@ -72,11 +65,6 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     @Override
     public Set<String> getAllTokens(String key) {
         return waitingRedisRepository.getAllTokens(key);
-    }
-
-    @Override
-    public Boolean isActiveToken(String key, long memberId) {
-        return waitingRedisRepository.isActiveToken(key, memberId);
     }
 
     @Override

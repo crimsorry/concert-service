@@ -3,7 +3,7 @@ package hhplus.tdd.concert.app.application.reservation.aop;
 import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;

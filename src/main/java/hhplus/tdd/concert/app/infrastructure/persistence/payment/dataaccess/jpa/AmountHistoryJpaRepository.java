@@ -1,16 +1,10 @@
-package hhplus.tdd.concert.app.domain.payment.repository;
+package hhplus.tdd.concert.app.infrastructure.persistence.payment.dataaccess.jpa;
 
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface AmountHistoryRepository {
-
-    List<AmountHistory> findAll();
-
-    AmountHistory save(AmountHistory amountHistory);
+public interface AmountHistoryJpaRepository extends JpaRepository<AmountHistory, Long> {
 
     AmountHistory findByPointId(Long amountHistoryId);
 

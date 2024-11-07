@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.domain.entity.waiting;
 
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.config.exception.FailException;

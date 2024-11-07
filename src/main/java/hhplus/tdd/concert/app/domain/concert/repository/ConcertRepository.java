@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ConcertRepository  {
 
+    Concert save(Concert concert);
+
     List<Concert> findAll();
 
 }

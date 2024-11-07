@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.app.domain.reservation.entity;
 
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

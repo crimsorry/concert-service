@@ -8,15 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
-public interface ConcertScheduleRepository extends JpaRepository<ConcertSchedule, Long> {
+public interface ConcertScheduleRepository {
+
+    ConcertSchedule save(ConcertSchedule concertSchedule);
 
     ConcertSchedule findByScheduleId(Long scheduleId);
-    @Query("SELECT DISTINCT cs FROM ConcertSchedule cs " +
-            "JOIN ConcertSeat seat ON seat.schedule = cs " +
-            "WHERE cs.startDate <= :now " +
-            "AND cs.endDate >= :now " +
-            "AND seat.seatStatus = hhplus.tdd.concert.config.types.SeatStatus.STAND_BY")
+
     List<ConcertSchedule> findByConcertScheduleDatesWithStandBySeats(LocalDateTime now);
 
 }

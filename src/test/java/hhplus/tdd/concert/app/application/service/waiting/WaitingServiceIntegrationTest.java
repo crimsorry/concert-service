@@ -1,11 +1,10 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.application.waiting.schedule.WaitingSchedule;
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
@@ -20,8 +19,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Duration;
@@ -31,7 +28,6 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 @Slf4j
 @SpringBootTest

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.domain.concert.repository;
+package hhplus.tdd.concert.app.infrastructure.persistence.concert.dataaccess.jpa;
 
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ConcertSeatRepository {
-
-    ConcertSeat save(ConcertSeat concertSeat);
+public interface ConcertSeatJpaRepository extends JpaRepository<ConcertSeat, Long> {
 
     ConcertSeat findBySeatId(Long seatId);
 

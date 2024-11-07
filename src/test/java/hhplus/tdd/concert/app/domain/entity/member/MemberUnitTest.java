@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.app.domain.entity.member;
 
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.config.exception.FailException;
 import org.junit.jupiter.api.Test;
 

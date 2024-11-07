@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.domain.payment.entity;
 
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.config.exception.FailException;
 import hhplus.tdd.concert.config.types.PointType;

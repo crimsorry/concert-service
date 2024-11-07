@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.jpa;
 
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.config.types.WaitingStatus;
 import org.springframework.data.domain.Pageable;

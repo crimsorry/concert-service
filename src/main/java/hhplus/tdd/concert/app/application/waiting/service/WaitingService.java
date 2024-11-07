@@ -16,6 +16,7 @@ import hhplus.tdd.concert.config.exception.FailException;
 import hhplus.tdd.concert.config.types.WaitingStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +24,12 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WaitingService {
@@ -54,7 +57,7 @@ public class WaitingService {
     }
 
     public WaitingNumQuery loadWaiting(String waitingToken){
-        Set<Object> tokenSet = waitingRepository.getAllTokens(WAITING_TOKEN_KEY);
+        Set<String> tokenSet = waitingRepository.getAllTokens(WAITING_TOKEN_KEY);
 
         if (tokenSet == null) {
             throw new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR);
@@ -102,12 +105,12 @@ public class WaitingService {
     @Transactional
     public void activeWaiting(){
         // 현재 active 갯수 세기
-        Set<Object> waitingTokenList = waitingRepository.getWaitingTokenRange(WAITING_TOKEN_KEY, 0, maxMember-1);
+        List<ActiveToken> waitingTokenList = waitingRepository.getWaitingTokenRange(WAITING_TOKEN_KEY, 0, maxMember-1);
         // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
-        for (Object token : waitingTokenList) {
-            // waiting 삭제
+        Collection<?> tokenCollection = (Collection<?>) waitingTokenList;
+        for (ActiveToken activeToken : waitingTokenList) {
+            String token = activeToken.token();
             waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, token);
-            // active insert
             waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, token + ":" + System.currentTimeMillis());
         }
     }

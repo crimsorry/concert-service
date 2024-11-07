@@ -5,21 +5,26 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
 import jakarta.persistence.metamodel.EntityType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class DatabaseCleaner implements InitializingBean {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     private List<String> tables = new ArrayList<>();
+
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void afterPropertiesSet() {
@@ -45,5 +50,11 @@ public class DatabaseCleaner implements InitializingBean {
             entityManager.createNativeQuery("ALTER TABLE " + table + " ALTER COLUMN ID RESTART WITH 1").executeUpdate();
         }
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
+
+        var keys = redisTemplate.keys("*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+
     }
 }

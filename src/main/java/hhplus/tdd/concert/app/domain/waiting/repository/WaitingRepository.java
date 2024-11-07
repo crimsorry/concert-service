@@ -2,35 +2,33 @@ package hhplus.tdd.concert.app.domain.waiting.repository;
 
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
-import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.List;
 import java.util.Set;
 
 public interface WaitingRepository {
 
-    public void addWaitingToken(String key, Object value, Long currentTime);
+    void addWaitingToken(String key, String value, Long currentTime);
 
-    public Long getWaitingTokenScore(String key, Object value);
+    Long getWaitingTokenScore(String key, String value);
 
-    public Boolean isWaitingTokenKey(String key);
+    Boolean isWaitingTokenKey(String key);
 
-    public Set<Object> getWaitingTokenRange(String key, int start, int end);
+    List<ActiveToken> getWaitingTokenRange(String key, int start, int end);
 
-    public void deleteWaitingToken(String key, Object value);
+    void deleteWaitingToken(String key, String value);
 
-    public List<ActiveToken> getActiveToken(String key);
+    List<ActiveToken> getActiveToken(String key);
 
-    public ZSetOperations<String, Object> getWaitingToken();
+    List<ActiveToken> getWaitingToken(String key);
 
-    public Set<Object> getAllTokens(String tokenKey);
+    Set<String> getAllTokens(String tokenKey);
 
-    public Boolean isActiveToken(String key, long memberId);
+    Boolean isActiveToken(String key, long memberId);
 
-    public void deleteActiveToken(String key, Object value);
+    void deleteActiveToken(String key, String value);
 
-    public void addActiveToken(String key, Object value);
+    void addActiveToken(String key, String value);
 
     default Waiting findByTokenOrThrow(String waitigToken){
         return null;

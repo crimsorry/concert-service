@@ -3,37 +3,32 @@ package hhplus.tdd.concert.app.application.service.waiting;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
-import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
 import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import hhplus.tdd.concert.config.types.SeatStatus;
-import hhplus.tdd.concert.config.types.WaitingStatus;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @Slf4j
 @SpringBootTest
@@ -78,21 +73,17 @@ public class WaitingServiceIntegrationTest {
         int maxMember = 10;
 
         for (int i = 0; i < totalMembers; i++) {
-//            Waiting waiting = new Waiting(1L + i, Member.builder().memberId(1L + i).memberName("김소리" + i).build(), "waitingTokenTest" + i , WaitingStatus.STAND_BY, LocalDateTime.now(), LocalDateTime.now().plusMinutes(30));
-//            waitingRepository.save(waiting);
-            waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken + i);
+            waitingRepository.addWaitingToken(testBase.WAITING_TOKEN_KEY, testBase.waitingToken + i + ":" + i, System.currentTimeMillis());
         }
 
         // when
         waitingService.activeWaiting();
-
-        // then
-//        List<Waiting> activeWaitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.ACTIVE, PageRequest.of(0, totalMembers));
-//        List<Waiting> standByWaitings = waitingRepository.findByStatusOrderByWaitingId(WaitingStatus.STAND_BY, PageRequest.of(0, totalMembers));
+        List<ActiveToken> waitingTokenList = waitingRepository.getWaitingToken(testBase.WAITING_TOKEN_KEY);
+        List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(testBase.ACTIVE_TOKEN_KEY);
 
         // 결과 검증
-//        assertEquals(maxMember, activeWaitings.size()); // 10명 ACTIVE
-//        assertEquals(totalMembers - maxMember, standByWaitings.size()); // 나머지 1명 STAND_BY
+        assertEquals(maxMember, activeTokenList.size()); // 10명 ACTIVE
+        assertEquals(totalMembers - maxMember, waitingTokenList.size()); // 나머지 1명 STAND_BY
     }
 
     @Test

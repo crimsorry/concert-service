@@ -58,7 +58,7 @@ public class WaitingServiceUnitTest {
 
     @Test
     public void 유저_대기열_순서_조회() {
-        Set<Object> mockTokenSet = new HashSet<>();
+        Set<String> mockTokenSet = new HashSet<>();
         mockTokenSet.add("token1:123");
         mockTokenSet.add("token2:456");
         mockTokenSet.add("token3:789");

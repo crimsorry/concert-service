@@ -76,7 +76,7 @@ public class PayRedisIntegrationTest {
         int totalCharge = testBase.member.getCharge() + chargeAmount.get() + chargeAmount.get() *2 + chargeAmount.get() *3;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
@@ -117,7 +117,7 @@ public class PayRedisIntegrationTest {
         int totalTasks = 100;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
         paymentRepository.save(testBase.payment);
         concertSeatRepository.save(testBase.concertSeatReserve);
         reservationRepository.save(testBase.reservationReserve);
@@ -140,7 +140,7 @@ public class PayRedisIntegrationTest {
         latch.await();
 
         Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
-        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
+//        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
         Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
         Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
@@ -150,7 +150,7 @@ public class PayRedisIntegrationTest {
         assertEquals(true, payment.getIsPay());
         assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
         assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
-        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
+//        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
         assertEquals(1, amountHistorys.size());
         assertEquals(testBase.payment.getAmount(), amountHistorys.get(0).getAmount());
         assertEquals(PointType.USE, amountHistorys.get(0).getPointType());

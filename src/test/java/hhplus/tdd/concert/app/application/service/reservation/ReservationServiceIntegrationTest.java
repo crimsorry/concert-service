@@ -70,24 +70,27 @@ public class ReservationServiceIntegrationTest {
         int capacity = 1;
         AtomicInteger failCnt = new AtomicInteger();
         List<Member> memberList = new ArrayList<>();
-        List<Waiting> waitingList = new ArrayList<>();
+//        List<Waiting> waitingList = new ArrayList<>();
         IntStream.range(0, totalTasks).forEach(i -> {
             Member member = Member.builder().memberName("김소리" + i).charge(15000).build();
             memberList.add(member);
-            waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
+//            waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
         });
         memberRepository.saveAll(memberList);
-        waitingRepository.saveAll(waitingList);
+        IntStream.range(0, totalTasks).forEach(i -> {
+            waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken + i);
+        });
         concertSeatRepository.save(testBase.concertSeatStandBy);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
 
         // when
-        for (Waiting waiting : waitingList) {
+        for (int i=0; i<totalTasks; i++) {
+            int finalI = i;
             executorService.execute(() -> {
                 try {
-                    reservationService.processReserve(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
+                    reservationService.processReserve(testBase.waitingToken + finalI, testBase.concertSeatStandBy.getSeatId());
                 } catch (Exception e) {
                     if (e.getMessage().equals("이미 임시배정된 좌석입니다.")) failCnt.getAndIncrement();
                 } finally {
@@ -121,24 +124,27 @@ public class ReservationServiceIntegrationTest {
         int capacity = 1;
         AtomicInteger failCnt = new AtomicInteger();
         List<Member> memberList = new ArrayList<>();
-        List<Waiting> waitingList = new ArrayList<>();
+//        List<Waiting> waitingList = new ArrayList<>();
         IntStream.range(0, totalTasks).forEach(i -> {
             Member member = Member.builder().memberName("김소리" + i).charge(15000).build();
             memberList.add(member);
-            waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
+//            waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
         });
         memberRepository.saveAll(memberList);
-        waitingRepository.saveAll(waitingList);
+        IntStream.range(0, totalTasks).forEach(i -> {
+            waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken + i);
+        });
         concertSeatRepository.save(testBase.concertSeatStandBy);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
 
         // when
-        for (Waiting waiting : waitingList) {
+        for (int i=0; i<totalTasks; i++) {
+            int finalI = i;
             executorService.execute(() -> {
                 try {
-                    reservationService.processReserveOptimisticLock(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
+                    reservationService.processReserveOptimisticLock(testBase.waitingToken + finalI, testBase.concertSeatStandBy.getSeatId());
                 } catch (RuntimeException e) {
                     failCnt.getAndIncrement();
                 } finally {
@@ -172,24 +178,27 @@ public class ReservationServiceIntegrationTest {
         int capacity = 1;
         AtomicInteger failCnt = new AtomicInteger();
         List<Member> memberList = new ArrayList<>();
-        List<Waiting> waitingList = new ArrayList<>();
+//        List<Waiting> waitingList = new ArrayList<>();
         IntStream.range(0, totalTasks).forEach(i -> {
             Member member = Member.builder().memberName("김소리" + i).charge(15000).build();
             memberList.add(member);
-            waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
+//            waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
         });
         memberRepository.saveAll(memberList);
-        waitingRepository.saveAll(waitingList);
+        IntStream.range(0, totalTasks).forEach(i -> {
+            waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken + i);
+        });
         concertSeatRepository.save(testBase.concertSeatStandBy);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
 
         // when
-        for (Waiting waiting : waitingList) {
+        for (int i=0; i<totalTasks; i++) {
+            int finalI = i;
             executorService.execute(() -> {
                 try {
-                    reservationService.processReserveOptimisticLockRetry(waiting.getToken(), testBase.concertSeatStandBy.getSeatId());
+                    reservationService.processReserveOptimisticLockRetry(testBase.waitingToken + finalI, testBase.concertSeatStandBy.getSeatId());
                 } catch (RuntimeException e) {
                     failCnt.getAndIncrement();
                 } finally {

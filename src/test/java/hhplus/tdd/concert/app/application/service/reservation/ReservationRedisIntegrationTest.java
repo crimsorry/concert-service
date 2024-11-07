@@ -76,7 +76,11 @@ public class ReservationRedisIntegrationTest {
             waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
         });
         memberRepository.saveAll(memberList);
-        waitingRepository.saveAll(waitingList);
+
+        IntStream.range(0, totalTasks).forEach(i -> {
+            waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken + i);
+        });
+
         concertSeatRepository.save(testBase.concertSeatStandBy);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);

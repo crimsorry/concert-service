@@ -15,11 +15,11 @@ public class WaitingRedisRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void addWaitingToken(String key, String value, Long currentTime) {
+    public void addWaitingToken(String key, Object value, Long currentTime) {
         redisTemplate.opsForZSet().add(key, value, currentTime);
     }
 
-    public Long getWaitingTokenScore(String key, String value) {
+    public Long getWaitingTokenScore(String key, Object value) {
         return redisTemplate.opsForZSet().rank(key, value);
     }
 
@@ -56,7 +56,7 @@ public class WaitingRedisRepository {
         return redisTemplate.opsForSet().isMember(key, memberId);
     }
 
-    public void deleteActiveToken(String key, String value) {
+    public void deleteActiveToken(String key, Object value) {
         redisTemplate.opsForSet().remove(key, value);
     }
 

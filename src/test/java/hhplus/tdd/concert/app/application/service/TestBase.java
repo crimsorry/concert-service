@@ -17,6 +17,8 @@ import java.util.List;
 public class TestBase {
 
     // given
+    public final String WAITING_TOKEN_KEY = "waitingToken";
+    public final String ACTIVE_TOKEN_KEY = "activeToken";
     public final int amount = 500;
     public final String title = "드라큘라";
     public final String waitingToken = "testToken";

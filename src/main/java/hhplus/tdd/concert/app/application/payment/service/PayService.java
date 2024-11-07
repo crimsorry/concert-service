@@ -41,8 +41,7 @@ public class PayService {
     /* 잔액 충전 */
     @Transactional
     public UpdateChargeCommand chargeAmount(String waitingToken, int amount){
-        Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
 
         long memberId = waiting.getMember().getMemberId();
         Member member = memberRepository.findByMemberIdWithPessimisticLock(memberId);
@@ -59,8 +58,7 @@ public class PayService {
 
     @Transactional
     public UpdateChargeCommand chargeAmountOptimisticLock(String waitingToken, int amount){
-        Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
 
         long memberId = waiting.getMember().getMemberId();
         Member member = memberRepository.findByMemberIdWithOptimisticLock(memberId);
@@ -86,8 +84,8 @@ public class PayService {
             backoff = @Backoff(100) // delay 0.1초
     )
     public UpdateChargeCommand chargeAmountOptimisticLockRetry(String waitingToken, int amount){
-        Waiting waiting = waitingRepository.findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
+        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
+
         long memberId = waiting.getMember().getMemberId();
         Member member = memberRepository.findByMemberId(memberId);
 

@@ -1,8 +1,11 @@
 package hhplus.tdd.concert.app.domain.waiting.repository;
 
+import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
+import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 
+import java.util.List;
 import java.util.Set;
 
 public interface WaitingRepository {
@@ -17,16 +20,21 @@ public interface WaitingRepository {
 
     public void deleteWaitingToken(String key, Object value);
 
-    public void addActiveToken(String key, Object value);
+    public List<ActiveToken> getActiveToken(String key);
 
     public ZSetOperations<String, Object> getWaitingToken();
 
     public Set<Object> getAllTokens(String tokenKey);
 
-    public SetOperations<String, Object> getActiveToken(String key);
-
     public Boolean isActiveToken(String key, long memberId);
 
     public void deleteActiveToken(String key, Object value);
+
+    public void addActiveToken(String key, Object value);
+
+    default Waiting findByTokenOrThrow(String waitigToken){
+        return null;
+    }
+
 
 }

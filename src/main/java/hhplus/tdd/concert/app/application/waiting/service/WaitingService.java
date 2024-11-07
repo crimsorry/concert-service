@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -79,17 +80,21 @@ public class WaitingService {
     /* 대기열 만료 */
     @Transactional
     public void expiredWaiting(){
-        List<Waiting> waitings = waitingRepository.findByExpiredAtLessThan(LocalDateTime.now());
-        for(Waiting waiting : waitings){
-            Member member = waiting.getMember();
-            Payment payment = paymentRepository.findByMember(member);
-            ConcertSeat concertSeat = payment.getReservation().getSeat();
-            Reservation reservation = payment.getReservation();
+        List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(ACTIVE_TOKEN_KEY);
+        for(ActiveToken activeToken : activeTokenList){
+            String[] sp = activeToken.token().split(":");
+            Long expireTime = Long.parseLong(sp[2]);
+            if(System.currentTimeMillis() < expireTime){
+                Member member = memberRepository.findByMemberId(Long.parseLong(sp[1]));
+                Payment payment = paymentRepository.findByMember(member);
+                ConcertSeat concertSeat = payment.getReservation().getSeat();
+                Reservation reservation = payment.getReservation();
 
-            // 결제 실패 처리
-            concertSeat.open();
-            reservation.cancel();
-            waiting.stop();
+                // 결제 실패 처리
+                concertSeat.open();
+                reservation.cancel();
+                waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.token());
+            }
         }
     }
 
@@ -103,7 +108,7 @@ public class WaitingService {
             // waiting 삭제
             waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, token);
             // active insert
-            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, token);
+            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, token + ":" + System.currentTimeMillis());
         }
     }
 

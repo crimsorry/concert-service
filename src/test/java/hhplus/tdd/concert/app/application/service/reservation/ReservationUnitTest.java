@@ -47,7 +47,7 @@ public class ReservationUnitTest {
     public void 좌석_예약() {
         // when
         when(concertSeatRepository.findBySeatIdWithPessimisticLock(testBase.concertSeatStandBy.getSeatId())).thenReturn(testBase.concertSeatStandBy);
-        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken).get()).thenReturn(testBase.activeToken);
         when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> {
             Reservation reservation = invocation.getArgument(0);
             return reservation.builder()
@@ -73,7 +73,7 @@ public class ReservationUnitTest {
     @Test
     public void 좌석_예약_리스트() {
         // when
-        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waiting);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken).get()).thenReturn(testBase.activeToken);
         when(reservationRepository.findByMember(testBase.member)).thenReturn(testBase.reservations);
 
         // then

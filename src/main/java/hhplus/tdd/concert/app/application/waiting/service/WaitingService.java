@@ -9,7 +9,7 @@ import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
-import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.config.exception.FailException;
 import jakarta.transaction.Transactional;
@@ -77,10 +77,8 @@ public class WaitingService {
     public void expiredWaiting(){
         List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(ACTIVE_TOKEN_KEY);
         for(ActiveToken activeToken : activeTokenList){
-            String[] sp = activeToken.token().split(":");
-            Long expireTime = Long.parseLong(sp[2]);
-            if(System.currentTimeMillis() > expireTime){
-                Member member = memberRepository.findByMemberId(Long.parseLong(sp[1]));
+            if(System.currentTimeMillis() > activeToken.getExpiredAt()){
+                Member member = memberRepository.findByMemberId(activeToken.getMemberId());
                 Payment payment = paymentRepository.findByMember(member);
                 ConcertSeat concertSeat = payment.getReservation().getSeat();
                 Reservation reservation = payment.getReservation();
@@ -88,7 +86,7 @@ public class WaitingService {
                 // 결제 실패 처리
                 concertSeat.open();
                 reservation.cancel();
-                waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.token());
+                waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
             }
         }
     }
@@ -100,9 +98,8 @@ public class WaitingService {
         List<ActiveToken> waitingTokenList = waitingRepository.getWaitingTokenRange(WAITING_TOKEN_KEY, 0, maxMember-1);
         // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
         for (ActiveToken activeToken : waitingTokenList) {
-            String token = activeToken.token();
-            waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, token);
-            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, token + ":" + System.currentTimeMillis() + (5 * 60 * 1000));
+            waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId());
+            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + System.currentTimeMillis() + (5 * 60 * 1000));
         }
     }
 

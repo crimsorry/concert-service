@@ -1,9 +1,9 @@
 package hhplus.tdd.concert.app.domain.waiting.repository;
 
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
-import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface WaitingRepository {
@@ -26,9 +26,7 @@ public interface WaitingRepository {
 
     void addActiveToken(String key, String value);
 
-    default Waiting findByTokenOrThrow(String waitigToken){
-        return null;
-    }
+    Optional<ActiveToken> findByTokenOrThrow(String waitigToken);
 
 
 }

@@ -7,13 +7,14 @@ import hhplus.tdd.concert.app.domain.concert.entity.Concert;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertScheduleRepository;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
+import hhplus.tdd.concert.config.exception.FailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +40,8 @@ public class ConcertService {
 
     /* 예약 가능 날짜 조회 */
     public List<ConcertScheduleQuery> loadConcertDate(String waitingToken){
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        Waiting.checkWaitingStatusActive(waiting);
+        waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
         LocalDateTime now = LocalDateTime.now();
         List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(now);
@@ -49,8 +50,8 @@ public class ConcertService {
 
     /* 예약 가능 좌석 조회 */
     public List<ConcertSeatQuery> loadConcertSeat(String waitingToken, long scheduleId){
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        Waiting.checkWaitingStatusActive(waiting);
+        waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
         ConcertSchedule concertSchedule = concertScheduleRepository.findByScheduleId(scheduleId);
         ConcertSchedule.checkConcertScheduleExistence(concertSchedule);

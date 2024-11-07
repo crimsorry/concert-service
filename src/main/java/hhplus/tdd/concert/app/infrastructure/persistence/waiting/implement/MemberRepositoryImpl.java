@@ -1,17 +1,12 @@
 package hhplus.tdd.concert.app.infrastructure.persistence.waiting.implement;
 
 import hhplus.tdd.concert.app.domain.waiting.entity.Member;
-import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
 import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
-import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.jpa.MemberJpaRepository;
-import hhplus.tdd.concert.app.infrastructure.persistence.waiting.dataaccess.redis.WaitingRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor

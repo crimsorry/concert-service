@@ -4,16 +4,20 @@ import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.waiting.entity.Member;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
+import hhplus.tdd.concert.config.exception.FailException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -30,6 +34,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
     private final WaitingRepository waitingRepository;
+    private final MemberRepository memberRepository;
 
     /* 좌석 예약 요청 */
     @Transactional
@@ -41,22 +46,22 @@ public class ReservationService {
         ConcertSeat.checkConcertSeatExistence(concertSeat);
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        Waiting.checkWaitingStatusActive(waiting);
-        Member member = waiting.getMember();
+        ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
+        long memberId = activeToken.getMemberId();
+        Member member = memberRepository.findByMemberId(memberId);
 
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
         Payment payment = Payment.generatePayment(member, reservation);
 
         // 좌석 임시배정
         concertSeat.pending();
-        waiting.limitPayTime();
+//        waiting.limitPayTime();
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
         return PayCommand.from(payment, reservation);
     }
-
 
     @Transactional
     public PayCommand processReserveOptimisticLock(String waitingToken, Long seatId){
@@ -66,16 +71,17 @@ public class ReservationService {
         ConcertSeat.checkConcertSeatExistence(concertSeat);
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        Waiting.checkWaitingStatusActive(waiting);
-        Member member = waiting.getMember();
+        ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
+        long memberId = activeToken.getMemberId();
+        Member member = memberRepository.findByMemberId(memberId);
 
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
         Payment payment = Payment.generatePayment(member, reservation);
 
         // 좌석 임시배정
         concertSeat.pending();
-        waiting.limitPayTime();
+//        waiting.limitPayTime();
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
@@ -95,16 +101,17 @@ public class ReservationService {
         ConcertSeat.checkConcertSeatExistence(concertSeat);
         ConcertSeat.checkConcertSeatStatus(concertSeat);
 
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        Waiting.checkWaitingStatusActive(waiting);
-        Member member = waiting.getMember();
+        ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
+        long memberId = activeToken.getMemberId();
+        Member member = memberRepository.findByMemberId(memberId);
 
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
         Payment payment = Payment.generatePayment(member, reservation);
 
         // 좌석 임시배정
         concertSeat.pending();
-        waiting.limitPayTime();
+//        waiting.limitPayTime();
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
@@ -113,8 +120,10 @@ public class ReservationService {
 
     /* 예약 조회 */
     public List<ReservationQuery> loadReservation(String waitingToken){
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        Member member = waiting.getMember();
+        ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
+        long memberId = activeToken.getMemberId();
+        Member member = memberRepository.findByMemberId(memberId);
 
         List<Reservation> reservations = reservationRepository.findByMember(member);
         return ReservationQuery.from(reservations);

@@ -8,7 +8,7 @@ import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
-import hhplus.tdd.concert.app.domain.waiting.model.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.config.types.ReserveStatus;
@@ -77,7 +77,7 @@ public class WaitingServiceIntegrationTest {
         }
 
         // when
-        waitingService.activeWaiting();
+        waitingService.activeWaiting(); // maxMember 값 조절을 통한 테스트
         List<ActiveToken> waitingTokenList = waitingRepository.getWaitingToken(testBase.WAITING_TOKEN_KEY);
         List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(testBase.ACTIVE_TOKEN_KEY);
 
@@ -149,7 +149,7 @@ public class WaitingServiceIntegrationTest {
 
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                waitingService.activeWaiting();
+                waitingService.activeWaiting(); // maxMember 값 조절을 통한 테스트
             } finally {
                 latch.countDown();
                 if (latch.getCount() == 0) {

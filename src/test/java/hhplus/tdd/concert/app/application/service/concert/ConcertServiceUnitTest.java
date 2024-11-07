@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,7 +60,7 @@ public class ConcertServiceUnitTest {
     @Test
     public void 예약_가능_날짜_조회() {
         // when
-        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(Optional.of(testBase.activeToken));
         when(concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(any(LocalDateTime.class)))
                 .thenReturn(testBase.concertSchedules);
 
@@ -74,7 +75,7 @@ public class ConcertServiceUnitTest {
     @Test
     public void 예약_가능_좌석_조회() {
         // when
-        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(Optional.of(testBase.activeToken));
         when(concertScheduleRepository.findByScheduleId(testBase.concertSchedule.getScheduleId())).thenReturn(testBase.concertSchedule);
         when(concertSeatRepository.findBySchedule(testBase.concertSchedule)).thenReturn(testBase.concertSeats);
 

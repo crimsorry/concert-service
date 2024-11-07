@@ -7,6 +7,7 @@ import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
+import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import hhplus.tdd.concert.config.types.SeatStatus;
 import hhplus.tdd.concert.config.types.WaitingStatus;
@@ -30,6 +31,8 @@ public class TestBase {
     public final Waiting waitingActive = new Waiting(1L, member, waitingToken, WaitingStatus.ACTIVE, now, now.plusMinutes(30));
     public final Waiting waitingActive2 = new Waiting(2L, member2, waitingToken2, WaitingStatus.ACTIVE, now, now.plusMinutes(30));
     public final Waiting waitingExpired = new Waiting(1L, member, waitingToken, WaitingStatus.ACTIVE, now.minusMinutes(30), now.minusMinutes(10));
+    public final ActiveToken waitToken = new ActiveToken(WAITING_TOKEN_KEY, 1L, 0L);
+    public final ActiveToken activeToken = new ActiveToken(ACTIVE_TOKEN_KEY, 1L, System.currentTimeMillis());
     public final Concert concert = new Concert(1L, title, "부산문화회관 대극장");
     public final ConcertSchedule concertSchedule = new ConcertSchedule(1L, concert, now, now.minusDays(1), now.plusDays(1));
     public final ConcertSeat concertSeatReserve = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.RESERVED);

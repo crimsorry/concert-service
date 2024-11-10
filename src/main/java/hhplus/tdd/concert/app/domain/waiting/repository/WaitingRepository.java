@@ -1,35 +1,32 @@
 package hhplus.tdd.concert.app.domain.waiting.repository;
 
-import hhplus.tdd.concert.app.domain.member.entity.Member;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
-import hhplus.tdd.concert.common.types.WaitingStatus;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-@Repository
-public interface WaitingRepository extends JpaRepository<Waiting, Long> {
+public interface WaitingRepository {
 
-    List<Waiting> findAll();
+    void addWaitingToken(String key, String value, Long currentTime);
 
-    Waiting findByWaitingId(Long waitingId);
+    Long getWaitingTokenScore(String key, String value);
 
-    Waiting findByMemberAndStatusNot(Member member, WaitingStatus status);
+    List<ActiveToken> getWaitingTokenRange(String key, int start, int end);
 
-    List<Waiting> findByExpiredAtLessThan(LocalDateTime localDateTime);
+    void deleteWaitingToken(String key, String value);
 
-    int countByWaitingIdLessThanAndStatus(long waitingId, WaitingStatus statue);
+    List<ActiveToken> getActiveToken(String key);
 
-    List<Waiting> findByStatusOrderByWaitingId(WaitingStatus statue, Pageable pageable);
+    List<ActiveToken> getWaitingToken(String key);
 
-    Waiting findByToken(String waitingToken);
+    Set<String> getAllTokens(String tokenKey);
 
-    default Waiting findByTokenOrThrow(String waitingToken) {
-        Waiting waiting = findByToken(waitingToken);
-        Waiting.checkWaitingExistence(waiting);
-        return waiting;
-    }
+    void deleteActiveToken(String key, String value);
+
+    void addActiveToken(String key, String value);
+
+    Optional<ActiveToken> findByTokenOrThrow(String waitigToken);
+
+
 }

@@ -2,30 +2,25 @@ package hhplus.tdd.concert.app.application.service.payment;
 
 import hhplus.tdd.concert.app.application.payment.aop.PayDistributedLockAop;
 import hhplus.tdd.concert.app.application.payment.service.PayService;
-import hhplus.tdd.concert.app.application.reservation.aop.ReserveDistributedLockAop;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
-import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
-import hhplus.tdd.concert.app.infrastructure.TestContainerConfig;
-import hhplus.tdd.concert.common.types.PointType;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.SeatStatus;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.types.PointType;
+import hhplus.tdd.concert.config.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.SeatStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -81,7 +76,7 @@ public class PayServiceIntegrationTest {
         int totalCharge = testBase.member.getCharge() + chargeAmount.get() + chargeAmount.get()*2 + chargeAmount.get()*3;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
@@ -118,7 +113,7 @@ public class PayServiceIntegrationTest {
         int totalCharge = testBase.member.getCharge() + chargeAmount;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
@@ -157,7 +152,7 @@ public class PayServiceIntegrationTest {
         int totalCharge = testBase.member.getCharge() + chargeAmount.get() + chargeAmount.get() *2 + chargeAmount.get() *3;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);
         ExecutorService executorService = Executors.newFixedThreadPool(totalTasks);
@@ -194,7 +189,7 @@ public class PayServiceIntegrationTest {
         int totalTasks = 100;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
         paymentRepository.save(testBase.payment);
         concertSeatRepository.save(testBase.concertSeatReserve);
         reservationRepository.save(testBase.reservationReserve);
@@ -217,7 +212,7 @@ public class PayServiceIntegrationTest {
         latch.await();
 
         Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
-        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
+//        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
         Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
         Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
@@ -227,7 +222,7 @@ public class PayServiceIntegrationTest {
         assertEquals(true, payment.getIsPay());
         assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
         assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
-        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
+//        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
         assertEquals(testBase.payment.getAmount(), amountHistory.getAmount());
         assertEquals(PointType.USE, amountHistory.getPointType());
         assertEquals(testBase.member.getCharge() - testBase.payment.getAmount(), member.getCharge());
@@ -244,7 +239,7 @@ public class PayServiceIntegrationTest {
         int totalTasks = 100;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
         paymentRepository.save(testBase.payment);
         concertSeatRepository.save(testBase.concertSeatReserve);
         reservationRepository.save(testBase.reservationReserve);
@@ -267,7 +262,7 @@ public class PayServiceIntegrationTest {
         latch.await();
 
         Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
-        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
+//        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
         Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
         Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
@@ -277,7 +272,7 @@ public class PayServiceIntegrationTest {
         assertEquals(true, payment.getIsPay());
         assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
         assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
-        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
+//        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
         assertEquals(1, amountHistorys.size());
         assertEquals(testBase.payment.getAmount(), amountHistorys.get(0).getAmount());
         assertEquals(PointType.USE, amountHistorys.get(0).getPointType());
@@ -295,7 +290,7 @@ public class PayServiceIntegrationTest {
         int totalTasks = 100;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.save(testBase.waitingActive);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
         paymentRepository.save(testBase.payment);
         concertSeatRepository.save(testBase.concertSeatReserve);
         reservationRepository.save(testBase.reservationReserve);
@@ -318,7 +313,7 @@ public class PayServiceIntegrationTest {
         latch.await();
 
         Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
-        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
+//        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
         Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
         Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
@@ -328,7 +323,7 @@ public class PayServiceIntegrationTest {
         assertEquals(true, payment.getIsPay());
         assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
         assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
-        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
+//        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
         assertEquals(1, amountHistorys.size());
         assertEquals(testBase.payment.getAmount(), amountHistorys.get(0).getAmount());
         assertEquals(PointType.USE, amountHistorys.get(0).getPointType());

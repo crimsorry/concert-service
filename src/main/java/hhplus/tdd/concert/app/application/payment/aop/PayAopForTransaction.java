@@ -3,17 +3,20 @@ package hhplus.tdd.concert.app.application.payment.aop;
 import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
-import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
-import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.common.types.PointType;
+import hhplus.tdd.concert.config.exception.FailException;
+import hhplus.tdd.concert.config.types.PointType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +32,10 @@ public class PayAopForTransaction {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public UpdateChargeCommand processChargeAmount(final String waitingToken, final int amount) throws Throwable {
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        long memberId = waiting.getMember().getMemberId();
-        Member member = memberRepository.findByMemberId(memberId);
+        ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
+        long memberId = activeToken.getMemberId();
+        Member member = memberRepository.findByMemberIdWithPessimisticLock(memberId);
 
         AmountHistory.checkAmountMinusOrZero(amount);
         Member.checkMemberCharge(member, amount);
@@ -45,9 +49,11 @@ public class PayAopForTransaction {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ReservationCommand processPay(final String waitingToken, final long payId) throws Throwable {
         // 대기열 존재 여부 확인
-        Waiting waiting = waitingRepository.findByTokenOrThrow(waitingToken);
-        Waiting.checkWaitingStatusActive(waiting);
-        Member member = waiting.getMember();
+        ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
+                .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
+
+        long memberId = activeToken.getMemberId();
+        Member member = memberRepository.findByMemberIdWithPessimisticLock(memberId);
 
         // 결제 정보
         Payment payment = paymentRepository.findByPayIdWithPessimisticLock(payId);
@@ -64,8 +70,8 @@ public class PayAopForTransaction {
         concertSeat.close();
         reservation.complete();
         member.withdraw(payment.getAmount());
-        waiting.stop();
-        AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, waiting.getMember());
+//        waiting.stop();
+        AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
         return ReservationCommand.from(reservation);
     }

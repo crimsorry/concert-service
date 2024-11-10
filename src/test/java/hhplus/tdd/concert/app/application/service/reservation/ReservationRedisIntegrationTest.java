@@ -1,19 +1,18 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
 import hhplus.tdd.concert.app.application.reservation.aop.ReserveDistributedLockAop;
-import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.member.entity.Member;
-import hhplus.tdd.concert.app.domain.member.repository.MemberRepository;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.app.infrastructure.TestContainerConfig;
-import hhplus.tdd.concert.common.types.ReserveStatus;
-import hhplus.tdd.concert.common.types.WaitingStatus;
+import hhplus.tdd.concert.config.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.WaitingStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -77,7 +76,11 @@ public class ReservationRedisIntegrationTest {
             waitingList.add(Waiting.builder().token("sample-token" + i).member(member).status(WaitingStatus.ACTIVE).createAt(testBase.now.minusMinutes(30)).expiredAt(testBase.now.plusMinutes(30)).build());
         });
         memberRepository.saveAll(memberList);
-        waitingRepository.saveAll(waitingList);
+
+        IntStream.range(0, totalTasks).forEach(i -> {
+            waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken + i);
+        });
+
         concertSeatRepository.save(testBase.concertSeatStandBy);
 
         CountDownLatch latch = new CountDownLatch(totalTasks);

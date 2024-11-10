@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.app.api.dto.response.concert;
 
 import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
-import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.config.types.SeatStatus;
 
 public record ConcertSeatRes(
         Long seatId,

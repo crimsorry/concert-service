@@ -9,7 +9,7 @@ import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.common.types.ReserveStatus;
+import hhplus.tdd.concert.config.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +43,7 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_충전_성공() {
         // when
-        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken).get()).thenReturn(testBase.activeToken);
         when(amountHistoryRepository.save(any(AmountHistory.class))).thenAnswer(invocation -> {
             AmountHistory amountHistory = invocation.getArgument(0);
             return amountHistory.builder()
@@ -63,7 +63,7 @@ class PayServiceUnitTest {
     @Test
     public void 잔액_조회() {
         // when
-        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken).get()).thenReturn(testBase.activeToken);
 
         // then
         LoadAmountQuery result = payService.loadAmount(testBase.waitingToken);
@@ -75,7 +75,7 @@ class PayServiceUnitTest {
     @Test
     public void 결제_처리_성공() {
         // when
-        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(testBase.waitingActive);
+        when(waitingRepository.findByTokenOrThrow(testBase.waitingToken).get()).thenReturn(testBase.activeToken);
         when(paymentRepository.findByPayId(eq(1L))).thenReturn(testBase.payment);
 
         // then

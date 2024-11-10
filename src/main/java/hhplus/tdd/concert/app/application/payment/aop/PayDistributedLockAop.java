@@ -3,7 +3,7 @@ package hhplus.tdd.concert.app.application.payment.aop;
 import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.exception.FailException;
+import hhplus.tdd.concert.config.exception.FailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Around;
@@ -28,7 +28,7 @@ public class PayDistributedLockAop {
     private final RedissonClient redissonClient; // RedissonClient를 통한 Redis 분산 락 관리
     private final PayAopForTransaction aopTransaction; // 트랜잭션 내에서 joinPoint를 실행하는 헬퍼 클래스
 
-    @Around("@annotation(hhplus.tdd.concert.common.aop.DistributedLock) && args(waitingToken, amount, ..)")
+    @Around("@annotation(hhplus.tdd.concert.config.aop.DistributedLock) && args(waitingToken, amount, ..)")
     public UpdateChargeCommand chargeAmountRedisPubSub(String waitingToken, int amount){
         String lockName = REDISSON_LOCK_PREFIX + "user_id:" + waitingToken;
         RLock lock = redissonClient.getLock(lockName);
@@ -51,7 +51,7 @@ public class PayDistributedLockAop {
         }
     }
 
-    @Around("@annotation(hhplus.tdd.concert.common.aop.DistributedLock) && args(waitingToken, payId, ..)")
+    @Around("@annotation(hhplus.tdd.concert.config.aop.DistributedLock) && args(waitingToken, payId, ..)")
     public ReservationCommand processPayRedisPubSub(String waitingToken, long payId){
         String lockName = REDISSON_LOCK_PREFIX + "user_id:" + waitingToken;
         RLock lock = redissonClient.getLock(lockName);

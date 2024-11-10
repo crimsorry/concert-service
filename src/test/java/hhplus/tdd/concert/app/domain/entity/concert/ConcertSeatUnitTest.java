@@ -2,8 +2,8 @@ package hhplus.tdd.concert.app.domain.entity.concert;
 
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.common.config.exception.FailException;
-import hhplus.tdd.concert.common.types.SeatStatus;
+import hhplus.tdd.concert.config.exception.FailException;
+import hhplus.tdd.concert.config.types.SeatStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

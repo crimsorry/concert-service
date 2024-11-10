@@ -4,6 +4,12 @@ import hhplus.tdd.concert.app.domain.concert.entity.Concert;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ConcertRepository extends JpaRepository<Concert, Long> {
+import java.util.List;
+
+public interface ConcertRepository  {
+
+    Concert save(Concert concert);
+
+    List<Concert> findAll();
+
 }

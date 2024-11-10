@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface ConcertSeatRepository extends JpaRepository<ConcertSeat, Long> {
+public interface ConcertSeatRepository {
+
+    ConcertSeat save(ConcertSeat concertSeat);
 
     ConcertSeat findBySeatId(Long seatId);
 

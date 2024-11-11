@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.application.reservation.aop;
 
-import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
+import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
@@ -30,7 +30,7 @@ public class ReserveAopForTransaction {
     private final MemberRepository memberRepository;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public PayCommand processChargeAmount(final String waitingToken, final long seatId) throws Throwable {
+    public PayDTO processChargeAmount(final String waitingToken, final long seatId) throws Throwable {
         ConcertSeat concertSeat = concertSeatRepository.findBySeatId(seatId);
 
         // 좌석 상태 확인
@@ -53,7 +53,7 @@ public class ReserveAopForTransaction {
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        return PayCommand.from(payment, reservation);
+        return PayDTO.from(payment, reservation);
     }
 
 

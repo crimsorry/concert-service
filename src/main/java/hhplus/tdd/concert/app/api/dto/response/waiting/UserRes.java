@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.waiting;
 
-import hhplus.tdd.concert.app.application.waiting.dto.MemberQuery;
+import hhplus.tdd.concert.app.application.waiting.dto.MemberDTO;
 
 public record UserRes(
         long memberId,
@@ -8,7 +8,7 @@ public record UserRes(
         Integer charge
 ) {
 
-    public static UserRes from(MemberQuery dto) {
+    public static UserRes from(MemberDTO dto) {
         return new UserRes(
                 dto.memberId(),
                 dto.memberName(),

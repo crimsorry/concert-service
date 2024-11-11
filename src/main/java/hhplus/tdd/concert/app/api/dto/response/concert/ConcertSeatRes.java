@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.concert;
 
-import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatDTO;
 import hhplus.tdd.concert.config.types.SeatStatus;
 
 public record ConcertSeatRes(
@@ -9,12 +9,12 @@ public record ConcertSeatRes(
         Integer amount,
         SeatStatus seatStatus
 ) {
-    public static ConcertSeatRes from(ConcertSeatQuery concertSeatQuery) {
+    public static ConcertSeatRes from(ConcertSeatDTO concertSeatDTO) {
         return new ConcertSeatRes(
-                concertSeatQuery.seatId(),
-                concertSeatQuery.seatCode(),
-                concertSeatQuery.amount(),
-                concertSeatQuery.seatStatus()
+                concertSeatDTO.seatId(),
+                concertSeatDTO.seatCode(),
+                concertSeatDTO.amount(),
+                concertSeatDTO.seatStatus()
         );
     }
 }

@@ -3,7 +3,8 @@ package hhplus.tdd.concert.app.api.v1;
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import hhplus.tdd.concert.app.api.dto.response.reservation.ReservationRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.PayRes;
-import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
+import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
 import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +51,7 @@ public class ReservationController {
             @Schema(description = "콘서트 좌석 ID")
             @PathVariable("seatId") long seatId
     ){
-        PayCommand restResponse = reservationService.processReserve(waitingToken, seatId);
+        PayDTO restResponse = reservationService.processReserve(waitingToken, seatId);
         return new ResponseEntity<>(PayRes.from(restResponse), HttpStatus.OK);
     }
 
@@ -70,7 +71,7 @@ public class ReservationController {
     public ResponseEntity<List<ReservationRes>> getReservation(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        List<ReservationQuery> restResponse = reservationService.loadReservation(waitingToken);
+        List<ReservationDTO> restResponse = reservationService.loadReservation(waitingToken);
         return new ResponseEntity<>(ReservationRes.fromQuery(restResponse), HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.app.application.reservation.service;
 
-import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
+import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
@@ -38,7 +39,7 @@ public class ReservationService {
 
     /* 좌석 예약 요청 */
     @Transactional
-    public PayCommand processReserve(String waitingToken, Long seatId){
+    public PayDTO processReserve(String waitingToken, Long seatId){
         // 비관적 락
         ConcertSeat concertSeat = concertSeatRepository.findBySeatIdWithPessimisticLock(seatId);
 
@@ -60,11 +61,11 @@ public class ReservationService {
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        return PayCommand.from(payment, reservation);
+        return PayDTO.from(payment, reservation);
     }
 
     @Transactional
-    public PayCommand processReserveOptimisticLock(String waitingToken, Long seatId){
+    public PayDTO processReserveOptimisticLock(String waitingToken, Long seatId){
         ConcertSeat concertSeat = concertSeatRepository.findBySeatIdWithOptimisticLock(seatId);
 
         // 좌석 상태 확인
@@ -85,7 +86,7 @@ public class ReservationService {
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        return PayCommand.from(payment, reservation);
+        return PayDTO.from(payment, reservation);
     }
 
     @Transactional
@@ -94,7 +95,7 @@ public class ReservationService {
             maxAttempts = 100,
             backoff = @Backoff(100)
     )
-    public PayCommand processReserveOptimisticLockRetry(String waitingToken, Long seatId){
+    public PayDTO processReserveOptimisticLockRetry(String waitingToken, Long seatId){
         ConcertSeat concertSeat = concertSeatRepository.findBySeatIdWithOptimisticLock(seatId);
 
         // 좌석 상태 확인
@@ -115,18 +116,18 @@ public class ReservationService {
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        return PayCommand.from(payment, reservation);
+        return PayDTO.from(payment, reservation);
     }
 
     /* 예약 조회 */
-    public List<ReservationQuery> loadReservation(String waitingToken){
+    public List<ReservationDTO> loadReservation(String waitingToken){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
         long memberId = activeToken.getMemberId();
         Member member = memberRepository.findByMemberId(memberId);
 
         List<Reservation> reservations = reservationRepository.findByMember(member);
-        return ReservationQuery.from(reservations);
+        return ReservationDTO.from(reservations);
     }
 
 }

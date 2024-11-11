@@ -1,14 +1,14 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
-import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
-import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
+import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import hhplus.tdd.concert.app.application.service.TestBase;
-import hhplus.tdd.concert.app.domain.payment.entity.Payment;
-import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import org.junit.jupiter.api.Test;
@@ -64,7 +64,7 @@ public class ReservationUnitTest {
         });
 
         // then
-        PayCommand result = reservationService.processReserve(testBase.waitingToken, testBase.concertSeatStandBy.getSeatId());
+        PayDTO result = reservationService.processReserve(testBase.waitingToken, testBase.concertSeatStandBy.getSeatId());
 
         // 결과검증
         assertEquals(true, result.isPay());
@@ -77,7 +77,7 @@ public class ReservationUnitTest {
         when(reservationRepository.findByMember(testBase.member)).thenReturn(testBase.reservations);
 
         // then
-        List<ReservationQuery> result = reservationService.loadReservation(testBase.waitingToken);
+        List<ReservationDTO> result = reservationService.loadReservation(testBase.waitingToken);
 
         // 결과검증
         assertEquals(1, result.size());

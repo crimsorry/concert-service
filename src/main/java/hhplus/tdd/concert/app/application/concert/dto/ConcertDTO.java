@@ -1,14 +1,12 @@
 package hhplus.tdd.concert.app.application.concert.dto;
 
 import hhplus.tdd.concert.app.domain.concert.entity.Concert;
-import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record ConcertQuery(
+public record ConcertDTO(
         Long concertId,
         String concertTitle,
         String concertPlace
@@ -16,17 +14,17 @@ public record ConcertQuery(
 
     private static final long serialVersionUID = 1L;
 
-    public static ConcertQuery from(Concert concert) {
-        return new ConcertQuery(
+    public static ConcertDTO from(Concert concert) {
+        return new ConcertDTO(
                 concert.getConcertId(),
                 concert.getConcertTitle(),
                 concert.getConcertPlace()
         );
     }
 
-    public static List<ConcertQuery> from(List<Concert> concerts) {
+    public static List<ConcertDTO> from(List<Concert> concerts) {
         return concerts.stream()
-                .map(ConcertQuery::from)
+                .map(ConcertDTO::from)
                 .collect(Collectors.toList());
     }
 

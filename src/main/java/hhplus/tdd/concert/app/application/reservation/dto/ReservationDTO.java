@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record ReservationQuery(
+public record ReservationDTO(
         long reserveId,
         String memberName,
         String concertTitle,
@@ -16,8 +16,8 @@ public record ReservationQuery(
         Integer amount,
         ReserveStatus reserveStatus
 ) {
-    public static ReservationQuery from(Reservation reservation) {
-        return new ReservationQuery(
+    public static ReservationDTO from(Reservation reservation) {
+        return new ReservationDTO(
                 reservation.getReserveId(),
                 reservation.getMember().getMemberName(),
                 reservation.getConcertTitle(),
@@ -28,9 +28,9 @@ public record ReservationQuery(
         );
     }
 
-    public static List<ReservationQuery> from(List<Reservation> reservations) {
+    public static List<ReservationDTO> from(List<Reservation> reservations) {
         return reservations.stream()
-                .map(ReservationQuery::from)
+                .map(ReservationDTO::from)
                 .collect(Collectors.toList());
     }
 

@@ -5,7 +5,7 @@ import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 
 import java.time.LocalDateTime;
 
-public record PayCommand(
+public record PayDTO(
         long payId,
         long userId,
         long reserveId,
@@ -14,8 +14,8 @@ public record PayCommand(
         LocalDateTime createAt
 ) {
 
-    public static PayCommand from(Payment payment, Reservation reservation) {
-        return new PayCommand(
+    public static PayDTO from(Payment payment, Reservation reservation) {
+        return new PayDTO(
                 payment.getPayId(),
                 reservation.getMember().getMemberId(),
                 reservation.getReserveId(),

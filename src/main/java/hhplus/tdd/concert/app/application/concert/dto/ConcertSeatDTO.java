@@ -6,15 +6,15 @@ import hhplus.tdd.concert.config.types.SeatStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record ConcertSeatQuery(
+public record ConcertSeatDTO(
         Long seatId,
         String seatCode,
         Integer amount,
         SeatStatus seatStatus
 ) {
 
-    public static ConcertSeatQuery from(ConcertSeat concertSeat) {
-        return new ConcertSeatQuery(
+    public static ConcertSeatDTO from(ConcertSeat concertSeat) {
+        return new ConcertSeatDTO(
                 concertSeat.getSeatId(),
                 concertSeat.getSeatCode(),
                 concertSeat.getAmount(),
@@ -22,9 +22,9 @@ public record ConcertSeatQuery(
         );
     }
 
-    public static List<ConcertSeatQuery> from(List<ConcertSeat> concertSeats) {
+    public static List<ConcertSeatDTO> from(List<ConcertSeat> concertSeats) {
         return concertSeats.stream()
-                .map(ConcertSeatQuery::from)
+                .map(ConcertSeatDTO::from)
                 .collect(Collectors.toList());
     }
 

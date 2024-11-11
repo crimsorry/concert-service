@@ -1,9 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.concert;
 
-import hhplus.tdd.concert.app.application.concert.dto.ConcertQuery;
-import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
-
-import java.time.LocalDateTime;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertDTO;
 
 public record ConcertRes(
         Long concertId,
@@ -11,11 +8,11 @@ public record ConcertRes(
         String concertPlace
 ) {
 
-    public static ConcertRes from(ConcertQuery concertQuery) {
+    public static ConcertRes from(ConcertDTO concertDTO) {
         return new ConcertRes(
-                concertQuery.concertId(),
-                concertQuery.concertTitle(),
-                concertQuery.concertPlace()
+                concertDTO.concertId(),
+                concertDTO.concertTitle(),
+                concertDTO.concertPlace()
         );
     }
 }

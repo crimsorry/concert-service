@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.concert;
 
-import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleDTO;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ public record ConcertScheduleRes(
         LocalDateTime endDate
 ) {
 
-    public static ConcertScheduleRes from(ConcertScheduleQuery concertSchedule) {
+    public static ConcertScheduleRes from(ConcertScheduleDTO concertSchedule) {
         return new ConcertScheduleRes(
                 concertSchedule.scheduleId(),
                 concertSchedule.concertTitle(),

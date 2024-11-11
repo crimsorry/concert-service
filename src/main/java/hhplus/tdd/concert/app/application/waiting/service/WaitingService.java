@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.app.application.waiting.service;
 
-import hhplus.tdd.concert.app.application.waiting.dto.WaitingNumQuery;
-import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenCommand;
+import hhplus.tdd.concert.app.application.waiting.dto.WaitingNumDTO;
+import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.waiting.entity.Member;
@@ -36,7 +36,7 @@ public class WaitingService {
     private final String ACTIVE_TOKEN_KEY = "activeToken";
 
     /* 유저 대기열 생성 */
-    public WaitingTokenCommand enqueueMember(long memberId){
+    public WaitingTokenDTO enqueueMember(long memberId){
         Member member = memberRepository.findByMemberId(memberId);
         Member.checkMemberExistence(member);
 
@@ -46,10 +46,10 @@ public class WaitingService {
         // waiting token insert
         waitingRepository.addWaitingToken(WAITING_TOKEN_KEY, token + ":" + memberId, System.currentTimeMillis());
 
-        return new WaitingTokenCommand(token);
+        return new WaitingTokenDTO(token);
     }
 
-    public WaitingNumQuery loadWaiting(String waitingToken){
+    public WaitingNumDTO loadWaiting(String waitingToken){
         Set<String> tokenSet = waitingRepository.getAllTokens(WAITING_TOKEN_KEY);
 
         if (tokenSet == null) {
@@ -69,7 +69,7 @@ public class WaitingService {
 
         Long userNum = waitingRepository.getWaitingTokenScore(WAITING_TOKEN_KEY, waitingToken + ":" + memberId);
 
-        return new WaitingNumQuery(userNum);
+        return new WaitingNumDTO(userNum);
     }
 
     /* 대기열 만료 */

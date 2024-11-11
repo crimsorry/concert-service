@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.api.dto.response.reservation;
 
-import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 
@@ -18,7 +18,7 @@ public record ReservationRes(
         ReserveStatus reserveStatus
 ) {
 
-    public static ReservationRes fromCommand(ReservationCommand dto) {
+    public static ReservationRes fromCommand(ReservationDTO dto) {
         return new ReservationRes(
                 dto.reserveId(),
                 dto.memberName(),
@@ -30,13 +30,13 @@ public record ReservationRes(
         );
     }
 
-    public static List<ReservationRes> fromCommand(List<ReservationCommand> dto) {
+    public static List<ReservationRes> fromCommand(List<ReservationDTO> dto) {
         return dto.stream()
                 .map(ReservationRes::fromCommand)
                 .collect(Collectors.toList());
     }
 
-    public static ReservationRes fromQuery(ReservationQuery dto) {
+    public static ReservationRes fromQuery(ReservationDTO dto) {
         return new ReservationRes(
                 dto.reserveId(),
                 dto.memberName(),
@@ -48,7 +48,7 @@ public record ReservationRes(
         );
     }
 
-    public static List<ReservationRes> fromQuery(List<ReservationQuery> dto) {
+    public static List<ReservationRes> fromQuery(List<ReservationDTO> dto) {
         return dto.stream()
                 .map(ReservationRes::fromQuery)
                 .collect(Collectors.toList());

@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.application.service.waiting;
 
-import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenCommand;
+import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenDTO;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
@@ -45,7 +45,7 @@ public class WaitingServiceUnitTest {
         MockitoAnnotations.openMocks(this);
 
         // then
-        WaitingTokenCommand result = waitingService.enqueueMember(memberId);
+        WaitingTokenDTO result = waitingService.enqueueMember(memberId);
 
         // 결과 검증
         assertNotNull(result);

@@ -4,9 +4,9 @@ import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import hhplus.tdd.concert.app.api.dto.response.concert.ConcertRes;
 import hhplus.tdd.concert.app.api.dto.response.concert.ConcertScheduleRes;
 import hhplus.tdd.concert.app.api.dto.response.concert.ConcertSeatRes;
-import hhplus.tdd.concert.app.application.concert.dto.ConcertQuery;
-import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
-import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertDTO;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleDTO;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatDTO;
 import hhplus.tdd.concert.app.application.concert.service.ConcertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,7 +47,7 @@ public class ConcertController {
                             schema = @Schema(implementation = ErrorRes.class))),
     })
     public ResponseEntity<List<ConcertRes>> getConcert(){
-        List<ConcertQuery> restResponse = concertService.loadConcert();
+        List<ConcertDTO> restResponse = concertService.loadConcert();
         return new ResponseEntity<>(restResponse.stream()
                 .map(ConcertRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);
@@ -69,7 +69,7 @@ public class ConcertController {
     public ResponseEntity<List<ConcertScheduleRes>> getConcertDate(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        List<ConcertScheduleQuery> restResponse = concertService.loadConcertDate(waitingToken);
+        List<ConcertScheduleDTO> restResponse = concertService.loadConcertDate(waitingToken);
         return new ResponseEntity<>(restResponse.stream()
                 .map(ConcertScheduleRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);
@@ -93,7 +93,7 @@ public class ConcertController {
             @Schema(description = "콘서트 스케줄 ID")
             @PathVariable("scheduleId") long scheduleId
     ){
-        List<ConcertSeatQuery> restResponse = concertService.loadConcertSeat(waitingToken, scheduleId);
+        List<ConcertSeatDTO> restResponse = concertService.loadConcertSeat(waitingToken, scheduleId);
         return new ResponseEntity<>(restResponse.stream()
                 .map(ConcertSeatRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);

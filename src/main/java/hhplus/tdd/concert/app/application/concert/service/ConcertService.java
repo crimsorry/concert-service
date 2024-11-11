@@ -1,8 +1,8 @@
 package hhplus.tdd.concert.app.application.concert.service;
 
-import hhplus.tdd.concert.app.application.concert.dto.ConcertQuery;
-import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleQuery;
-import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatQuery;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertDTO;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleDTO;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.Concert;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
@@ -33,23 +33,23 @@ public class ConcertService {
 
     /* 전체 콘서트 리스트 조회 */
     @Cacheable(value = "concertList", key = "'concertList'", cacheManager = "cacheManager", unless = "#result == null || #result.isEmpty()")
-    public List<ConcertQuery> loadConcert() {
+    public List<ConcertDTO> loadConcert() {
         List<Concert> concerts = concertRepository.findAll();
-        return ConcertQuery.from(concerts);
+        return ConcertDTO.from(concerts);
     }
 
     /* 예약 가능 날짜 조회 */
-    public List<ConcertScheduleQuery> loadConcertDate(String waitingToken){
+    public List<ConcertScheduleDTO> loadConcertDate(String waitingToken){
         waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
         LocalDateTime now = LocalDateTime.now();
         List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(now);
-        return ConcertScheduleQuery.from(concertSchedules);
+        return ConcertScheduleDTO.from(concertSchedules);
     }
 
     /* 예약 가능 좌석 조회 */
-    public List<ConcertSeatQuery> loadConcertSeat(String waitingToken, long scheduleId){
+    public List<ConcertSeatDTO> loadConcertSeat(String waitingToken, long scheduleId){
         waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
@@ -57,6 +57,6 @@ public class ConcertService {
         ConcertSchedule.checkConcertScheduleExistence(concertSchedule);
 
         List<ConcertSeat> concertSeats = concertSeatRepository.findBySchedule(concertSchedule);
-        return ConcertSeatQuery.from(concertSeats);
+        return ConcertSeatDTO.from(concertSeats);
     }
 }

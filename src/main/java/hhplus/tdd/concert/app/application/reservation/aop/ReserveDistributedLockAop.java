@@ -1,6 +1,6 @@
 package hhplus.tdd.concert.app.application.reservation.aop;
 
-import hhplus.tdd.concert.app.application.payment.dto.PayCommand;
+import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.config.exception.FailException;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ReserveDistributedLockAop {
     private final ReserveAopForTransaction aopTransaction; // 트랜잭션 내에서 joinPoint를 실행하는 헬퍼 클래스
 
     @Around("@annotation(hhplus.tdd.concert.config.aop.DistributedLock) && args(waitingToken, seatId, ..)")
-    public PayCommand processReserveRedisPubSub(String waitingToken, Long seatId){
+    public PayDTO processReserveRedisPubSub(String waitingToken, Long seatId){
         String lockName = REDISSON_LOCK_PREFIX + "seat_id:" + seatId;
         RLock lock = redissonClient.getLock(lockName);
         boolean isOK = false;

@@ -1,9 +1,9 @@
 package hhplus.tdd.concert.app.application.service.payment;
 
-import hhplus.tdd.concert.app.application.payment.dto.LoadAmountQuery;
-import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
+import hhplus.tdd.concert.app.application.payment.dto.LoadAmountDTO;
+import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeDTO;
 import hhplus.tdd.concert.app.application.payment.service.PayService;
-import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
@@ -51,7 +51,7 @@ class PayServiceUnitTest {
                     .build();
         });
         // then
-        UpdateChargeCommand result = payService.chargeAmount(testBase.waitingToken, testBase.amount);
+        UpdateChargeDTO result = payService.chargeAmount(testBase.waitingToken, testBase.amount);
 
         // 결과검증
         assertNotNull(result);
@@ -66,7 +66,7 @@ class PayServiceUnitTest {
         when(waitingRepository.findByTokenOrThrow(testBase.waitingToken).get()).thenReturn(testBase.activeToken);
 
         // then
-        LoadAmountQuery result = payService.loadAmount(testBase.waitingToken);
+        LoadAmountDTO result = payService.loadAmount(testBase.waitingToken);
 
         // 결과검증
         assertEquals(testBase.member.getCharge(), result.amount());
@@ -79,7 +79,7 @@ class PayServiceUnitTest {
         when(paymentRepository.findByPayId(eq(1L))).thenReturn(testBase.payment);
 
         // then
-        ReservationCommand result = payService.processPay(testBase.waitingToken, 1L);
+        ReservationDTO result = payService.processPay(testBase.waitingToken, 1L);
 
         // 결과검증
         assertEquals(testBase.title, result.concertTitle());

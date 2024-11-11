@@ -3,8 +3,8 @@ package hhplus.tdd.concert.app.api.v1;
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
 import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingNumRes;
 import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingTokenRes;
-import hhplus.tdd.concert.app.application.waiting.dto.WaitingNumQuery;
-import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenCommand;
+import hhplus.tdd.concert.app.application.waiting.dto.WaitingNumDTO;
+import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenDTO;
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,7 +45,7 @@ public class WaitingController {
             @Schema(description = "유저 ID")
             @PathVariable("userId") long userId
     ){
-        WaitingTokenCommand restResponse = waitingService.enqueueMember(userId);
+        WaitingTokenDTO restResponse = waitingService.enqueueMember(userId);
         return new ResponseEntity<>(WaitingTokenRes.from(restResponse), HttpStatus.OK);
     }
 
@@ -65,7 +65,7 @@ public class WaitingController {
     public ResponseEntity<WaitingNumRes> getUserQueueNum(
             @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
     ){
-        WaitingNumQuery restResponse = waitingService.loadWaiting(waitingToken);
+        WaitingNumDTO restResponse = waitingService.loadWaiting(waitingToken);
         return new ResponseEntity<>(WaitingNumRes.from(restResponse), HttpStatus.OK);
     }
 

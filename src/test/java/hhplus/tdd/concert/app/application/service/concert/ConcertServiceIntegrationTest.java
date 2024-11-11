@@ -1,11 +1,10 @@
 package hhplus.tdd.concert.app.application.service.concert;
 
-import hhplus.tdd.concert.app.application.concert.dto.ConcertQuery;
+import hhplus.tdd.concert.app.application.concert.dto.ConcertDTO;
 import hhplus.tdd.concert.app.application.concert.service.ConcertService;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
 import hhplus.tdd.concert.app.infrastructure.persistence.concert.dataaccess.jpa.ConcertJpaRepository;
-import hhplus.tdd.concert.app.infrastructure.persistence.concert.implement.ConcertRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,7 +41,7 @@ public class ConcertServiceIntegrationTest {
 
         verify(concertJpaRepository, times(1)).findAll(); // 캐시 검증
 
-        List<ConcertQuery> result = concertService.loadConcert();
+        List<ConcertDTO> result = concertService.loadConcert();
         assertEquals(1, result.size());
         assertEquals(testBase.title, result.get(0).concertTitle());
     }

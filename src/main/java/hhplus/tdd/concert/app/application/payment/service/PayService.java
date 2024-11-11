@@ -1,8 +1,8 @@
 package hhplus.tdd.concert.app.application.payment.service;
 
-import hhplus.tdd.concert.app.application.payment.dto.LoadAmountQuery;
-import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeCommand;
-import hhplus.tdd.concert.app.application.reservation.dto.ReservationCommand;
+import hhplus.tdd.concert.app.application.payment.dto.LoadAmountDTO;
+import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeDTO;
+import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
@@ -37,7 +37,7 @@ public class PayService {
 
     /* 잔액 충전 */
     @Transactional
-    public UpdateChargeCommand chargeAmount(String waitingToken, int amount){
+    public UpdateChargeDTO chargeAmount(String waitingToken, int amount){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
@@ -51,11 +51,11 @@ public class PayService {
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
         amountHistoryRepository.save(amountHistory);
 
-        return new UpdateChargeCommand(true);
+        return new UpdateChargeDTO(true);
     }
 
     @Transactional
-    public UpdateChargeCommand chargeAmountOptimisticLock(String waitingToken, int amount){
+    public UpdateChargeDTO chargeAmountOptimisticLock(String waitingToken, int amount){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
@@ -73,7 +73,7 @@ public class PayService {
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
         amountHistoryRepository.save(amountHistory);
 
-        return new UpdateChargeCommand(true);
+        return new UpdateChargeDTO(true);
     }
 
     @Transactional
@@ -82,7 +82,7 @@ public class PayService {
             maxAttempts = 20,
             backoff = @Backoff(100) // delay 0.1초
     )
-    public UpdateChargeCommand chargeAmountOptimisticLockRetry(String waitingToken, int amount){
+    public UpdateChargeDTO chargeAmountOptimisticLockRetry(String waitingToken, int amount){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
@@ -97,11 +97,11 @@ public class PayService {
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(amount, PointType.CHARGE, member);
         amountHistoryRepository.save(amountHistory);
 
-        return new UpdateChargeCommand(true);
+        return new UpdateChargeDTO(true);
     }
 
     /* 잔액 조회 */
-    public LoadAmountQuery loadAmount(String waitingToken){
+    public LoadAmountDTO loadAmount(String waitingToken){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
@@ -109,12 +109,12 @@ public class PayService {
         Member member = memberRepository.findByMemberId(memberId);
 
         // 잔액 조회
-        return new LoadAmountQuery(member.getCharge());
+        return new LoadAmountDTO(member.getCharge());
     }
 
     /* 결제 처리 */
     @Transactional
-    public ReservationCommand processPay(String waitingToken, long payId){
+    public ReservationDTO processPay(String waitingToken, long payId){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
         long memberId = activeToken.getMemberId();
@@ -138,11 +138,11 @@ public class PayService {
         waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
-        return ReservationCommand.from(reservation);
+        return ReservationDTO.from(reservation);
     }
 
     @Transactional
-    public ReservationCommand processPayOptimisticLock(String waitingToken, long payId){
+    public ReservationDTO processPayOptimisticLock(String waitingToken, long payId){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
         long memberId = activeToken.getMemberId();
@@ -166,7 +166,7 @@ public class PayService {
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
         waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
-        return ReservationCommand.from(reservation);
+        return ReservationDTO.from(reservation);
     }
 
     @Transactional
@@ -175,7 +175,7 @@ public class PayService {
             maxAttempts = 20, // 최대 재시도 횟수
             backoff = @Backoff(100) // 재시작 간격
     )
-    public ReservationCommand processPayOptimisticLockRetry(String waitingToken, long payId){
+    public ReservationDTO processPayOptimisticLockRetry(String waitingToken, long payId){
         ActiveToken activeToken = waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
         long memberId = activeToken.getMemberId();
@@ -197,7 +197,7 @@ public class PayService {
         waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
-        return ReservationCommand.from(reservation);
+        return ReservationDTO.from(reservation);
     }
 
 }

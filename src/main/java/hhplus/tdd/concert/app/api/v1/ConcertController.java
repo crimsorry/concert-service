@@ -26,14 +26,14 @@ import java.util.stream.Collectors;
 
 @Tag(name = "콘서트 API", description = "모든 API 는 대기열 토큰 값이 필요합니다.")
 @RestController
-@RequestMapping("/api/v1/concerts")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class ConcertController {
 
     private final ConcertService concertService;
 
-    @GetMapping("/query")
+    @GetMapping("/concerts/query")
     @Operation(summary = "전체 콘서트 리스트")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
@@ -53,7 +53,7 @@ public class ConcertController {
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    @GetMapping("/date")
+    @GetMapping("/concert/{concertId}/date")
     @Operation(summary = "예약 가능 날짜 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",
@@ -67,15 +67,17 @@ public class ConcertController {
                             schema = @Schema(implementation = ErrorRes.class))),
     })
     public ResponseEntity<List<ConcertScheduleRes>> getConcertDate(
-            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken
+            @Parameter(hidden = true) @RequestHeader("waitingToken") String waitingToken,
+            @Schema(description = "콘서트 스케줄 ID")
+            @PathVariable("concertId") long concertId
     ){
-        List<ConcertScheduleDTO> restResponse = concertService.loadConcertDate(waitingToken);
+        List<ConcertScheduleDTO> restResponse = concertService.loadConcertDate(waitingToken, concertId);
         return new ResponseEntity<>(restResponse.stream()
                 .map(ConcertScheduleRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    @GetMapping("/{scheduleId}/seat")
+    @GetMapping("/concert/{scheduleId}/seat")
     @Operation(summary = "예약 가능 좌석 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공",

@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class ConcertServiceIntegrationTest {
+public class ConcertServiceCacheTest {
 
     private final TestBase testBase = new TestBase();
 

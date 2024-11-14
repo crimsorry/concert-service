@@ -13,13 +13,13 @@ public class WaitingSchedule {
     private final WaitingService waitingService;
 
     /* 대기열 만료 스케줄러 */
-//    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void expiredWaitingSchedule(){
         waitingService.expiredWaiting();
     }
 
     /* 대기열 active 전환 스케줄러 */
-//    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void activeWaitingSchedule(){
         waitingService.activeWaiting();
     }

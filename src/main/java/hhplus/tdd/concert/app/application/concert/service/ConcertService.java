@@ -16,9 +16,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -39,12 +42,15 @@ public class ConcertService {
     }
 
     /* 예약 가능 날짜 조회 */
-    public List<ConcertScheduleDTO> loadConcertDate(String waitingToken){
+    public List<ConcertScheduleDTO> loadConcertDate(String waitingToken, Long concertId){
         waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
-        LocalDateTime now = LocalDateTime.now();
-        List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(now);
+//        LocalDate startDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//        LocalDate endDate = startDate.plusDays(1);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(concertId, pageRequest);
         return ConcertScheduleDTO.from(concertSchedules);
     }
 

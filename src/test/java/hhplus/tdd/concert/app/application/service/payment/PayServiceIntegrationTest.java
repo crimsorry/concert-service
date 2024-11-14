@@ -4,15 +4,15 @@ import hhplus.tdd.concert.app.application.payment.aop.PayDistributedLockAop;
 import hhplus.tdd.concert.app.application.payment.service.PayService;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
-import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
-import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
-import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
+import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.config.types.PointType;
@@ -26,7 +26,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -240,14 +239,13 @@ public class PayServiceIntegrationTest {
     }
 
     @Test
-//    @Transactional
     public void 낙관락_throw_한_유저가_1건예약_100번결제시_1건결제성공() throws InterruptedException {
         long beforeTime = System.currentTimeMillis();
         databaseCleaner.clear();
         int totalTasks = 100;
         AtomicInteger failCnt = new AtomicInteger();
         memberRepository.save(testBase.member);
-        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
+        waitingRepository.addActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.activeTokenValue);
         paymentRepository.save(testBase.payment);
         concertSeatRepository.save(testBase.concertSeatReserve);
         reservationRepository.save(testBase.reservationReserve);
@@ -258,7 +256,7 @@ public class PayServiceIntegrationTest {
         IntStream.range(0, totalTasks).forEach(i ->
                 executorService.execute(() -> {
                     try {
-                        payService.processPayOptimisticLock(testBase.waitingActive.getToken(), testBase.payment.getPayId());
+                        payService.processPayOptimisticLock(testBase.activeTokenValue.split(":")[0], testBase.payment.getPayId());
                     } catch (RuntimeException e) {
                         failCnt.getAndIncrement();
                     } finally {
@@ -269,22 +267,22 @@ public class PayServiceIntegrationTest {
 
         latch.await();
 
-//        Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
-////        Waiting waiting = waitingRepository.findByWaitingId(testBase.waitingActive.getWaitingId());
-//        Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
-//        Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
-//        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
-//        List<AmountHistory> amountHistorys = amountHistoryRepository.findAll();
-//
-//        assertEquals(totalTasks - 1, failCnt.get());
-//        assertEquals(true, payment.getIsPay());
-//        assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
-//        assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
-////        assertEquals(WaitingStatus.EXPIRED, waiting.getStatus());
-//        assertEquals(1, amountHistorys.size());
-//        assertEquals(testBase.payment.getAmount(), amountHistorys.get(0).getAmount());
-//        assertEquals(PointType.USE, amountHistorys.get(0).getPointType());
-//        assertEquals(testBase.member.getCharge() - testBase.payment.getAmount(), member.getCharge());
+        Member member = memberRepository.findByMemberId(testBase.member.getMemberId());
+        Boolean isWaiting = waitingRepository.isActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.waitingToken);
+        Payment payment = paymentRepository.findByPayId(testBase.payment.getPayId());
+        Reservation reservation = reservationRepository.findByReserveId(testBase.reservationReserve.getReserveId());
+        ConcertSeat concertSeat = concertSeatRepository.findBySeatId(testBase.concertSeatReserve.getSeatId());
+        List<AmountHistory> amountHistorys = amountHistoryRepository.findAll();
+
+        assertEquals(totalTasks - 1, failCnt.get());
+        assertEquals(true, payment.getIsPay());
+        assertEquals(ReserveStatus.RESERVED, reservation.getReserveStatus());
+        assertEquals(SeatStatus.ASSIGN, concertSeat.getSeatStatus());
+        assertEquals(false, isWaiting);
+        assertEquals(1, amountHistorys.size());
+        assertEquals(testBase.payment.getAmount(), amountHistorys.get(0).getAmount());
+        assertEquals(PointType.USE, amountHistorys.get(0).getPointType());
+        assertEquals(testBase.member.getCharge() - testBase.payment.getAmount(), member.getCharge());
 
         long afterTime = System.currentTimeMillis();
         double  secDiffTime = (afterTime - beforeTime)/1000.0;

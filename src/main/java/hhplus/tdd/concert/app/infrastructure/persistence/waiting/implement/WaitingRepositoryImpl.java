@@ -92,4 +92,9 @@ public class WaitingRepositoryImpl implements WaitingRepository {
                 .findFirst();
     }
 
+    @Override
+    public Boolean isActiveToken(String key, String value) {
+        return waitingRedisRepository.isActiveToken(key, value);
+    }
+
 }

@@ -1,8 +1,8 @@
-package hhplus.tdd.concert.app.infrastructure.event;
+package hhplus.tdd.concert.app.infrastructure.event.external;
 
-import hhplus.tdd.concert.app.domain.event.KakaoPayProcessEvent;
-import hhplus.tdd.concert.app.domain.event.KakaoProcessEventListener;
-import hhplus.tdd.concert.app.domain.event.KakaoReservationProcessEvent;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoPayProcessEvent;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessEventListener;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoReservationProcessEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

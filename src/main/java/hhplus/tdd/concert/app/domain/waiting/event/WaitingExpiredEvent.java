@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.domain.event;
+package hhplus.tdd.concert.app.domain.waiting.event;
 
 import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 import org.springframework.context.ApplicationEvent;

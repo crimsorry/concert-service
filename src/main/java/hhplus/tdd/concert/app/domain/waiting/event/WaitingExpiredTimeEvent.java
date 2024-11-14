@@ -1,6 +1,5 @@
-package hhplus.tdd.concert.app.domain.event;
+package hhplus.tdd.concert.app.domain.waiting.event;
 
-import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

@@ -1,10 +1,10 @@
-package hhplus.tdd.concert.app.infrastructure.event;
+package hhplus.tdd.concert.app.infrastructure.event.external;
 
 import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
-import hhplus.tdd.concert.app.domain.event.KakaoPayProcessEvent;
-import hhplus.tdd.concert.app.domain.event.KakaoProcessPublisher;
-import hhplus.tdd.concert.app.domain.event.KakaoReservationProcessEvent;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoPayProcessEvent;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoReservationProcessEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

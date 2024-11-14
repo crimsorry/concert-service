@@ -1,10 +1,9 @@
-package hhplus.tdd.concert.app.infrastructure.event;
+package hhplus.tdd.concert.app.infrastructure.event.waiting;
 
-import hhplus.tdd.concert.app.domain.event.WaitingExpiredEventListener;
+import hhplus.tdd.concert.app.domain.waiting.event.WaitingExpiredEventListener;
 import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;

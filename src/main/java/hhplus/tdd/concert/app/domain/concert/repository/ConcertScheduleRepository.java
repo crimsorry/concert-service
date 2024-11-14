@@ -1,6 +1,7 @@
 package hhplus.tdd.concert.app.domain.concert.repository;
 
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,6 @@ public interface ConcertScheduleRepository {
 
     ConcertSchedule findByScheduleId(Long scheduleId);
 
-    List<ConcertSchedule> findByConcertScheduleDatesWithStandBySeats(LocalDateTime now);
+    List<ConcertSchedule> findByConcertScheduleDatesWithStandBySeats(Long concertId, Pageable pageable);
 
 }

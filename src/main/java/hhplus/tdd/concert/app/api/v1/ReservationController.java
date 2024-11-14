@@ -1,11 +1,10 @@
 package hhplus.tdd.concert.app.api.v1;
 
 import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
-import hhplus.tdd.concert.app.api.dto.response.reservation.ReservationRes;
 import hhplus.tdd.concert.app.api.dto.response.payment.PayRes;
+import hhplus.tdd.concert.app.api.dto.response.reservation.ReservationRes;
 import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
-import hhplus.tdd.concert.app.application.reservation.dto.ReservationQuery;
 import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

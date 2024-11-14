@@ -7,6 +7,7 @@ import hhplus.tdd.concert.app.domain.concert.repository.ConcertScheduleRepositor
 import hhplus.tdd.concert.app.infrastructure.persistence.concert.dataaccess.jpa.ConcertJpaRepository;
 import hhplus.tdd.concert.app.infrastructure.persistence.concert.dataaccess.jpa.ConcertScheduleJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ public class ConcertScheduleRepositoryImpl implements ConcertScheduleRepository 
     }
 
     @Override
-    public List<ConcertSchedule> findByConcertScheduleDatesWithStandBySeats(LocalDateTime now) {
-        return repository.findByConcertScheduleDatesWithStandBySeats(now);
+    public List<ConcertSchedule> findByConcertScheduleDatesWithStandBySeats(Long concertId, Pageable pageable) {
+        return repository.findByConcertScheduleDatesWithStandBySeats(concertId, pageable);
     }
 }

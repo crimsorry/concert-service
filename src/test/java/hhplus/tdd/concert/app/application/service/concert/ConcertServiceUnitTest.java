@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,11 +61,11 @@ public class ConcertServiceUnitTest {
     public void 예약_가능_날짜_조회() {
         // when
         when(waitingRepository.findByTokenOrThrow(testBase.waitingToken)).thenReturn(Optional.of(testBase.activeToken));
-        when(concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(any(LocalDateTime.class)))
+        when(concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(any(Long.class), any(Pageable.class)))
                 .thenReturn(testBase.concertSchedules);
 
         // then
-        List<ConcertScheduleDTO> result = concertService.loadConcertDate(testBase.waitingToken);
+        List<ConcertScheduleDTO> result = concertService.loadConcertDate(testBase.waitingToken, 1L);
 
         // 결과 검증
         assertEquals(1, result.size());

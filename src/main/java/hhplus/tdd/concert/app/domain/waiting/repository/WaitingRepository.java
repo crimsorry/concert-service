@@ -28,5 +28,10 @@ public interface WaitingRepository {
 
     Optional<ActiveToken> findByTokenOrThrow(String waitigToken);
 
+    Boolean isActiveToken(String key, String value);
+
+    void updateActiveToken(String value);
+
+
 
 }

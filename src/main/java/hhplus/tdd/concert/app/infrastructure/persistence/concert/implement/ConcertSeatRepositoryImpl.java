@@ -22,7 +22,7 @@ public class ConcertSeatRepositoryImpl implements ConcertSeatRepository {
 
     @Override
     public ConcertSeat findBySeatId(Long seatId) {
-        return repository.findBySeatIdWithOptimisticLock(seatId);
+        return repository.findBySeatId(seatId);
     }
 
     @Override

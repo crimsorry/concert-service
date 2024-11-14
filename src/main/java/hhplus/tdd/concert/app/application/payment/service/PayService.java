@@ -4,6 +4,8 @@ import hhplus.tdd.concert.app.application.payment.dto.LoadAmountDTO;
 import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
+import hhplus.tdd.concert.app.domain.waiting.event.WaitingPublisher;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
@@ -34,6 +36,9 @@ public class PayService {
     private final PaymentRepository paymentRepository;
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
+
+    private final WaitingPublisher waitingPublisher;
+    private final KakaoProcessPublisher kakaoProcessPublisher;
 
     /* 잔액 충전 */
     @Transactional
@@ -165,8 +170,14 @@ public class PayService {
         member.withdraw(payment.getAmount());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
-        waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
-        return ReservationDTO.from(reservation);
+
+        // event listener : 대기열 만료
+        waitingPublisher.publishWaitingExpiredEvent(activeToken);
+        // event listener : 카카오톡 전송
+        ReservationDTO reservationDto = ReservationDTO.from(reservation);
+        kakaoProcessPublisher.publishReservationEvent(reservationDto);
+
+        return reservationDto;
     }
 
     @Transactional

@@ -24,6 +24,8 @@ public class TestBase {
     public final String title = "드라큘라";
     public final String waitingToken = "testToken";
     public final String waitingToken2 = "testToken2";
+    public final String activeTokenValueOnlyToken = "testActiveToken";
+    public final String activeTokenValue = "testActiveToken:1:" + System.currentTimeMillis();
     public final LocalDateTime now = LocalDateTime.now();
     public final Member member = Member.builder().memberId(1L).memberName("김소리").charge(9000000).build();
     public final Member member2 = Member.builder().memberId(2L).memberName("김소리").charge(16000).build();
@@ -38,7 +40,7 @@ public class TestBase {
     public final ConcertSeat concertSeatReserve = new ConcertSeat(1L, concertSchedule, "A01", 140000, SeatStatus.RESERVED);
     public final ConcertSeat concertSeatStandBy = new ConcertSeat(2L, concertSchedule, "A01", 140000, SeatStatus.STAND_BY);
     public final Reservation reservationReserve = new Reservation(1L, member, concertSeatReserve, "드라큘라", now, "A01", 140000, ReserveStatus.PENDING);
-    public final Payment payment = new Payment(1L, member, reservationReserve, 140000, false, now);
+    public final Payment payment = new Payment(1L, member, reservationReserve, 140000, false, now, 0);
     public final List<Concert> concerts = List.of(concert);
     public final List<ConcertSchedule> concertSchedules = List.of(concertSchedule);
     public final List<ConcertSeat> concertSeats = List.of(concertSeatStandBy);

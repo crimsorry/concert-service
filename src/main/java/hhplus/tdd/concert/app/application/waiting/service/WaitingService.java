@@ -27,7 +27,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class WaitingService {
 
-    private final int maxMember = 6000;
+    private final int maxMember = 1000;
+    private final int totalMaxMember = 24000;
     private final MemberRepository memberRepository;
     private final WaitingRepository waitingRepository;
     private final PaymentRepository paymentRepository;
@@ -77,17 +78,20 @@ public class WaitingService {
     public void expiredWaiting(){
         List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(ACTIVE_TOKEN_KEY);
         for(ActiveToken activeToken : activeTokenList){
-            if(System.currentTimeMillis() > activeToken.getExpiredAt()){
-                Member member = memberRepository.findByMemberId(activeToken.getMemberId());
-                Payment payment = paymentRepository.findByMember(member);
-                ConcertSeat concertSeat = payment.getReservation().getSeat();
-                Reservation reservation = payment.getReservation();
+            if(activeToken.getExpiredAt() != null){
+                if(System.currentTimeMillis() > activeToken.getExpiredAt()){
+                    Member member = memberRepository.findByMemberId(activeToken.getMemberId());
+                    Payment payment = paymentRepository.findByMember(member);
+                    ConcertSeat concertSeat = payment.getReservation().getSeat();
+                    Reservation reservation = payment.getReservation();
 
-                // 결제 실패 처리
-                concertSeat.open();
-                reservation.cancel();
-                waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
+                    // 결제 실패 처리
+                    concertSeat.open();
+                    reservation.cancel();
+                    waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
+                }
             }
+
         }
     }
 
@@ -96,10 +100,13 @@ public class WaitingService {
     public void activeWaiting(){
         // 현재 active 갯수 세기
         List<ActiveToken> waitingTokenList = waitingRepository.getWaitingTokenRange(WAITING_TOKEN_KEY, 0, maxMember-1);
-        // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
-        for (ActiveToken activeToken : waitingTokenList) {
-            waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId());
-            waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + System.currentTimeMillis() + (5 * 60 * 1000));
+        int activeTokenLen = waitingRepository.getActiveToken(ACTIVE_TOKEN_KEY).size();
+        if(totalMaxMember>activeTokenLen) {
+            // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
+            for (ActiveToken activeToken : waitingTokenList) {
+                waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId());
+                waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + System.currentTimeMillis() + (5 * 60 * 1000));
+            }
         }
     }
 

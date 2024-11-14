@@ -50,8 +50,8 @@ public class WaitingRedisRepository {
         return redisTemplate.opsForSet();
     }
 
-    public Boolean isActiveToken(String key, long memberId) {
-        return redisTemplate.opsForSet().isMember(key, memberId);
+    public Boolean isActiveToken(String key, String value) {
+        return redisTemplate.opsForSet().isMember(key, value);
     }
 
     public void deleteActiveToken(String key, String value) {

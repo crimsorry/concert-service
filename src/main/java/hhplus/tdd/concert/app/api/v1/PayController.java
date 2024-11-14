@@ -95,7 +95,7 @@ public class PayController {
             @Schema(description = "결제 ID")
             @PathVariable("payId") long payId
     ){
-        ReservationDTO restResponse = payService.processPay(waitingToken, payId);
+        ReservationDTO restResponse = payService.processPayOptimisticLock(waitingToken, payId);
         return new ResponseEntity<>(ReservationRes.fromCommand(restResponse), HttpStatus.OK);
     }
 

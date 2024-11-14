@@ -55,8 +55,8 @@ public class Payment {
     @Column
     private LocalDateTime createAt;
 
-//    @Version
-//    private Integer version;
+    @Version
+    private Integer version;
 
     public static Payment generatePayment(Member member, Reservation reservation){
         Payment payment = Payment.builder()

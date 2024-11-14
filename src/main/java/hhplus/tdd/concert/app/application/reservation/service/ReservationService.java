@@ -4,6 +4,8 @@ import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
+import hhplus.tdd.concert.app.domain.event.KakaoProcessPublisher;
+import hhplus.tdd.concert.app.domain.event.WaitingPublisher;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
@@ -36,6 +38,9 @@ public class ReservationService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
 
+    private final WaitingPublisher waitingPublisher;
+    private final KakaoProcessPublisher kakaoProcessPublisher;
+
     /* 좌석 예약 요청 */
     @Transactional
     public PayDTO processReserve(String waitingToken, Long seatId){
@@ -56,11 +61,17 @@ public class ReservationService {
 
         // 좌석 임시배정
         concertSeat.pending();
-//        waiting.limitPayTime();
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        return PayDTO.from(payment, reservation);
+        // event listener : 대기열 업데이트 
+        // TODO: ttl 고려 필요
+        waitingPublisher.publishWaitingExpiredTimeEvent(waitingToken);
+        // event listener : 카카오톡 전송
+        PayDTO payDto = PayDTO.from(payment, reservation);
+        kakaoProcessPublisher.publishPayEvent(payDto);
+
+        return payDto;
     }
 
     @Transactional

@@ -5,11 +5,11 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class KakaoProcessEvent extends ApplicationEvent {
+public class KakaoReservationProcessEvent extends ApplicationEvent {
 
     private final ReservationDTO reservationDTO;
 
-    public KakaoProcessEvent(Object source, ReservationDTO reservationDTO) {
+    public KakaoReservationProcessEvent(Object source, ReservationDTO reservationDTO) {
         super(source);
         this.reservationDTO = reservationDTO;
     }

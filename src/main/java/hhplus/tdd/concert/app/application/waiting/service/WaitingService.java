@@ -77,17 +77,20 @@ public class WaitingService {
     public void expiredWaiting(){
         List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(ACTIVE_TOKEN_KEY);
         for(ActiveToken activeToken : activeTokenList){
-            if(System.currentTimeMillis() > activeToken.getExpiredAt()){
-                Member member = memberRepository.findByMemberId(activeToken.getMemberId());
-                Payment payment = paymentRepository.findByMember(member);
-                ConcertSeat concertSeat = payment.getReservation().getSeat();
-                Reservation reservation = payment.getReservation();
+            if(activeToken.getExpiredAt() != null){
+                if(System.currentTimeMillis() > activeToken.getExpiredAt()){
+                    Member member = memberRepository.findByMemberId(activeToken.getMemberId());
+                    Payment payment = paymentRepository.findByMember(member);
+                    ConcertSeat concertSeat = payment.getReservation().getSeat();
+                    Reservation reservation = payment.getReservation();
 
-                // 결제 실패 처리
-                concertSeat.open();
-                reservation.cancel();
-                waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
+                    // 결제 실패 처리
+                    concertSeat.open();
+                    reservation.cancel();
+                    waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
+                }
             }
+
         }
     }
 

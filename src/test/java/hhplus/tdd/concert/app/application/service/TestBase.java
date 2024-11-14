@@ -24,6 +24,7 @@ public class TestBase {
     public final String title = "드라큘라";
     public final String waitingToken = "testToken";
     public final String waitingToken2 = "testToken2";
+    public final String activeTokenValueOnlyToken = "testActiveToken";
     public final String activeTokenValue = "testActiveToken:1:" + System.currentTimeMillis();
     public final LocalDateTime now = LocalDateTime.now();
     public final Member member = Member.builder().memberId(1L).memberName("김소리").charge(9000000).build();

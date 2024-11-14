@@ -45,7 +45,11 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     public List<ActiveToken> getActiveToken(String key){
         List<ActiveToken> tokens = new ArrayList<>();
         waitingRedisRepository.getActiveToken().members(key).forEach(token ->{
-            tokens.add(new ActiveToken(token.split(":")[0], Long.parseLong(token.split(":")[1]), Long.parseLong(token.split(":")[2])));
+            String[] parts = token.split(":");
+            String uuid = parts[0];
+            Long userId = Long.parseLong(parts[1]);
+            Long createAt = (parts.length > 2) ? Long.parseLong(parts[2]) : null;
+            tokens.add(new ActiveToken(uuid, userId, createAt));
         });
         return tokens;
     }
@@ -87,7 +91,8 @@ public class WaitingRepositoryImpl implements WaitingRepository {
         }
 
         return tokens.stream()
-                .map(token -> new ActiveToken(token.split(":")[0], Long.parseLong(token.split(":")[1]), Long.parseLong(token.split(":")[2])))
+                .map(token ->
+                        new ActiveToken(token.split(":")[0], Long.parseLong(token.split(":")[1]), token.split(":").length>2 ? Long.parseLong(token.split(":")[2]) : null))
                 .filter(activeToken -> activeToken.getToken().split(":")[0].equals(waitingToken))
                 .findFirst();
     }
@@ -95,6 +100,12 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     @Override
     public Boolean isActiveToken(String key, String value) {
         return waitingRedisRepository.isActiveToken(key, value);
+    }
+
+    @Override
+    public void updateActiveToken(String value) {
+        waitingRedisRepository.deleteActiveToken("activeToken", value);
+        waitingRedisRepository.addActiveToken("activeToken", value + ":" + System.currentTimeMillis());
     }
 
 }

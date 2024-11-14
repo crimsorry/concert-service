@@ -30,6 +30,8 @@ public interface WaitingRepository {
 
     Boolean isActiveToken(String key, String value);
 
+    void updateActiveToken(String value);
+
 
 
 }

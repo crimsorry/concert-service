@@ -83,7 +83,7 @@ index 성능 테스트의 경우 가장 조회가 많이 일어날 것 같은 �
   * 스케줄: Full Scan, 좌석: range
 
 
-![image-20241114032407423](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114032407423.png)
+![image-20241114032407423](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/no_index_select_date.png)
 
 * **[no index : Explain Analyze]**
   * 실행시간: 0.325ms
@@ -126,15 +126,15 @@ index 성능 테스트의 경우 가장 조회가 많이 일어날 것 같은 �
 
 [user100]
 
-![image-20241114035041111](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114035041111.png)
+![image-20241114035041111](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/no_index_select_date_k6.png)
 
 [user150]
 
-![image-20241114035614438](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114035614438.png)
+![image-20241114035614438](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/no_index_select_date_k6_150.png)
 
 [user200]
 
-![image-20241114035327933](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114035327933.png)
+![image-20241114035327933](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/no_index_select_date_k6_200.png)
 
 * **[no index : K6]**
 
@@ -154,15 +154,15 @@ index 성능 테스트의 경우 가장 조회가 많이 일어날 것 같은 �
 
 [조회: 15]
 
-![image-20241114040357522](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114040357522.png)
+![image-20241114040357522](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/no_index_select_date_k6_150_15.png)
 
 [조회 50]
 
-![image-20241114041746540](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114041746540.png)
+![image-20241114041746540](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/no_index_select_date_k6_150_50.png)
 
 [조회 100]
 
-![no_index_select_date_k6_150_100](C:\Users\user\Desktop\k6\picture\no_index_select_date_k6_150_100.png)
+![no_index_select_date_k6_150_100](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/no_index_select_date_k6_150_100.png)
 
 
 
@@ -170,7 +170,7 @@ index 성능 테스트의 경우 가장 조회가 많이 일어날 것 같은 �
   * 스케줄:  eq_ref, 좌석: ref (index 범위 스캔)
 
 
-![image-20241114130054156](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114130054156.png)
+![image-20241114130054156](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/index_idx_seat_status_schedule_select_date.png)
 
 * **[index : Explain Analyze]**
 
@@ -208,11 +208,11 @@ index 성능 테스트의 경우 가장 조회가 많이 일어날 것 같은 �
 
   [조회 10번 ]
   
-  ![image-20241114124757970](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114124757970.png)
+  ![image-20241114124757970](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/index_idx_seat_status_schedule_select_date_k6_150.png)
   
   [조회 100번]
   
-  ![image-20241114132058330](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114132058330.png)
+  ![image-20241114132058330](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/index_idx_seat_status_schedule_select_date_k6_150_100.png)
 
 
 
@@ -263,5 +263,5 @@ CREATE INDEX idx_schedule_id_seat_status ON concert_seat (schedule_id, seat_stat
 쿼리 조건과 인덱스 컬럼 순서가 완전히 일치하지 않으면 쿼리 옵티마이저가 인덱스를 비효율적으로 사용할 수 있다는 사실 확인
 ```
 
-![image-20241114125615137](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241114125615137.png)
+![image-20241114125615137](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/picture/index_error_select_date_k6_150.png)
 

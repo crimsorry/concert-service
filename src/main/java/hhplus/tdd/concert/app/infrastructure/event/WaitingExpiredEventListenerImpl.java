@@ -16,14 +16,12 @@ public class WaitingExpiredEventListenerImpl implements WaitingExpiredEventListe
 
     private WaitingRepository waitingRepository;
 
-    @Async
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     @Override
     public void handleWaitingExpiredEvent(ActiveToken activeToken) {
         waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
     }
 
-    @Async
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     @Override
     public void handleWaitingExpiredTimeEvent(String value) {

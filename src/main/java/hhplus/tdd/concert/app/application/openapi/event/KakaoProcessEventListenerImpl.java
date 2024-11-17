@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.infrastructure.event.external;
+package hhplus.tdd.concert.app.application.openapi.event;
 
 import hhplus.tdd.concert.app.application.openapi.service.OpenapiService;
 import hhplus.tdd.concert.app.domain.openapi.event.KakaoPayProcessEvent;

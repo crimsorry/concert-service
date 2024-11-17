@@ -110,4 +110,14 @@ public class WaitingService {
         }
     }
 
+    @Transactional
+    public void deleteActiveToken(ActiveToken activeToken){
+        waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
+    }
+
+    @Transactional
+    public void updateActiveToken(String value){
+        waitingRepository.updateActiveToken(value);
+    }
+
 }

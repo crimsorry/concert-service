@@ -1,5 +1,6 @@
-package hhplus.tdd.concert.app.infrastructure.event.external;
+package hhplus.tdd.concert.app.application.openapi.event;
 
+import hhplus.tdd.concert.app.application.openapi.service.OpenapiService;
 import hhplus.tdd.concert.app.domain.openapi.event.KakaoPayProcessEvent;
 import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessEventListener;
 import hhplus.tdd.concert.app.domain.openapi.event.KakaoReservationProcessEvent;
@@ -15,29 +16,19 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class KakaoProcessEventListenerImpl implements KakaoProcessEventListener {
 
+    private final OpenapiService openapiService;
+
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Override
     public void handleKakaoReservationProcessEvent(KakaoReservationProcessEvent event) {
-        try {
-            // 카카오톡 메시지 전송 로직
-            log.info("Sending Kakao message for reservation: " + event.getReservationDTO());
-        } catch (Exception e) {
-            // 실패 처리 로직
-            log.warn("Failed to send Kakao message: " + e.getMessage());
-        }
+        openapiService.processKakaoMsgReservation(event.getReservationDTO());
     }
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Override
     public void handleKakaoPayProcessEvent(KakaoPayProcessEvent event) {
-        try {
-            // 카카오톡 메시지 전송 로직
-            log.info("Sending Kakao message for reservation: " + event.getPayDTO());
-        } catch (Exception e) {
-            // 실패 처리 로직
-            log.warn("Failed to send Kakao message: " + e.getMessage());
-        }
+        openapiService.processKakaoMsgPay(event.getPayDTO());
     }
 }

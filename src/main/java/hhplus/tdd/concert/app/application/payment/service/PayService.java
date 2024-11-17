@@ -171,9 +171,9 @@ public class PayService {
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
 
-        // event listener : 대기열 만료
+        // event listener : 결제 완료 이벤트 > 대기열 만료
         waitingPublisher.publishWaitingExpiredEvent(activeToken);
-        // event listener : 카카오톡 전송
+        // event listener : 결제 완료 이벤트 > 카카오톡 전송
         ReservationDTO reservationDto = ReservationDTO.from(reservation);
         kakaoProcessPublisher.publishReservationEvent(reservationDto);
 

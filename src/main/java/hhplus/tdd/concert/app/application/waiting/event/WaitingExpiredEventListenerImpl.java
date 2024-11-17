@@ -1,8 +1,8 @@
-package hhplus.tdd.concert.app.infrastructure.event.waiting;
+package hhplus.tdd.concert.app.application.waiting.event;
 
+import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import hhplus.tdd.concert.app.domain.waiting.event.WaitingExpiredEventListener;
 import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
-import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -13,17 +13,18 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class WaitingExpiredEventListenerImpl implements WaitingExpiredEventListener {
 
-    private WaitingRepository waitingRepository;
+    private final WaitingService waitingService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     @Override
-    public void handleWaitingExpiredEvent(ActiveToken activeToken) {
-        waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
+    public void handleWaitingExpiredEvent(ActiveToken activeToken) { // 전달 . domain 감! application 이나 도메인
+        waitingService.deleteActiveToken(activeToken);
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     @Override
     public void handleWaitingExpiredTimeEvent(String value) {
-        waitingRepository.updateActiveToken(value);
+        waitingService.updateActiveToken(value);
     }
+
 }

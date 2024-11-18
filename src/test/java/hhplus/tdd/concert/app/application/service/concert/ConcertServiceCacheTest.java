@@ -5,6 +5,7 @@ import hhplus.tdd.concert.app.application.concert.service.ConcertService;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
 import hhplus.tdd.concert.app.infrastructure.persistence.concert.dataaccess.jpa.ConcertJpaRepository;
+import hhplus.tdd.concert.config.RedisContainerExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({
+        RedisContainerExtension.class,
+        MockitoExtension.class
+})
 public class ConcertServiceCacheTest {
 
     private final TestBase testBase = new TestBase();

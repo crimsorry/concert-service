@@ -60,7 +60,9 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 	testImplementation("org.testcontainers:testcontainers:1.17.6")
 	testImplementation("org.testcontainers:junit-jupiter:1.17.6")
-
+	testImplementation("org.testcontainers:kafka:1.20.3")
+	testImplementation("org.testcontainers:mysql:1.20.3")
+	testImplementation ("com.redis.testcontainers:testcontainers-redis-junit:1.6.4")
 }
 
 tasks.withType<Test> {

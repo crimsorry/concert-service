@@ -14,7 +14,7 @@ import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
-import hhplus.tdd.concert.app.infrastructure.TestContainerConfig;
+import hhplus.tdd.concert.config.RedisContainerExtension;
 import hhplus.tdd.concert.config.types.PointType;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import hhplus.tdd.concert.config.types.SeatStatus;
@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 @SpringBootTest
-@ExtendWith(TestContainerConfig.class)
+@ExtendWith(RedisContainerExtension.class)
 public class PayRedisIntegrationTest {
 
     private final TestBase testBase = new TestBase();

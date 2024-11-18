@@ -10,7 +10,7 @@ import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepositor
 import hhplus.tdd.concert.app.domain.waiting.entity.Waiting;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
-import hhplus.tdd.concert.app.infrastructure.TestContainerConfig;
+import hhplus.tdd.concert.config.RedisContainerExtension;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import hhplus.tdd.concert.config.types.WaitingStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 @SpringBootTest
-@ExtendWith(TestContainerConfig.class)
+@ExtendWith(RedisContainerExtension.class)
 public class ReservationRedisIntegrationTest {
 
     private final TestBase testBase = new TestBase();

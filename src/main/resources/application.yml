@@ -14,13 +14,3 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
-  data:
-    redis:
-      lettuce:
-        pool:
-          max-active: 8
-      maxmemory-policy: allkeys-lru
-
-redis:
-  stock:
-    prefix: stocks

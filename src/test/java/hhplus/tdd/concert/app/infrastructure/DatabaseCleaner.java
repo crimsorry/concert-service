@@ -6,6 +6,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
 import jakarta.persistence.metamodel.EntityType;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

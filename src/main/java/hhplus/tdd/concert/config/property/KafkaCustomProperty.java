@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "application.kafka-property")
+@ConfigurationProperties(prefix = "spring.kafka.common")
 public class KafkaCustomProperty {
 
     private String bootstrapServers;

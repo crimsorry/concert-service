@@ -1,5 +1,5 @@
-INSERT INTO member(member_name, charge, version)VALUES('김소리_테스트_1', 0, 0);
-INSERT INTO member(member_name, charge, version)VALUES('김소리_테스트_2', 0, 0);
+INSERT INTO member(member_name, charge)VALUES('김소리_테스트_1', 0);
+INSERT INTO member(member_name, charge)VALUES('김소리_테스트_2', 0);
 INSERT INTO concert (concert_title, concert_place) VALUES
                                                        ('드라큘라1', '부산문화회관 대극장'),
                                                        ('드라큘라2', '부산문화회관 대극장'),

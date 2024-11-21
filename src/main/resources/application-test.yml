@@ -1,53 +1,36 @@
-profile-name: test
-
 spring:
   application.name: concert
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:testdb;MODE=MySQL'
-    username: sa
-    password:
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
       show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: false # test에서는 false
-        show_sql: false   # test에서는 false
-    show-sql: false
+        format_sql: false
+        show_sql: false
     defer-datasource-initialization: true
 
   sql:
     init:
-      username: sa
-      password:
       schema-locations: file:./docs/ddl.sql
-      data-locations: file:./docs/data.sql
-
 
   kafka:
     bootstrap-servers: ${spring.embedded.kafka.brokers}
-    common:
+    producer:
+      retries: 3
+      acks: all
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      trusted-packages: "*"
     consumer:
       group-id: test-group
       auto-offset-reset: earliest
       properties:
         spring.json.trusted.packages: "*"
-    producer:
-      retries: 3
-      acks: all
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

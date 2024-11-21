@@ -1,17 +1,16 @@
 package hhplus.tdd.concert.app.domain.openapi.event;
 
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class KakaoReservationProcessEvent extends ApplicationEvent {
+@AllArgsConstructor
+@NoArgsConstructor
+public class KakaoReservationProcessEvent {
 
-    private final ReservationDTO reservationDTO;
-
-    public KakaoReservationProcessEvent(Object source, ReservationDTO reservationDTO) {
-        super(source);
-        this.reservationDTO = reservationDTO;
-    }
+    private ReservationDTO reservationDTO;
 
 }

@@ -66,7 +66,7 @@ public class ReservationService {
 
         // event listener : 예약 완료 > 대기열 업데이트
         // TODO: ttl 고려 필요
-        waitingPublisher.publishWaitingExpiredTimeEvent(waitingToken);
+        waitingPublisher.publishWaitingExpiredTimeEvent(waitingToken + ":" + memberId);
         // event listener : 예약 완료 > 카카오톡 전송
         PayDTO payDto = PayDTO.from(payment, reservation);
         kakaoProcessPublisher.publishPayEvent(payDto);

@@ -66,6 +66,8 @@ dependencies {
 	testImplementation("org.testcontainers:kafka:1.20.3")
 	testImplementation("org.testcontainers:mysql:1.20.3")
 	testImplementation ("com.redis.testcontainers:testcontainers-redis-junit:1.6.4")
+	testImplementation ("org.springframework.boot:spring-boot-testcontainers")
+
 }
 
 tasks.withType<Test> {

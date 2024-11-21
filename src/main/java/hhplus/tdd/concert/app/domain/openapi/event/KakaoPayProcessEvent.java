@@ -1,17 +1,17 @@
 package hhplus.tdd.concert.app.domain.openapi.event;
 
 import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class KakaoPayProcessEvent extends ApplicationEvent {
+@AllArgsConstructor
+@NoArgsConstructor
+public class KakaoPayProcessEvent{
 
-    private final PayDTO payDTO;
+    private PayDTO payDTO;
 
-    public KakaoPayProcessEvent(Object source, PayDTO payDTO) {
-        super(source);
-        this.payDTO = payDTO;
-    }
 
 }

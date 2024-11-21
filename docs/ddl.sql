@@ -81,6 +81,7 @@ CREATE TABLE payment (
     is_pay BOOLEAN DEFAULT FALSE COMMENT '결제 여부(true / false)',
     create_at DATETIME NOT NULL COMMENT '생성 시간',
     version BIGINT NOT NULL default 0 COMMENT '버전',
+    expired_at DATETIME NOT NULL COMMENT '만료 시간',
     INDEX pay_idx_member_id (member_id),
     INDEX pay_idx_reserve_id (reserve_id),
     INDEX pay_idx_is_pay (is_pay)

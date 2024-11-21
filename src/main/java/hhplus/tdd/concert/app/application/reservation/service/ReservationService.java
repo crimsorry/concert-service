@@ -58,15 +58,13 @@ public class ReservationService {
 
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
         Payment payment = Payment.generatePayment(member, reservation);
+        payment.recordExpiredAt();
 
         // 좌석 임시배정
         concertSeat.pending();
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        // event listener : 예약 완료 > 대기열 업데이트
-        // TODO: ttl 고려 필요
-        waitingPublisher.publishWaitingExpiredTimeEvent(waitingToken + ":" + memberId);
         // event listener : 예약 완료 > 카카오톡 전송
         PayDTO payDto = PayDTO.from(payment, reservation);
         kakaoProcessPublisher.publishPayEvent(payDto);

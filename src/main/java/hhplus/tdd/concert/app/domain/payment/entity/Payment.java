@@ -55,6 +55,10 @@ public class Payment {
     @Column
     private LocalDateTime createAt;
 
+    @Comment("만료 시간")
+    @Column
+    private LocalDateTime expiredAt;
+
     @Version
     private Integer version;
 
@@ -83,6 +87,14 @@ public class Payment {
 
     public void done(){
         this.isPay = true;
+    }
+
+    public void recordExpiredAt(){
+        this.expiredAt = LocalDateTime.now().plusMinutes(10);
+    }
+
+    public void expiredExpiredAt(){
+        this.expiredAt = null;
     }
 
 }

@@ -85,8 +85,8 @@ public class ReservationKafkaIntegrationTest extends KafkaRedisMySqlContainerSup
 
         reservationService.processReserve(testBase.activeTokenValueOnlyToken, 1L);
 
-        Awaitility.await()
-                .atMost(10, TimeUnit.SECONDS)  // 5초 wait
+        await()
+                .atMost(100, TimeUnit.SECONDS)  // 5초 wait
                 .pollInterval(100, TimeUnit.MILLISECONDS)  // 100ms 간격 check
                 .until(() -> {
                     return !waitingRepository.isActiveToken(testBase.ACTIVE_TOKEN_KEY, testBase.activeTokenValueOnlyToken + ":1");

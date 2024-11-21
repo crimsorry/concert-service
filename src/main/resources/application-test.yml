@@ -34,3 +34,5 @@ spring:
         spring.json.trusted.packages: "*"
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      metadata.max.age.ms: 3000
+    properties.auto.create.topics.enable: false

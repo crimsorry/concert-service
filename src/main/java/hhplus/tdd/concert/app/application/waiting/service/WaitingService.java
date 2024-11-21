@@ -74,7 +74,7 @@ public class WaitingService {
         return new WaitingNumDTO(userNum);
     }
 
-    /* 대기열 만료 */
+    /* TODO: 대기열 만료 */
     @Transactional
     public void expiredWaiting(){
         List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(ACTIVE_TOKEN_KEY);
@@ -116,10 +116,11 @@ public class WaitingService {
         waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
     }
 
-    @Transactional
-    public void updateActiveToken(String value){
-        waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, value);
-        waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, value + ":" + System.currentTimeMillis());
-    }
+//    @Transactional
+//    public void updateActiveToken(String value){
+//        // 테이블 변경 로직 개선 필요
+//        waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, value);
+//        waitingRepository.addActiveToken(ACTIVE_EXPIRED_TOKEN_KEY, value + ":" + System.currentTimeMillis());
+//    }
 
 }

@@ -19,8 +19,10 @@ public abstract class KafkaRedisMySqlContainerSupport {
     // Kafka Testcontainer 설정
     private static final KafkaContainer KAFKA = new KafkaContainer(
             DockerImageName.parse("confluentinc/cp-kafka:7.5.0")
-                    .asCompatibleSubstituteFor("apache/kafka") // Testcontainers에서 Kafka 설정을 호환
-    );
+                    .asCompatibleSubstituteFor("apache/kafka")
+    )
+            .waitingFor(Wait.forListeningPort())
+            .withReuse(false);
 
     static final GenericContainer<?> REDIS = new GenericContainer<>("redis:latest")
             .waitingFor(Wait.forListeningPort())

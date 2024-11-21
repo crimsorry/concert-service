@@ -165,14 +165,13 @@ public class PayService {
 
         // 결제 완료 처리
         payment.done();
+        payment.expiredExpiredAt();
         concertSeat.close();
         reservation.complete();
         member.withdraw(payment.getAmount());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
 
-        // event listener : 결제 완료 이벤트 > 대기열 만료
-        waitingPublisher.publishWaitingExpiredEvent(activeToken);
         // event listener : 결제 완료 이벤트 > 카카오톡 전송
         ReservationDTO reservationDto = ReservationDTO.from(reservation);
         kakaoProcessPublisher.publishReservationEvent(reservationDto);

@@ -18,7 +18,6 @@ public class WaitingExpiredEventListenerImpl implements WaitingExpiredEventListe
     private final WaitingService waitingService;
 
     private static final String WAITING_EXPIRED_TOPIC = "waiting_expired_event";
-    private static final String WAITING_EXPIRED_TIME_TOPIC = "waiting_expired_time_event";
 
     @KafkaListener(topics = WAITING_EXPIRED_TOPIC,
             groupId = "waiting-group",
@@ -32,21 +31,6 @@ public class WaitingExpiredEventListenerImpl implements WaitingExpiredEventListe
             log.info("대기열 만료 성공");
         }catch (Exception e){
             log.info("대기열 만료 실패");
-        }
-    }
-
-    @KafkaListener(topics = WAITING_EXPIRED_TIME_TOPIC,
-            groupId = "waiting-group",
-            errorHandler = "deadLetterQueueWaitingTimeErrorHandler")
-    @Async
-    @Override
-    public void handleWaitingExpiredTimeEvent(WaitingExpiredTimeEvent waitingExpiredTimeEvent) {
-        try{
-            log.info("대기열 업데이트 listener 진입");
-            waitingService.updateActiveToken(waitingExpiredTimeEvent.getValue());
-            log.info("대기열 상태 업데이트 성공");
-        }catch (Exception e){
-            log.info("대기열 상태 업데이트 실패");
         }
     }
 

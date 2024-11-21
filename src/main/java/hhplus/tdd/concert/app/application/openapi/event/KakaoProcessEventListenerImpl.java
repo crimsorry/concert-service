@@ -24,7 +24,7 @@ public class KakaoProcessEventListenerImpl implements KakaoProcessEventListener 
 
     @KafkaListener(topics = KAKAO_RESERVATION_TOTIC,
             groupId = "kakao-group",
-            errorHandler = "deadLetterQueueKakaoErrorHandler")
+            errorHandler = "deadLetterQueueKakaoReservationErrorHandler")
     @Async
     @Override
     public void handleKakaoReservationProcessEvent(KakaoReservationProcessEvent event) {
@@ -33,7 +33,7 @@ public class KakaoProcessEventListenerImpl implements KakaoProcessEventListener 
 
     @KafkaListener(topics = KAKAO_PAY_TOPIC,
             groupId = "kakao-group",
-            errorHandler = "deadLetterQueueKakaoErrorHandler")
+            errorHandler = "deadLetterQueueKakaoPayErrorHandler")
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Override

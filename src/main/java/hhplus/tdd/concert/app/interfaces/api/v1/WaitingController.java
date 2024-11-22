@@ -1,8 +1,8 @@
-package hhplus.tdd.concert.app.api.v1;
+package hhplus.tdd.concert.app.interfaces.api.v1;
 
-import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
-import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingNumRes;
-import hhplus.tdd.concert.app.api.dto.response.waiting.WaitingTokenRes;
+import hhplus.tdd.concert.app.interfaces.api.dto.response.ErrorRes;
+import hhplus.tdd.concert.app.interfaces.api.dto.response.waiting.WaitingNumRes;
+import hhplus.tdd.concert.app.interfaces.api.dto.response.waiting.WaitingTokenRes;
 import hhplus.tdd.concert.app.application.waiting.dto.WaitingNumDTO;
 import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenDTO;
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;

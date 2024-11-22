@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.application.waiting.schedule;
+package hhplus.tdd.concert.app.interfaces.schedular.waiting;
 
 import hhplus.tdd.concert.app.application.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;

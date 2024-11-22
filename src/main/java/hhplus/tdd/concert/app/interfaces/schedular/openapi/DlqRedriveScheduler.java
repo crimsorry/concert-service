@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.application;
+package hhplus.tdd.concert.app.interfaces.schedular.openapi;
 
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import hhplus.tdd.concert.app.domain.waiting.event.WaitingExpiredEvent;

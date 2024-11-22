@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.api.dto.response.payment;
+package hhplus.tdd.concert.app.interfaces.api.dto.response.payment;
 
 import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 

@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.api.dto.response;
+package hhplus.tdd.concert.app.interfaces.api.dto.response;
 
 import org.springframework.boot.logging.LogLevel;
 

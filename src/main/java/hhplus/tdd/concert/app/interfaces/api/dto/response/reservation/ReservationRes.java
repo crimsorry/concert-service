@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.api.dto.response.reservation;
+package hhplus.tdd.concert.app.interfaces.api.dto.response.reservation;
 
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.config.types.ReserveStatus;

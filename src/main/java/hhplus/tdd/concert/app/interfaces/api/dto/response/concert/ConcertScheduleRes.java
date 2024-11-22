@@ -1,4 +1,4 @@
-package hhplus.tdd.concert.app.api.dto.response.concert;
+package hhplus.tdd.concert.app.interfaces.api.dto.response.concert;
 
 import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleDTO;
 

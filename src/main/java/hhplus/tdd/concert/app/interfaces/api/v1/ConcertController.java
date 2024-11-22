@@ -1,9 +1,9 @@
-package hhplus.tdd.concert.app.api.v1;
+package hhplus.tdd.concert.app.interfaces.api.v1;
 
-import hhplus.tdd.concert.app.api.dto.response.ErrorRes;
-import hhplus.tdd.concert.app.api.dto.response.concert.ConcertRes;
-import hhplus.tdd.concert.app.api.dto.response.concert.ConcertScheduleRes;
-import hhplus.tdd.concert.app.api.dto.response.concert.ConcertSeatRes;
+import hhplus.tdd.concert.app.interfaces.api.dto.response.ErrorRes;
+import hhplus.tdd.concert.app.interfaces.api.dto.response.concert.ConcertRes;
+import hhplus.tdd.concert.app.interfaces.api.dto.response.concert.ConcertScheduleRes;
+import hhplus.tdd.concert.app.interfaces.api.dto.response.concert.ConcertSeatRes;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertDTO;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertScheduleDTO;
 import hhplus.tdd.concert.app.application.concert.dto.ConcertSeatDTO;

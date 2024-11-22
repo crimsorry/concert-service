@@ -4,9 +4,9 @@ import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
-import hhplus.tdd.concert.app.domain.waiting.event.WaitingPublisher;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoMsgEvent;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
@@ -38,7 +38,6 @@ public class ReservationService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
 
-    private final WaitingPublisher waitingPublisher;
     private final KakaoProcessPublisher kakaoProcessPublisher;
 
     /* 좌석 예약 요청 */
@@ -67,7 +66,13 @@ public class ReservationService {
 
         // event listener : 예약 완료 > 카카오톡 전송
         PayDTO payDto = PayDTO.from(payment, reservation);
-        kakaoProcessPublisher.publishPayEvent(payDto);
+        KakaoMsgEvent kakaoMsgEvent = new KakaoMsgEvent(
+                "[입금요망]",
+                member.getMemberName(),
+                reservation.getConcertTitle(),
+                reservation.getAmount(),
+                reservation.getSeatCode());
+        kakaoProcessPublisher.publishEvent(kakaoMsgEvent);
 
         return payDto;
     }

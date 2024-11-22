@@ -54,11 +54,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     public NewTopic waitingExpiredEventTopic() {
-        return new NewTopic("waiting_expired_event", 1, (short) 2); // 파티션 1개, 복제본 2개
-    }
-
-    @Bean
-    public NewTopic waitingExpiredTopic() {
-        return new NewTopic("waiting_expired_time_event", 1, (short) 2); // 파티션 1개, 복제본 2개
+        new NewTopic("kakao-event.DLQ", 1, (short) 2);
+        return new NewTopic("kakao-event", 1, (short) 2);
     }
 }

@@ -80,14 +80,14 @@ public class DlqRedriveScheduler {
     @Scheduled(fixedDelay = 30000) // 30초마다 실행
     public void processDlqMessages() {
         // DLQ 토픽에서 메시지 읽기
-        kafkaConsumer.subscribe(Collections.singletonList("waiting_expired_event.DLQ"));
+        kafkaConsumer.subscribe(Collections.singletonList("kakao-event.DLQ"));
         ConsumerRecords<String, Object> records = kafkaConsumer.poll(Duration.ofSeconds(5));
 
         for (ConsumerRecord<String, Object> record : records) {
             int retryCount = getRetryCount(record);
 
             if (retryCount >= MAX_RETRY_COUNT) {
-                kafkaTemplate.send("waiting_expired_event.permanent_fail", record.value());
+                kafkaTemplate.send("kakao-event.permanent_fail", record.value());
                 log.warn("최대 재시도 초과. 영구 삭제 토픽으로 이동: {}", record.value());
                 continue;
             }
@@ -95,7 +95,7 @@ public class DlqRedriveScheduler {
             try {
                 // 재시도
                 ProducerRecord<String, Object> producerRecord = new ProducerRecord<>(
-                        "waiting_expired_event",
+                        "kakao-event",
                         null,
                         null,
                         record.key(),

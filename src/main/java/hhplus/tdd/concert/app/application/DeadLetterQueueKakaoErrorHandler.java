@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class DeadLetterQueueWaitingTimeErrorHandler implements ConsumerAwareListenerErrorHandler{
+public class DeadLetterQueueKakaoErrorHandler implements ConsumerAwareListenerErrorHandler{
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
     public Object handleError(Message<?> message, ListenerExecutionFailedException exception, Consumer<?, ?> consumer) {
-        log.error("[waiting_time] WaitingTime 메시지 처리 실패, DLQ로 이동: {}", exception.getMessage());
-        kafkaTemplate.send("waiting_time_event.DLQ", message.getPayload());
+        log.error("[알림톡] 메시지 처리 실패, DLQ로 이동: {}", exception.getMessage());
+        kafkaTemplate.send("kakao-event.DLQ", message.getPayload());
         return null;
     }
 }

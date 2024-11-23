@@ -1,24 +1,20 @@
 package hhplus.tdd.concert.config;
 
-import java.util.Map;
-
 import hhplus.tdd.concert.config.property.KafkaCustomProperty;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 @EnableKafka
 @Configuration
 @RequiredArgsConstructor
-@Profile("!test")
 public class KafkaProducerConfig {
 
     private final KafkaCustomProperty kafkaProperty;

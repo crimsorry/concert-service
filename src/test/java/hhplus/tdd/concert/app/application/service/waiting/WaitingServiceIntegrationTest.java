@@ -31,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 @SpringBootTest
-@ActiveProfiles("test")
 public class WaitingServiceIntegrationTest {
 
     private final TestBase testBase = new TestBase();

@@ -38,7 +38,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @Slf4j
-@ActiveProfiles("test")
 @Testcontainers
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -69,7 +68,6 @@ public class PayKafkaIntegrationTest extends KafkaRedisMySqlContainerSupport {
 
     @Autowired
     private PaymentRepository paymentRepository;
-
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;

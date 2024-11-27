@@ -51,6 +51,9 @@ public class WaitingService {
     }
 
     public WaitingNumDTO loadWaiting(String waitingToken){
+        Long memberId = -1L;
+        Long memberNum = 0L;
+
         Set<String> tokenSet = waitingRepository.getAllTokens(WAITING_TOKEN_KEY);
 
         if (tokenSet == null) {
@@ -63,14 +66,14 @@ public class WaitingService {
                 .orElse(null);
 
         if(matchedValue == null) {
-            throw new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR);
+            waitingRepository.findByTokenOrThrow(waitingToken)
+                    .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
+        }else{
+            memberId = Long.parseLong(matchedValue.split(":")[1]);
+            memberNum = waitingRepository.getWaitingTokenScore(WAITING_TOKEN_KEY, waitingToken + ":" + memberId) + 1;
         }
 
-        int memberId = Integer.parseInt(matchedValue.split(":")[1]);
-
-        Long userNum = waitingRepository.getWaitingTokenScore(WAITING_TOKEN_KEY, waitingToken + ":" + memberId);
-
-        return new WaitingNumDTO(userNum);
+        return new WaitingNumDTO(memberNum);
     }
 
     /* TODO: 대기열 만료 */

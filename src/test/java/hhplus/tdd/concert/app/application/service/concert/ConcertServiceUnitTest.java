@@ -50,7 +50,7 @@ public class ConcertServiceUnitTest {
         when(concertRepository.findAll()).thenReturn(testBase.concerts);
 
         // then
-        List<ConcertDTO> result = concertService.loadConcert();
+        List<ConcertDTO> result = concertService.loadConcert(1);
 
         // 결과 검증
         assertEquals(1, result.size());

@@ -35,9 +35,16 @@ public class ConcertService {
     private final WaitingRepository waitingRepository;
 
     /* 전체 콘서트 리스트 조회 */
-    @Cacheable(value = "concertList", key = "'concertList'", cacheManager = "cacheManager", unless = "#result == null || #result.isEmpty()")
-    public List<ConcertDTO> loadConcert() {
-        List<Concert> concerts = concertRepository.findAll();
+    @Cacheable(value = "concertList",
+            key = "#page",
+            cacheManager = "cacheManager",
+            unless = "#result == null || #result.isEmpty()")
+    public List<ConcertDTO> loadConcert(int page) {
+        int pageSize = 10;
+        int pageNumber = page - 1;
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        List<Concert> concerts = concertRepository.getConcertList(pageRequest);
         return ConcertDTO.from(concerts);
     }
 
@@ -46,10 +53,7 @@ public class ConcertService {
         waitingRepository.findByTokenOrThrow(waitingToken)
                 .orElseThrow(() -> new FailException(ErrorCode.NOT_FOUND_WAITING_MEMBER, LogLevel.ERROR));
 
-//        LocalDate startDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//        LocalDate endDate = startDate.plusDays(1);
         PageRequest pageRequest = PageRequest.of(0, 10);
-
         List<ConcertSchedule> concertSchedules = concertScheduleRepository.findByConcertScheduleDatesWithStandBySeats(concertId, pageRequest);
         return ConcertScheduleDTO.from(concertSchedules);
     }

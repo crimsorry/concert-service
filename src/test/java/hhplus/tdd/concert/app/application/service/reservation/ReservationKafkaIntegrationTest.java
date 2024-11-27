@@ -29,6 +29,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static java.time.Duration.ofSeconds;
@@ -38,7 +39,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @Slf4j
-@ActiveProfiles("test")
 @Testcontainers
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -142,6 +142,7 @@ public class ReservationKafkaIntegrationTest extends KafkaRedisMySqlContainerSup
     void consumeDLQTestMessage(KakaoMsgEvent event) {
         receivedkakaoMsgEventDlq = event;
     }
+
 
 
 }

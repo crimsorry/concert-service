@@ -5,6 +5,7 @@ import hhplus.tdd.concert.app.application.concert.service.ConcertService;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
 import hhplus.tdd.concert.app.infrastructure.concert.persistence.dataacess.jpa.ConcertJpaRepository;
+import hhplus.tdd.concert.config.KafkaRedisMySqlContainerSupport;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

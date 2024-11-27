@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Profile("!test")
 public class WaitingSchedule {
 
     private final WaitingService waitingService;

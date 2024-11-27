@@ -4,6 +4,11 @@ spring:
                          # hhplus: 코치님 실 사용
                          # test: 통합테스트용.
 
+  kafka:
+    producer:
+      topic:
+        waiting: waiting
+
 springdoc:
   packages-to-scan: hhplus.tdd.concert.app.api
   default-consumes-media-type: application/json;charset=UTF-8
@@ -14,13 +19,5 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
-  data:
-    redis:
-      lettuce:
-        pool:
-          max-active: 8
-      maxmemory-policy: allkeys-lru
 
-redis:
-  stock:
-    prefix: stocks
+

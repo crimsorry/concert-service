@@ -18,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({
+        MockitoExtension.class
+})
 public class ConcertServiceCacheTest {
 
     private final TestBase testBase = new TestBase();

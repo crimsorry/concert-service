@@ -49,6 +49,9 @@ dependencies {
 	// Redisson
 	implementation("org.redisson:redisson-spring-boot-starter:3.38.1")
 
+	// Kafka
+	implementation ("org.springframework.kafka:spring-kafka")
+
 	// Test - h2
 	testImplementation("com.h2database:h2:2.3.232")
 
@@ -58,9 +61,11 @@ dependencies {
 	testCompileOnly("org.projectlombok:lombok")
 	testAnnotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-	testImplementation("org.testcontainers:testcontainers:1.17.6")
-	testImplementation("org.testcontainers:junit-jupiter:1.17.6")
-
+	testImplementation("org.testcontainers:testcontainers:1.20.3")
+	testImplementation("org.testcontainers:junit-jupiter:1.20.3")
+	testImplementation("org.testcontainers:kafka:1.20.3")
+	testImplementation("org.testcontainers:mysql:1.20.3")
+	testImplementation ("com.redis.testcontainers:testcontainers-redis-junit:1.6.4")
 }
 
 tasks.withType<Test> {

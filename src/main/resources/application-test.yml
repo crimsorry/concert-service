@@ -34,10 +34,20 @@ spring:
       schema-locations: file:./docs/ddl.sql
       data-locations: file:./docs/data.sql
 
-  # redis
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    common:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      trusted-packages: "*"
+    consumer:
+      group-id: test-group
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      retries: 3
+      acks: all

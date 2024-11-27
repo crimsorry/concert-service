@@ -1,9 +1,10 @@
 package hhplus.tdd.concert.app.infrastructure;
 
-import hhplus.tdd.concert.config.KafkaRedisContainerSupport;
+import hhplus.tdd.concert.config.KafkaRedisMySqlContainerSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.annotation.DirtiesContext;
@@ -18,8 +19,9 @@ import static org.awaitility.Awaitility.await;
 @Slf4j
 @ActiveProfiles("test")
 @Testcontainers
+@SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class KafkaTest extends KafkaRedisContainerSupport{
+public class KafkaTest extends KafkaRedisMySqlContainerSupport {
 
     private static final String TEST_TOPIC = "test-topic";
 

@@ -9,8 +9,7 @@
 CREATE TABLE member (
     member_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '사용자 ID',
     member_name VARCHAR(13) NOT NULL COMMENT '사용자 명',
-    charge INT NOT NULL default 0 COMMENT '잔액',
-    version BIGINT NOT NULL default 0 COMMENT '버전'
+    charge INT NOT NULL default 0 COMMENT '잔액'
 ) COMMENT = '사용자';
 
 CREATE TABLE waiting (
@@ -45,7 +44,6 @@ CREATE TABLE concert_seat (
     seat_code VARCHAR(3) NOT NULL COMMENT '좌석 번호',
     amount INT NOT NULL COMMENT '좌석 금액',
     seat_status VARCHAR(10) NOT NULL COMMENT '좌석 점유 여부',
-    version BIGINT NOT NULL default 0 COMMENT '버전',
     INDEX seat_idx_schedule_id (schedule_id),
     INDEX seat_idx_seat_status (seat_status)
 ) COMMENT = '콘서트 좌석';
@@ -83,6 +81,7 @@ CREATE TABLE payment (
     is_pay BOOLEAN DEFAULT FALSE COMMENT '결제 여부(true / false)',
     create_at DATETIME NOT NULL COMMENT '생성 시간',
     version BIGINT NOT NULL default 0 COMMENT '버전',
+    expired_at DATETIME NOT NULL COMMENT '만료 시간',
     INDEX pay_idx_member_id (member_id),
     INDEX pay_idx_reserve_id (reserve_id),
     INDEX pay_idx_is_pay (is_pay)

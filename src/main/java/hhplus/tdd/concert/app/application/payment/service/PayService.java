@@ -4,16 +4,16 @@ import hhplus.tdd.concert.app.application.payment.dto.LoadAmountDTO;
 import hhplus.tdd.concert.app.application.payment.dto.UpdateChargeDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
-import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
-import hhplus.tdd.concert.app.domain.waiting.event.WaitingPublisher;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoMsgEvent;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
 import hhplus.tdd.concert.app.domain.payment.entity.AmountHistory;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.AmountHistoryRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
-import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.config.exception.FailException;
@@ -37,7 +37,6 @@ public class PayService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
 
-    private final WaitingPublisher waitingPublisher;
     private final KakaoProcessPublisher kakaoProcessPublisher;
 
     /* 잔액 충전 */
@@ -165,17 +164,17 @@ public class PayService {
 
         // 결제 완료 처리
         payment.done();
+        payment.expiredExpiredAt();
         concertSeat.close();
         reservation.complete();
         member.withdraw(payment.getAmount());
         AmountHistory amountHistory = AmountHistory.generateAmountHistory(payment.getAmount(), PointType.USE, member);
         amountHistoryRepository.save(amountHistory);
 
-        // event listener : 결제 완료 이벤트 > 대기열 만료
-        waitingPublisher.publishWaitingExpiredEvent(activeToken);
         // event listener : 결제 완료 이벤트 > 카카오톡 전송
         ReservationDTO reservationDto = ReservationDTO.from(reservation);
-        kakaoProcessPublisher.publishReservationEvent(reservationDto);
+        KakaoMsgEvent kakaoMsgEvent = new KakaoMsgEvent("[결제완료]", reservationDto.memberName(), reservationDto.concertTitle(), reservationDto.amount(), reservationDto.seatCode());
+        kakaoProcessPublisher.publishEvent(kakaoMsgEvent);
 
         return reservationDto;
     }

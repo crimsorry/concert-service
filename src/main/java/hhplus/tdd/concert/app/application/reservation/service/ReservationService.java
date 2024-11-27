@@ -4,9 +4,9 @@ import hhplus.tdd.concert.app.application.payment.dto.PayDTO;
 import hhplus.tdd.concert.app.application.reservation.dto.ReservationDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
-import hhplus.tdd.concert.app.domain.waiting.event.WaitingPublisher;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoMsgEvent;
+import hhplus.tdd.concert.app.domain.openapi.event.KakaoProcessPublisher;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
@@ -38,7 +38,6 @@ public class ReservationService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
 
-    private final WaitingPublisher waitingPublisher;
     private final KakaoProcessPublisher kakaoProcessPublisher;
 
     /* 좌석 예약 요청 */
@@ -58,18 +57,22 @@ public class ReservationService {
 
         Reservation reservation = Reservation.generateReservation(member, concertSeat);
         Payment payment = Payment.generatePayment(member, reservation);
+        payment.recordExpiredAt();
 
         // 좌석 임시배정
         concertSeat.pending();
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
 
-        // event listener : 예약 완료 > 대기열 업데이트
-        // TODO: ttl 고려 필요
-        waitingPublisher.publishWaitingExpiredTimeEvent(waitingToken);
         // event listener : 예약 완료 > 카카오톡 전송
         PayDTO payDto = PayDTO.from(payment, reservation);
-        kakaoProcessPublisher.publishPayEvent(payDto);
+        KakaoMsgEvent kakaoMsgEvent = new KakaoMsgEvent(
+                "[입금요망]",
+                member.getMemberName(),
+                reservation.getConcertTitle(),
+                reservation.getAmount(),
+                reservation.getSeatCode());
+        kakaoProcessPublisher.publishEvent(kakaoMsgEvent);
 
         return payDto;
     }

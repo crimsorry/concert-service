@@ -4,12 +4,12 @@ import hhplus.tdd.concert.app.application.waiting.dto.WaitingNumDTO;
 import hhplus.tdd.concert.app.application.waiting.dto.WaitingTokenDTO;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import hhplus.tdd.concert.app.domain.exception.ErrorCode;
-import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
-import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
-import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.payment.repository.PaymentRepository;
+import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.waiting.entity.ActiveToken;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
+import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
 import hhplus.tdd.concert.config.exception.FailException;
 import jakarta.transaction.Transactional;
@@ -73,7 +73,7 @@ public class WaitingService {
         return new WaitingNumDTO(userNum);
     }
 
-    /* 대기열 만료 */
+    /* TODO: 대기열 만료 */
     @Transactional
     public void expiredWaiting(){
         List<ActiveToken> activeTokenList = waitingRepository.getActiveToken(ACTIVE_TOKEN_KEY);
@@ -105,19 +105,21 @@ public class WaitingService {
             // maxMember 이하라면 : maxMember - 현재 active 수 만큼 위에서부터 active 전환
             for (ActiveToken activeToken : waitingTokenList) {
                 waitingRepository.deleteWaitingToken(WAITING_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId());
-                waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + System.currentTimeMillis() + (5 * 60 * 1000));
+                waitingRepository.addActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId());
             }
         }
     }
 
     @Transactional
     public void deleteActiveToken(ActiveToken activeToken){
-        waitingRepository.deleteActiveToken("waitingToken", activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
+        waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, activeToken.getToken() + ":" + activeToken.getMemberId() + ":" + activeToken.getExpiredAt());
     }
 
-    @Transactional
-    public void updateActiveToken(String value){
-        waitingRepository.updateActiveToken(value);
-    }
+//    @Transactional
+//    public void updateActiveToken(String value){
+//        // 테이블 변경 로직 개선 필요
+//        waitingRepository.deleteActiveToken(ACTIVE_TOKEN_KEY, value);
+//        waitingRepository.addActiveToken(ACTIVE_EXPIRED_TOKEN_KEY, value + ":" + System.currentTimeMillis());
+//    }
 
 }

@@ -24,6 +24,10 @@ repositories {
 	mavenCentral()
 }
 
+tasks.named<Jar>("jar") {
+	enabled = false
+}
+
 dependencies {
 	// Spring Boot
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -67,6 +71,9 @@ dependencies {
 	testImplementation("org.testcontainers:mysql:1.20.3")
 	testImplementation ("com.redis.testcontainers:testcontainers-redis-junit:1.6.4")
 	testImplementation ("org.springframework.boot:spring-boot-testcontainers")
+
+	// run
+	implementation("org.springframework.boot:spring-boot-maven-plugin:3.4.0")
 
 }
 

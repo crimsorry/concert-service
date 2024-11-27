@@ -8,7 +8,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - kafka-network
+      - spring-kafka-network
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -29,7 +29,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     networks:
-      - kafka-network
+      - spring-kafka-network
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -43,8 +43,10 @@ services:
     depends_on:
       - kafka
     networks:
-      - kafka-network
+      - spring-kafka-network
 
 networks:
-  kafka-network:
-    driver: bridge
+  spring-kafka-network:
+    external: true
+
+# docker network create spring-kafka-network

@@ -46,8 +46,11 @@ public class ConcertController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorRes.class))),
     })
-    public ResponseEntity<List<ConcertRes>> getConcert(){
-        List<ConcertDTO> restResponse = concertService.loadConcert();
+    public ResponseEntity<List<ConcertRes>> getConcert(
+            @Schema(description = "페이지 번호")
+            @RequestParam(required = false, defaultValue = "1") int page
+    ){
+        List<ConcertDTO> restResponse = concertService.loadConcert(page);
         return new ResponseEntity<>(restResponse.stream()
                 .map(ConcertRes::from)
                 .collect(Collectors.toList()), HttpStatus.OK);

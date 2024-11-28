@@ -39,12 +39,12 @@ public class ConcertServiceCacheTest {
     public void 전체_콘서트_조회_2번조회시_캐시로_1번_호출_검증_() {
         when(concertRepository.findAll()).thenReturn(testBase.concerts);
 
-        concertService.loadConcert();
-        concertService.loadConcert();
+        concertService.loadConcert(1);
+        concertService.loadConcert(1);
 
         verify(concertJpaRepository, times(1)).findAll(); // 캐시 검증
 
-        List<ConcertDTO> result = concertService.loadConcert();
+        List<ConcertDTO> result = concertService.loadConcert(1);
         assertEquals(1, result.size());
         assertEquals(testBase.title, result.get(0).concertTitle());
     }

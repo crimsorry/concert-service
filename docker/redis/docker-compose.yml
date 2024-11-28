@@ -1,0 +1,28 @@
+
+services:
+  redis:
+    image: redis:7.4.1-alpine3.20
+    container_name: redis
+    ports:
+      - "6379:6379"  
+    volumes:
+      - redis-data:/data  
+    command: ["redis-server", "--maxclients", "1000", "--save", "900", "1", "--loglevel", "notice"]
+    networks:
+      - spring-kafka-network
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"    # 최대 cpu    
+          memory: "2g"   # 최대 memory    
+        reservations:
+          cpus: "2.0"    # 최소 cpu  
+          memory: "1g" # 최소 memory      
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  spring-kafka-network:
+    external: true

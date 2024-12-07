@@ -1,97 +1,21 @@
 # 콘서트 예약 서비스
 
-### [기술 스택]
+## 🔑 주차 별 문제점 개선 회고
+### [블로그 확인](https://velog.io/@crimsorry/series/%EC%BD%98%EC%84%9C%ED%8A%B8-%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4)
 
-* SpringBoot 3.4 
+## 🔑 보고서
+### [🗓️ 동시성 발생 분석 보고서](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/%EB%8F%99%EC%8B%9C%EC%84%B1%20%EC%A0%9C%EC%96%B4%20%EB%B0%A9%EC%8B%9D%20%EC%84%B1%EB%8A%A5%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) 
+### [🗓️ Redis 캐싱 성능 테스트](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/%EC%BD%98%EC%84%9C%ED%8A%B8%20%EC%BF%BC%EB%A6%AC%20%EC%84%B1%EB%8A%A5%20%EA%B0%9C%EC%84%A0.md)
+### [🗓️ 분산 트랜잭션 설계](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%B2%98%EB%A6%AC%20%EB%B3%B4%EA%B3%A0%EC%84%9C.md)
+### [🗓️ 부하 및 장애 대응 성능 테스트](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/%EB%B6%80%ED%95%98%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%84%B1%EB%8A%A5%20%EB%B3%B4%EA%B3%A0%EC%84%9C.md)
+
+## 🔑 [기술 스택]
+
+* 기술: SpringBoot 3.4 
 * DB: Mysql 8
 * DB ORM: JPA 
 * api 문서: spring docs > OpenAPI Specification 지원
 * 아키텍처: Clean + Layered 
 * test: JUnit + AssertJ
-
-**[ ERD ]**
-
-```mermaid
-erDiagram
-    USER {
-        bigint user_id PK
-        varchar user_name "사용자 명"
-        int amount "잔액"
-    }
-    USER_QUEUE {
-        bigint queue_id PK
-        bigint user_id FK
-        varchar token "토큰 값"
-        enum status "상태 값 (STAND_BY, ACTIVE, EXPIRED)"
-        datetime create_at "생성 시간"
-        datetime expired_at "만료 시간"
-    }
-    CONCERT {
-        bigint concert_id PK
-        varchar concert_title "콘서트 명"
-        varchar concert_place "콘서트 장소"
-    }
-    CONCERT_SCHEDULE {
-        bigint schedule_id PK
-        bigint concert_id FK
-        datetime open_date "콘서트 개최 일"
-        datetime start_date "티켓 예매 시작 시간"
-        datetime end_date "티켓 예매 종료 시간"
-    }
-    CONCERT_SEAT {
-        bigint seat_id PK
-        bigint schedule_id FK
-        varchar seat_code "좌석 번호"
-        int amount "좌석 금액"
-        enum sear_status "좌석 점유 여부 (STAND_BY, RESERVED, ASSIGN)"
-    }
-    PAYMENT {
-        bigint pay_id PK
-        bigint user_id FK
-        bigint reserve_id PK
-        int amount "결제 금액"
-        boolean is_pay "결제 여부(true / false)"
-        datetime create_at "생성 시간"
-    }
-    RESERVATION {
-        bigint reserve_id PK
-        bigint user_id FK
-        bigint seat_id FK
-        varchar concert_title "콘서트 명"
-        datetime open_date "콘서트 개최 일"
-        varchar seat_code "좌석 번호"
-        int amount "좌석 금액"
-        enum reserve_statue "예약 상태 (PENDING, RESERVED, CANCELED)"
-    }
-    AMOUNT_HISTORY {
-        bigint point_id PK
-        bigint user_id FK
-        int amount "결제 금액"
-       	enum point_type "결제 타입 (CHARGE, USE)"
-        datetime create_at "생성 일"
-    }
-	USER ||--o{ USER_QUEUE : "enter queue"
-    USER ||--o{ PAYMENT : "has pay"
-    USER ||--o{ RESERVATION : "has reserve"
-    USER ||--o{ AMOUNT_HISTORY : "has point"
-    CONCERT ||--o{ CONCERT_SCHEDULE : "has concert schedule"
-    CONCERT_SCHEDULE ||--o{ CONCERT_SEAT : "has c oncert seat"
-    PAYMENT ||--|| RESERVATION : "pay to reserve"
-    CONCERT_SEAT ||--o{ RESERVATION : "has reserve"
-    
-```
-
-* 사용자는 대기열을 여러건 생성 가능합니다. (대기열 만료 상태 ENUM 관리)
-* 콘서트에는 콘서트 스케줄이 여러건 존재합니다. 
-* 콘서트 스케줄 당 여러개의 좌석이 존재합니다.
-* 콘서트 좌석 당 여러건의 예약이 존재합니다.
-* 사용자는 콘서트를 여러건 예약 할 수 있습니다. 
-* 사용자는 콘서트 예약를 확정하기 위해 좌석을 결제합니다. 
-* 사용자에게는 결제 내역이 여러건 존재합니다.
-* 사용자가 결제를 완료 하면 예약이 확정됩니다.
-* 사용자가 결제를 완료하지 않으면 예약이 취소됩니다.
-* 사용자는 충전, 사용 내역을 여러건 관리합니다.
-* user <> payment & user <> reservation: 사용자가 결제 상태와 예약 상태를 독립적으로 조회할 필요가 있다고 생각해 각각 직접 참조하는 방식으로 설계했습니다. (5주차에 예약 내역 조회 api 추가 예정)
-
 
 

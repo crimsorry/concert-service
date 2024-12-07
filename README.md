@@ -9,15 +9,6 @@
 ### [🗓️ 분산 트랜잭션 설계](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%B2%98%EB%A6%AC%20%EB%B3%B4%EA%B3%A0%EC%84%9C.md)
 ### [🗓️ 부하 및 장애 대응 성능 테스트](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/%EB%B6%80%ED%95%98%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%84%B1%EB%8A%A5%20%EB%B3%B4%EA%B3%A0%EC%84%9C.md)
 
-## 🔑 [기술 스택]
-
-* 기술: SpringBoot 3.4 
-* DB: Mysql 8
-* DB ORM: JPA 
-* api 문서: spring docs > OpenAPI Specification 지원
-* 아키텍처: Clean + Layered 
-* test: JUnit + AssertJ
-
 ## 🔑 마일스톤
 
 ### [🗓️ 프로젝트 개요](https://github.com/crimsorry/hhplus-concert-service/issues/1)
@@ -33,6 +24,25 @@
 ### [🗓️ API 명세](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/API%20%EB%AA%85%EC%84%B8.yaml)
 ### [🗓️ Mock API 작성](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/Mock%20API%20%EC%9E%91%EC%84%B1.md)
 ### [🗓️ Swagger](https://github.com/crimsorry/hhplus-concert-service/blob/main/docs/Swagger.md)
+
+## 🔑 [기술 스택]
+
+### 애플리케이션
+* **Framework**: Spring Boot 3.4
+* **Architecture**: Clean Architecture + Layered Architecture
+### 데이터
+* **Database**: MySQL 8
+* **DB ORM**: JPA (Hibernate)
+* **Caching**: Redis
+### 메시지 처리
+* **Message Queue**: Kafka
+### API 문서화
+* **API Docs**: Spring Docs
+### 테스트 및 품질
+* **Test Framework**: JUnit, AssertJ
+* **Load Testing**: k6
+### 모니터링 및 로깅
+* **Monitoring Tools**: Grafana, InfluxDB
 
 
 

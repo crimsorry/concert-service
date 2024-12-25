@@ -1,7 +1,6 @@
 spring:
   profiles:
-    active: dev            # local: 내 pc 실 사용 (mysql)
-                             # hhplus: 코치님 실 사용
+    active: local            # local: 내 pc 실 사용 (mysql)
                              # test: 통합테스트용.
                              # dev: 배포용
 

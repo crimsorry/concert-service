@@ -1,14 +1,13 @@
 package hhplus.tdd.concert.app.application.service.reservation;
 
-import hhplus.tdd.concert.app.application.reservation.aop.ReserveDistributedLockAop;
 import hhplus.tdd.concert.app.application.reservation.service.ReservationService;
+import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertSeatRepository;
-import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.reservation.entity.Reservation;
 import hhplus.tdd.concert.app.domain.reservation.repository.ReservationRepository;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.waiting.repository.MemberRepository;
 import hhplus.tdd.concert.app.domain.waiting.repository.WaitingRepository;
-import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.infrastructure.DatabaseCleaner;
 import hhplus.tdd.concert.config.types.ReserveStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +49,6 @@ public class ReservationServiceIntegrationTest {
 
     @Autowired
     private ReservationRepository reservationRepository;
-
-    @Autowired
-    private ReserveDistributedLockAop reserveDistributedLockAop;
 
     @AfterEach
     public void setUp() {

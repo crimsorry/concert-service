@@ -17,8 +17,8 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class WaitingServiceUnitTest {
@@ -27,7 +27,6 @@ public class WaitingServiceUnitTest {
 
     @InjectMocks
     private WaitingService waitingService;
-
 
     @Mock
     private MemberRepository memberRepository;
@@ -42,7 +41,6 @@ public class WaitingServiceUnitTest {
 
         // when
         when(memberRepository.findByMemberId(memberId)).thenReturn(testBase.member);
-        MockitoAnnotations.openMocks(this);
 
         // then
         WaitingTokenDTO result = waitingService.enqueueMember(memberId);
@@ -50,6 +48,7 @@ public class WaitingServiceUnitTest {
         // 결과 검증
         assertNotNull(result);
         assertNotNull(result.waitingToken());
+        verify(memberRepository, times(1)).findByMemberId(memberId);
     }
 
     @Test

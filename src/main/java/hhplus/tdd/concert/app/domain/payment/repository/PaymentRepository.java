@@ -1,7 +1,7 @@
 package hhplus.tdd.concert.app.domain.payment.repository;
 
-import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 import hhplus.tdd.concert.app.domain.payment.entity.Payment;
+import hhplus.tdd.concert.app.domain.waiting.entity.Member;
 
 public interface PaymentRepository  {
 

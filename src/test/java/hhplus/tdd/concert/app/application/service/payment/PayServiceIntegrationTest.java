@@ -1,6 +1,5 @@
 package hhplus.tdd.concert.app.application.service.payment;
 
-import hhplus.tdd.concert.app.application.payment.aop.PayDistributedLockAop;
 import hhplus.tdd.concert.app.application.payment.service.PayService;
 import hhplus.tdd.concert.app.application.service.TestBase;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
@@ -24,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -64,9 +62,6 @@ public class PayServiceIntegrationTest {
 
     @Autowired
     private AmountHistoryRepository amountHistoryRepository;
-
-    @Autowired
-    private PayDistributedLockAop payDistributedLockAop;
 
     @AfterEach
     public void setUp() {

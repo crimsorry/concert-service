@@ -3,10 +3,8 @@ package hhplus.tdd.concert.app.domain.concert.repository;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSchedule;
 import hhplus.tdd.concert.app.domain.concert.entity.ConcertSeat;
 import jakarta.persistence.LockModeType;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

@@ -4,7 +4,6 @@ import hhplus.tdd.concert.app.domain.concert.entity.Concert;
 import hhplus.tdd.concert.app.domain.concert.repository.ConcertRepository;
 import hhplus.tdd.concert.app.infrastructure.concert.persistence.dataacess.jpa.ConcertJpaRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 

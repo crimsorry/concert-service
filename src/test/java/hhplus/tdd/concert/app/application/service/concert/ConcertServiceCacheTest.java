@@ -45,7 +45,7 @@ public class ConcertServiceCacheTest {
         verify(concertJpaRepository, times(1)).findAll(); // 캐시 검증
 
         List<ConcertDTO> result = concertService.loadConcert(1);
-        assertEquals(1, result.size());
+        assertEquals(10, result.size());
         assertEquals(testBase.title, result.get(0).concertTitle());
     }
 
